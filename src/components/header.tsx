@@ -16,8 +16,8 @@ console.log("aa",currentPath)
             </div>
             <nav className="flex items-center space-x-10 mr-20">
                 <Link
-                    href="/homepage"
-                    className={`text-gray-600 ${currentPath === '/homepage' ? 'text-teal-400' : 'hover:text-teal-400'}`}
+                    href="/"
+                    className={`text-gray-600 ${currentPath === '/' ? 'text-teal-400' : 'hover:text-teal-400'}`}
                 >
                     Home
                 </Link>
