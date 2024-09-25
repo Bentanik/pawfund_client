@@ -1,5 +1,6 @@
 import AuthCarousel from '@/components/auth-carousel';
 import { X } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AuthLayout({
     children,
@@ -21,7 +22,7 @@ export default function AuthLayout({
             </section>
             <section className=" bg-white flex-1" >
                 <div className="absolute top-5 right-10 p-2 bg-slate-200 rounded-full hover:bg-slate-300 cursor-pointer">
-                    <X />
+                    <Link href="/"><X /></Link>
                 </div>
                 {children}
             </section>
