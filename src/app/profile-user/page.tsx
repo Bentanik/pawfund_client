@@ -17,9 +17,6 @@ export default function UserProfilePage() {
         const tab = searchParams.get("tab");
         if (tab) {
             setActiveTab(tab);
-        } else {
-            // Nếu không có tab trong URL, chuyển hướng về tab "profile"
-            window.history.replaceState({}, "", `${pathname}?tab=profile`);
         }
     }, [searchParams, pathname]);
 
@@ -30,10 +27,10 @@ export default function UserProfilePage() {
                 return <InquiryHistory />;
             case "favorite-pets":
                 return <FavoritePets />;
-            case "profile":
-                return <Profile />;
-            default:
+            case "active-inquiries":
                 return <ActiveInquiry />;
+            default:
+                return <Profile />;
         }
     };
 
