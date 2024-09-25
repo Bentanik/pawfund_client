@@ -28,7 +28,7 @@ export default function AuthCarousel() {
                             <span className='text-2xl text-gray-50 text-center font-montserrat_alternates'>Love is action <br /> Together, we create a loving home for pets</span>
                         </div>
                     </CarouselItem>
-                    <CarouselItem>
+                    {/* <CarouselItem>
                         <div className='px-[20px] flex flex-col items-center'>
                             <figure className="w-[450px] h-[450px] flex items-center justify-between">
                                 <Image src="/images/auth02.png"
@@ -40,7 +40,7 @@ export default function AuthCarousel() {
                             </figure>
                             <span className='text-2xl text-gray-50 text-center font-montserrat_alternates'>Healing Hearts, One Paw at a Time <br /> Adopt and Let Animals Mend Your Soul</span>
                         </div>
-                    </CarouselItem>
+                    </CarouselItem> */}
                     <CarouselItem>
                         <div className='px-[20px] flex flex-col items-center'>
                             <figure className="w-[450px] h-[450px] flex items-center justify-between">
