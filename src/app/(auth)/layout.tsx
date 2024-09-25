@@ -20,7 +20,7 @@ export default function AuthLayout({
                 </div> */}
                 <AuthCarousel />
             </section>
-            <section className=" bg-white flex-1" >
+            <section className="bg-white flex-1" >
                 <div className="absolute top-5 right-10 p-2 bg-slate-200 rounded-full hover:bg-slate-300 cursor-pointer">
                     <Link href="/"><X /></Link>
                 </div>
