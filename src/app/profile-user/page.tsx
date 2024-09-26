@@ -12,13 +12,17 @@ export default function UserProfilePage() {
     const pathname = usePathname();
     const [activeTab, setActiveTab] = useState("profile"); // Đặt tab mặc định là "profile"
 
-    // Khi component mount, đọc giá trị tab từ URL
+    // Khi component mount, luôn đặt về tab "profile" và thay đổi URL
     useEffect(() => {
         const tab = searchParams.get("tab");
-        if (tab) {
-            setActiveTab(tab);
+
+        // Dù tab trong URL có là gì thì luôn thay đổi URL về "profile" khi load
+        if (tab && tab !== "profile") {
+            const newUrl = `${pathname}?tab=profile`;
+            window.history.replaceState({}, "", newUrl);
+            setActiveTab("profile");
         }
-    }, [searchParams, pathname]);
+    }, [pathname]);
 
     // Hàm render nội dung dựa trên tab hiện tại
     const renderContent = () => {
