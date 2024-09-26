@@ -37,19 +37,21 @@ const CatProfile: React.FC<CatProfileProps> = ({
 }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+    const [isDisabled, setIsDisabled] = useState(false);
     const openModal = (index: number) => {
         setCurrentImageIndex(index);
+        setIsDisabled(true);  
         setModalIsOpen(true);
     };
 
     const closeModal = () => {
         setModalIsOpen(false);
+        setIsDisabled(false);  
     };
 
-    const handleImageChange = (index: number) => {
-        setCurrentImageIndex(index);
-    };
+    
+    const allImages = [mainImage, ...otherImages];
+
     return (
         <div className="grid grid-cols-12 gap-6 p-6 w-full mx-auto bg-white rounded-lg shadow-md">
             {/* Image gallery */}
@@ -57,8 +59,10 @@ const CatProfile: React.FC<CatProfileProps> = ({
                 <img
                     src={mainImage}
                     alt={`Main image of ${name}`}
-                    className="w-full h-96 rounded-lg object-cover transition-transform transform hover:scale-105"
+                    className={`w-full h-96 rounded-lg object-cover cursor-pointer ${isDisabled ? '' : 'transition-transform transform hover:scale-105'}`}
+                    onClick={() => openModal(0)} 
                 />
+
                 <Carousel
                     opts={{
                         align: "start",
@@ -76,7 +80,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                                                     src={image}
                                                     alt={`Other image ${index + 1}`}
                                                     className="h-48 w-full object-cover rounded-lg cursor-pointer"
-                                                    onClick={() => openModal(index)} 
+                                                    onClick={() => openModal(index + 1)} 
                                                 />
                                             </CardContent>
                                         </Card>
@@ -95,10 +99,11 @@ const CatProfile: React.FC<CatProfileProps> = ({
                 <ImageModal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
-                    images={otherImages}   
-                    currentIndex={currentImageIndex} 
-                    onImageChange={handleImageChange}  
+                    images={allImages} 
+                    currentIndex={currentImageIndex}
                 />
+
+
             </div>
 
             {/* Cat information */}
