@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Card, CardContent } from "@/components/ui/card"
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+import ImageModal from './image-cat-modal';
 
 interface CatProfileProps {
     mainImage: string;
@@ -26,6 +35,21 @@ const CatProfile: React.FC<CatProfileProps> = ({
     chipStatus,
     description,
 }) => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const openModal = (index: number) => {
+        setCurrentImageIndex(index);
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
+    const handleImageChange = (index: number) => {
+        setCurrentImageIndex(index);
+    };
     return (
         <div className="grid grid-cols-12 gap-6 p-6 w-full mx-auto bg-white rounded-lg shadow-md">
             {/* Image gallery */}
@@ -35,21 +59,46 @@ const CatProfile: React.FC<CatProfileProps> = ({
                     alt={`Main image of ${name}`}
                     className="w-full h-96 rounded-lg object-cover transition-transform transform hover:scale-105"
                 />
-                <div className="flex flex-wrap justify-between mt-4">
-                    {otherImages.length > 0 ? (
-                        otherImages.map((image, index) => (
-                            <div className="w-1/2 p-1 transition-transform transform hover:scale-105" key={index}>
-                                <img
-                                    src={image}
-                                    alt={`Other image ${index + 1}`}
-                                    className="h-48 w-full object-cover rounded-lg" // Đảm bảo ảnh phụ có chiều cao cố định và căn chỉnh
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        <p>No additional images</p>
-                    )}
-                </div>
+                <Carousel
+                    opts={{
+                        align: "start",
+                    }}
+                    className="flex flex-wrap justify-between mt-4"
+                >
+                    <CarouselContent>
+                        {otherImages.length > 0 ? (
+                            otherImages.map((image, index) => (
+                                <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
+                                    <div className="p-1">
+                                        <Card>
+                                            <CardContent className="w-full p-1 transition-transform transform hover:scale-105">
+                                                <img
+                                                    src={image}
+                                                    alt={`Other image ${index + 1}`}
+                                                    className="h-48 w-full object-cover rounded-lg cursor-pointer"
+                                                    onClick={() => openModal(index)} 
+                                                />
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </CarouselItem>
+                            ))
+                        ) : (
+                            <p>No additional images</p>
+                        )}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </Carousel>
+
+                {/* Modal component */}
+                <ImageModal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    images={otherImages}   
+                    currentIndex={currentImageIndex} 
+                    onImageChange={handleImageChange}  
+                />
             </div>
 
             {/* Cat information */}
@@ -113,7 +162,6 @@ const CatProfile: React.FC<CatProfileProps> = ({
                 <button className="mt-6 bg-teal-400 text-white px-6 py-3 rounded-lg hover:bg-teal-300 transition-transform transform hover:scale-105 ml-20">
                     GIÚP ĐỠ
                 </button>
-
             </div>
         </div>
     );

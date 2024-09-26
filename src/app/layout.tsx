@@ -1,8 +1,12 @@
-// app/layout.tsx
 import type { Metadata } from "next";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+
+const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+    weight: ["400", "600"],
+    subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -16,10 +20,8 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body>
-                <Header />
-                <main>{children}</main>
-                <Footer />
+            <body className={`${inter.className} ${poppins.className}`}>
+                {children}
             </body>
         </html>
     );
