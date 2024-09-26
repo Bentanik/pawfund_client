@@ -6,6 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
 import InputAuth from "@/components/input-auth";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function RegisterForm() {
     const { register, handleSubmit, setError, formState: { errors },
@@ -64,9 +65,11 @@ export default function RegisterForm() {
                         <div className="flex justify-between">
                             <p className="text-[1rem]">
                                 Have an account PawFund?{" "}
-                                <span className="font-bold cursor-pointer">
-                                    Log In
-                                </span>
+                                <Link href="/login">
+                                    <span className="font-bold cursor-pointer">
+                                        Log In
+                                    </span>
+                                </Link>
                             </p>
                             <p className="text-[1rem]">
                                 <span className="font-bold cursor-pointer">
