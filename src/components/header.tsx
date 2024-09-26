@@ -9,12 +9,12 @@ const Header: React.FC = () => {
     const currentPath = usePathname();
 console.log("aa",currentPath)
     return (
-        <header className="flex items-center justify-between px-20 py-8 bg-white shadow">
+        <header className="flex items-center justify-between px-12 py-8 bg-white shadow">
             <div className="flex items-center">
                 <img src="/logo.png" alt="Logo" className="h-10" />
                 <h1 className="text-2xl font-bold ml-2">CAT ADOPTION FOUNDATION inc</h1>
             </div>
-            <nav className="flex items-center space-x-10 mr-20">
+            <nav className="flex items-center space-x-6 mr-10">
                 <Link
                     href="/"
                     className={`text-gray-600 ${currentPath === '/' ? 'text-teal-400' : 'hover:text-teal-400'}`}
@@ -52,6 +52,12 @@ console.log("aa",currentPath)
                     className={`text-gray-600 ${currentPath === '/sponsors' ? 'text-teal-400' : 'hover:text-teal-400'}`}
                 >
                     Sponsors
+                </Link>
+                <Link
+                    href="/login"
+                    className={`text-gray-600 ${currentPath === '/sponsors' ? 'text-teal-400' : 'hover:text-teal-400'}`}
+                >
+                    Login
                 </Link>
             </nav>
         </header>
