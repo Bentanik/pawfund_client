@@ -1,9 +1,12 @@
-import Image from "next/image";
-import HomePage from "./homepage/page";
+import HomePage from "@/app/(user)/homepage/home-page";
+import UserLayout from "@/app/(user)/layout";
+
 export default function Home() {
   return (
     <div>
-      <HomePage></HomePage>
+      <UserLayout>
+        <HomePage />
+      </UserLayout>
     </div>
   );
 }
