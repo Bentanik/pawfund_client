@@ -138,7 +138,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                             <label className="font-semibold w-32 text-xl">Breed:</label>
                             <div className="flex items-center border rounded-lg p-2 w-40">
                                 <input type="text" value={breed} className="border-none w-full focus:outline-none text-gray-500" readOnly />
-                                <i className="fa-solid fa-circle-info"></i>
+                                <i className="fa-solid fa-cat"></i>
                             </div>
                         </div>
                     </div>
@@ -147,14 +147,14 @@ const CatProfile: React.FC<CatProfileProps> = ({
                             <label className="font-semibold w-32 text-xl">Size:</label>
                             <div className="flex items-center border rounded-lg p-2 w-40">
                                 <input type="text" value={size} className="border-none w-full focus:outline-none text-gray-500" readOnly />
-                                <i className="fa-solid fa-circle-info"></i>
+                                <i className="fa-solid fa-weight-scale"></i>
                             </div>
                         </div>
                         <div className='flex flex-col'>
                             <label className="font-semibold w-32 text-xl">Color:</label>
                             <div className="flex items-center border rounded-lg p-2 w-40">
                                 <input type="text" value={color} className="border-none w-full focus:outline-none text-gray-500" readOnly />
-                                <i className="fa-solid fa-circle-info"></i>
+                                <i className="fa-solid fa-droplet"></i>
                             </div>
                         </div>
                     </div>

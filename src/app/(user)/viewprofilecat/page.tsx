@@ -39,8 +39,8 @@ const ViewProfileCatPage = () => {
 
             // Mô phỏng dữ liệu được trả về từ API
             const data: CatData = {
-                mainImage: '/meo5.jpeg',
-                otherImages: ['/meo2.jpg', '/meo3.jpg', '/meo4.jpg', '/meo3.jpg', '/meo3.jpg', '/meo3.jpg', '/meo3.jpg'],
+                mainImage: '/images/meo5.jpeg',
+                otherImages: ['/images/meo2.jpg', '/images/meo3.jpg', '/images/meo4.jpg', '/images/meo3.jpg', '/images/meo3.jpg', '/images/meo3.jpg', '/images/meo3.jpg'],
                 name: 'hello',
                 gender: 'Male',
                 age: '5',
