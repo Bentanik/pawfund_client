@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-full bg-gray-100">
-            <div className="bg-[url('/background.jpg')] bg-cover bg-center w-full h-[120vh] rounded-lg shadow-md flex flex-col items-center justify-center ">
+            <div className="bg-[url('/images/background.jpg')] bg-cover bg-center w-full h-[120vh] rounded-lg shadow-md flex flex-col items-center justify-center ">
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="col-span-6 bg-[url('/home1.jpg')] bg-cover bg-center w-full h-[92vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home1.jpg')] bg-cover bg-center w-full h-[92vh]"></div>
             </motion.div>
 
             <motion.div
@@ -123,7 +123,7 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 0.7 }}
                 className="grid grid-cols-12"
             >
-                <div className="col-span-6 bg-[url('/home2.webp')] bg-cover bg-center w-full h-[101vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home2.webp')] bg-cover bg-center w-full h-[101vh]"></div>
                 <div className="flex flex-col justify-center items-center col-span-6 p-36">
                     <div className="self-start mb-4">
                         <h5>Would you like to help?</h5>
@@ -158,7 +158,7 @@ const HomePage: React.FC = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="col-span-6 bg-[url('/home3.webp')] bg-cover bg-center w-full h-[97vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home3.webp')] bg-cover bg-center w-full h-[97vh]"></div>
             </motion.div>
         </div>
     );
