@@ -35,10 +35,14 @@ export default function StepForm() {
             {/* Nội dung form được điều khiển theo state */}
             {step === 0 && (
                 <Card>
-                    <div className="flex justify-between p-[20px]">
-                        <div></div>
-                        <div className="text-center">Choose your amount</div>
-                        <div onClick={handleNextForm}>r</div>
+                    <div className="relative p-[20px]">
+                        <div className=" text-center">Choose your amount</div>
+                        <img
+                            className="w-[30px] h-[30px] hover:opacity-40 absolute top-[16px] right-[5%] cursor-pointer"
+                            src="/images/arrow-right.svg"
+                            alt="Right arrow"
+                            onClick={handleNextForm}
+                        />
                     </div>
                     <CardContent className="space-y-2">
                         <div>
@@ -47,9 +51,9 @@ export default function StepForm() {
                                 {amounts.map((index) => (
                                     <div
                                         key={index}
-                                        className={`min-w-[31.5%] py-[20px] cursor-pointer bg-[#2dd4c029] ${
+                                        className={`min-w-[31.5%] py-[20px] cursor-pointer bg-[#2dd4aa20] ${
                                             selectAmount === index
-                                                ? "bg-[#2dd4aa]"
+                                                ? "border border-[#2dd4aa]"
                                                 : ""
                                         } text-center`}
                                         onClick={() =>
@@ -78,10 +82,20 @@ export default function StepForm() {
 
             {step === 1 && (
                 <Card>
-                    <div className="flex justify-between p-[20px]">
-                        <div onClick={handlePreForm}>l</div>
-                        <div>Choose your amount</div>
-                        <div onClick={handleNextForm}>r</div>
+                    <div className="relative p-[20px]">
+                        <img
+                            className="w-[30px] h-[30px] hover:opacity-40 absolute top-[16px] left-[5%] cursor-pointer"
+                            src="/images/arrow-left.svg"
+                            alt="Right arrow"
+                            onClick={handlePreForm}
+                        />
+                        <div className=" text-center">Choose your amount</div>
+                        <img
+                            className="w-[30px] h-[30px] hover:opacity-40 absolute top-[16px] right-[5%] cursor-pointer"
+                            src="/images/arrow-right.svg"
+                            alt="Right arrow"
+                            onClick={handleNextForm}
+                        />
                     </div>
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
@@ -101,10 +115,14 @@ export default function StepForm() {
 
             {step === 2 && (
                 <Card>
-                    <div className="flex justify-between p-[20px]">
-                        <div onClick={handlePreForm}>l</div>
-                        <div>cc</div>
-                        <div></div>
+                    <div className="relative p-[20px]">
+                        <img
+                            className="w-[30px] h-[30px] hover:opacity-40 absolute top-[16px] left-[5%] cursor-pointer"
+                            src="/images/arrow-left.svg"
+                            alt="Right arrow"
+                            onClick={handlePreForm}
+                        />
+                        <div className=" text-center">Ccc</div>
                     </div>
                     <CardContent className="space-y-2">
                         <div className="space-y-1">

@@ -31,7 +31,7 @@ export default function DonationPage() {
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
                     className="absolute top-20 transform pl-[10%]"
                 >
-                    <div className="text-lg text-white text-[1.7rem] w-[50%] font-semibold">
+                    <div className="text-lg text-white text-[1.6rem] w-[60%] font-semibold">
                         Donate to the Cat Adoption Foundation right now to help
                         save a life.
                     </div>
