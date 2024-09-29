@@ -1,11 +1,17 @@
 "use client";
+import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-const HomePage: React.FC = () => {
+export const metadata: Metadata = {
+    title: "Home Page",
+    description: "Home page for PawFund",
+};
+
+export default function HomePage() {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -164,4 +170,3 @@ const HomePage: React.FC = () => {
     );
 };
 
-export default HomePage;

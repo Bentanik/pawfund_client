@@ -2,7 +2,8 @@ import z from "zod";
 
 export const RegisterBody = z
   .object({
-    name: z.string().trim().min(2).max(256),
+    firstName: z.string().trim().min(2).max(256),
+    lastName: z.string().trim().min(2).max(256),
     email: z.string().email(),
     password: z.string().min(6).max(100),
     confirmPassword: z.string().min(6).max(100),
@@ -12,7 +13,7 @@ export const RegisterBody = z
     if (confirmPassword !== password) {
       ctx.addIssue({
         code: "custom",
-        message: "Mật khẩu không khớp",
+        message: "Passwords do not match",
         path: ["confirmPassword"],
       });
     }
@@ -26,7 +27,8 @@ export const RegisterRes = z.object({
     expiresAt: z.string(),
     account: z.object({
       id: z.number(),
-      name: z.string(),
+      firstName: z.string(),
+      lastName: z.string(),
       email: z.string(),
     }),
   }),

@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import CatProfile from '@/components/catprofile';
+import React, { useState, useEffect } from "react";
+import CatProfile from "@/components/catprofile";
 
 // Định nghĩa interface cho dữ liệu mèo
 interface CatData {
@@ -18,16 +18,16 @@ interface CatData {
 
 const ViewProfileCatPage = () => {
     const [catData, setCatData] = useState<CatData>({
-        mainImage: '', // Khởi tạo rỗng, sau này sẽ được cập nhật từ API
+        mainImage: "", // Khởi tạo rỗng, sau này sẽ được cập nhật từ API
         otherImages: [],
-        name: '',
-        gender: '',
-        age: '',
-        breed: '',
-        size: '',
-        color: '',
-        chipStatus: '',
-        description: '',
+        name: "",
+        gender: "",
+        age: "",
+        breed: "",
+        size: "",
+        color: "",
+        chipStatus: "",
+        description: "",
     });
 
     useEffect(() => {
