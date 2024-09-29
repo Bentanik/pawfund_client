@@ -15,11 +15,12 @@ export default function UserProfilePage() {
     // Khi component mount, luôn đặt về tab "profile" và thay đổi URL
     useEffect(() => {
         const tab = searchParams.get("tab");
-
-        // Dù tab trong URL có là gì thì luôn thay đổi URL về "profile" khi load
-        if (tab && tab !== "profile") {
-            const newUrl = `${pathname}?tab=profile`;
-            window.history.replaceState({}, "", newUrl);
+        // Kiểm tra nếu có giá trị 'tab' trong URL thì giữ nguyên tab đó
+        // Nếu không có giá trị thì bạn có thể đặt giá trị mặc định
+        if (tab) {
+            setActiveTab(tab);
+        } else {
+            // Đặt tab mặc định nếu không có giá trị nào trong URL, ví dụ "profile"
             setActiveTab("profile");
         }
     }, [pathname]);
