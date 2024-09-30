@@ -45,7 +45,7 @@ export default function DonationPage() {
                     <Tabs defaultValue="one-time" className="w-[400px]">
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value="one-time">One-Time</TabsTrigger>
-                            <TabsTrigger value="weekly">Week</TabsTrigger>
+                            <TabsTrigger value="weekly">Weekly</TabsTrigger>
                             <TabsTrigger value="monthly">Monthly</TabsTrigger>
                         </TabsList>
                         <TabsContent value="one-time">
