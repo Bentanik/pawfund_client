@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-full bg-gray-100">
-            <div className="bg-[url('/background.jpg')] bg-cover bg-center w-full h-[120vh] rounded-lg shadow-md flex flex-col items-center justify-center ">
+            <div className="bg-[url('/background.jpg')] bg-cover bg-center w-full h-[120vh] rounded-lg shadow-md flex flex-col items-center justify-center">
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

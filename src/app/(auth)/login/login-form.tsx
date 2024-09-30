@@ -7,8 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import InputAuth from "@/components/input-auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function LoginForm() {
+
+    const [typePassword, setTypePassword] = useState<boolean>(false);
+
     const { register, watch, handleSubmit, setError, formState: { errors },
         reset, } =
         useForm<LoginBodyType>({
@@ -26,6 +30,12 @@ export default function LoginForm() {
         }
     }
 
+    const valuePassword = watch("password");
+
+    const handleToggleTypePassword = () => {
+        setTypePassword(prev => !prev);
+    }
+
     return (
         <div>
             <div className="w-[70%] px-5 py-4 m-auto">
@@ -38,7 +48,7 @@ export default function LoginForm() {
                         <InputAuth id="email" label="Email" type="text" autoComplete="off" register={register("email")} error={errors?.email?.message} />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <InputAuth id="password" label="Password" type="password" autoComplete="off" register={register("password")} error={errors?.password?.message} />
+                        <InputAuth id="password" label="Password" type={typePassword === false ? "password" : "text"} autoComplete="off" register={register("password")} error={errors?.password?.message} value={valuePassword} onClickEyePassword={handleToggleTypePassword} />
                     </div>
                     <div className="flex flex-col gap-y-5">
                         <button className={`mt-2 block w-[100%] rounded-md py-2 ${Object.keys(errors).length === 0 ? "bg-[#7a3cdd]" : "bg-[#C3B1E1]"}`}>
