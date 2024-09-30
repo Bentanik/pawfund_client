@@ -86,9 +86,9 @@ export default function StepForm() {
                                 {amounts.map((index) => (
                                     <div
                                         key={index}
-                                        className={`min-w-[31.5%] py-[20px] cursor-pointer bg-[#2dd4aa20] ${
+                                        className={`min-w-[31.5%] py-[20px] cursor-pointer bg-[#2dd4aa20] text-[#2dd4aa8a] ${
                                             selectAmount === index
-                                                ? "border border-[#2dd4aa]"
+                                                ? "border border-[#2dd4aa] text-[#2dd497]"
                                                 : ""
                                         } text-center`}
                                         onClick={() =>
