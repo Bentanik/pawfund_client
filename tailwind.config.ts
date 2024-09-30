@@ -59,6 +59,7 @@ const config: Config = {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
         montserrat_alternates: ["Montserrat Alternates", "sans-serif"],
+        open_sans: ["Open Sans", "sans-serif"],
       },
     },
   },
