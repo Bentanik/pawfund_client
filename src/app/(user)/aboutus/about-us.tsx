@@ -63,12 +63,15 @@ const AboutUs = () => {
                 transition={{ duration: 0.7 }}
                 className="col-span-12 bg-[url('/images/meoaboutus4.jpg')] bg-cover bg-center w-full h-[60vh] shadow-md flex flex-col items-end justify-center relative p-4 mt-4"
             >
+                
                 <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                <div className='w-4/12 p-8 mr-10'>
-                    <h1 className="text-white text-3xl font-bold z-10 text-center">The greatness of a nation and its moral progress can be judged by the way its animals are treated.</h1>
-                    <p className="text-white text-lg z-10 text-center">- Gandhi</p>
+                
+                <div className='relative z-10 w-4/12 p-8 mr-10'>
+                    <h1 className="text-white text-3xl font-bold text-center">The greatness of a nation and its moral progress can be judged by the way its animals are treated.</h1>
+                    <p className="text-white text-lg text-center">- Gandhi</p>
                 </div>
             </motion.div>
+
 
             <div className='col-span-12 py-16 px-28 gap-10 grid grid-cols-12'>
                 <motion.div
