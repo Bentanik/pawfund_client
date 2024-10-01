@@ -5,58 +5,52 @@ import Image from "next/image";
 
 export default function AuthCarousel() {
     return (
-        <div>
-            <Carousel
-                plugins={[
-                    Autoplay({
-                        delay: 2000,
-                        stopOnInteraction: false
-                    }),
-                ]}
-            >
-                <CarouselContent>
-                    <CarouselItem>
-                        <div className='px-[20px] flex flex-col items-center'>
-                            <figure className="w-[450px] h-[450px] flex items-end justify-between">
-                                <Image src="/images/auth01.png"
-                                    width={430}
-                                    height={430}
-                                    alt="image"
-                                    objectFit="cover"
-                                />
-                            </figure>
-                            <span className='text-2xl text-gray-50 text-center font-montserrat_alternates'>Love is action <br /> Together, we create a loving home for pets</span>
+        <Carousel
+            plugins={[
+                Autoplay({
+                    delay: 2000,
+                    stopOnInteraction: false
+                }),
+            ]}
+        >
+            <CarouselContent>
+                <CarouselItem>
+                    <div className="absolute w-full h-[100vh]">
+                        <Image
+                            src={"/images/login01.jpg"}
+                            alt="Authen01"
+                            layout="fill"
+                            priority
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+                        <div className="relative top-[60%]">
+                            <p className='text-3xl leading-normal text-gray-50 text-center font-montserrat_alternates'>
+                                Log in to bring hope to abandoned cats
+                                <br />
+                                Help us find them a warm home
+                            </p>
                         </div>
-                    </CarouselItem>
-                    {/* <CarouselItem>
-                        <div className='px-[20px] flex flex-col items-center'>
-                            <figure className="w-[450px] h-[450px] flex items-center justify-between">
-                                <Image src="/images/auth02.png"
-                                    width={430}
-                                    height={430}
-                                    alt="image"
-                                    objectFit="cover"
-                                />
-                            </figure>
-                            <span className='text-2xl text-gray-50 text-center font-montserrat_alternates'>Healing Hearts, One Paw at a Time <br /> Adopt and Let Animals Mend Your Soul</span>
+                    </div>
+                </CarouselItem>
+                <CarouselItem>
+                    <div className="relative w-full h-[100vh]">
+                        <Image
+                            src={"/images/login02.jpg"}
+                            alt="Authen02"
+                            layout="fill"
+                            priority
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+                        <div className="relative top-[60%]">
+                            <p className='text-3xl leading-normal text-gray-50 text-center font-montserrat_alternates'>
+                                Amid life’s stress, a cat brings calm and joy
+                                <br />
+                                Adopt one and discover your peace!
+                            </p>
                         </div>
-                    </CarouselItem> */}
-                    <CarouselItem>
-                        <div className='px-[20px] flex flex-col items-center'>
-                            <figure className="w-[450px] h-[450px] flex items-center justify-between">
-                                <Image src="/images/auth03.png"
-                                    width={430}
-                                    height={430}
-                                    alt="image"
-                                    objectFit="cover"
-                                />
-                            </figure>
-                            <span className='text-2xl text-gray-50 text-center font-montserrat_alternates'>Adopt, Don’t Shop <br />  Give a Rescue Pet a Loving Home</span>
-                        </div>
-                    </CarouselItem>
-                </CarouselContent>
-            </Carousel>
-
-        </div>
+                    </div>
+                </CarouselItem>
+            </CarouselContent>
+        </Carousel>
     )
 }

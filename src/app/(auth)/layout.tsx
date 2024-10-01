@@ -9,7 +9,7 @@ export default function AuthLayout({
 }>) {
     return (
         <div className="relative text-base flex items-center">
-            <section className="fixed top-0 h-screen w-[45%] bg-auth-gradient bg-[#7a3cdd]">
+            <section className="fixed top-0 h-screen w-[45%]">
                 <AuthCarousel />
             </section>
             <section className="absolute w-[55%] h-screen top-0 right-0 flex-1" >
