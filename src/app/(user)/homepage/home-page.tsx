@@ -23,7 +23,7 @@ export default function HomePage() {
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0 }
+        visible: { opacity: 1, y: 0 },
     };
 
     const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.2 });
@@ -51,7 +51,9 @@ export default function HomePage() {
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
                     className="max-w-lg text-center mb-4 relative z-10"
                 >
-                    <h5 className="text-lg">"Time spent with cats is never wasted" - Sigmund Freud</h5>
+                    <h5 className="text-lg">
+                        "Time spent with cats is never wasted" - Sigmund Freud
+                    </h5>
                 </motion.div>
 
 
@@ -108,7 +110,9 @@ export default function HomePage() {
                 className="p-20"
             >
                 <div className="text-center text-9xl">10000</div>
-                <div className="text-center text-2xl py-5">cats and kittens rehomed to date</div>
+                <div className="text-center text-2xl py-5">
+                    cats and kittens rehomed to date
+                </div>
             </motion.div>
 
             <motion.div
@@ -120,11 +124,21 @@ export default function HomePage() {
                 className="grid grid-cols-12"
             >
                 <div className="flex flex-col justify-center items-center col-span-6 p-36 bg-zinc-200 ">
-                    <h2 className="text-5xl font-medium mb-4">Looking to adopt your new furry best friend?</h2>
-                    <p className="text-gray-500 text-xl mb-4">Our beautiful cats and kittens are waiting to find their furever family - could that be you?</p>
+                    <h2 className="text-5xl font-medium mb-4">
+                        Looking to adopt your new furry best friend?
+                    </h2>
+                    <p className="text-gray-500 text-xl mb-4">
+                        Our beautiful cats and kittens are waiting to find their
+                        furever family - could that be you?
+                    </p>
                     <div className="self-start mt-4">
                         <Link href="/adopt">
-                            <Button variant="outline" className="text-gray-600 bg-teal-400 uppercase p-8 hover:bg-teal-300">Learn more about adopt</Button>
+                            <Button
+                                variant="outline"
+                                className="text-gray-600 bg-teal-400 uppercase p-8 hover:bg-teal-300"
+                            >
+                                Learn more about adopt
+                            </Button>
                         </Link>
                     </div>
                 </div>
@@ -144,11 +158,20 @@ export default function HomePage() {
                     <div className="self-start mb-4">
                         <h5>Would you like to help?</h5>
                     </div>
-                    <h2 className="text-5xl font-medium mb-4">We're always looking for enthusiastic volunteers</h2>
-                    <p className="text-gray-500 text-xl mb-4">We have a range of volunteer roles available.</p>
+                    <h2 className="text-5xl font-medium mb-4">
+                        We're always looking for enthusiastic volunteers
+                    </h2>
+                    <p className="text-gray-500 text-xl mb-4">
+                        We have a range of volunteer roles available.
+                    </p>
                     <div className="self-start mt-4">
                         <Link href="/adopt">
-                            <Button variant="outline" className="text-gray-600 uppercase p-8 border-black hover:bg-teal-400">become a volunteer</Button>
+                            <Button
+                                variant="outline"
+                                className="text-gray-600 uppercase p-8 border-black hover:bg-teal-400"
+                            >
+                                become a volunteer
+                            </Button>
                         </Link>
                     </div>
                 </div>
@@ -166,11 +189,21 @@ export default function HomePage() {
                     <div className="self-start mb-4">
                         <h5>Like what we're doing?</h5>
                     </div>
-                    <h2 className="text-5xl font-medium mb-4">We need your help - donate, sponsor or fundraise</h2>
-                    <p className="text-gray-500 text-xl mb-4">As a small, volunteer-run organisation, we rely on your generosity.</p>
+                    <h2 className="text-5xl font-medium mb-4">
+                        We need your help - donate, sponsor or fundraise
+                    </h2>
+                    <p className="text-gray-500 text-xl mb-4">
+                        As a small, volunteer-run organisation, we rely on your
+                        generosity.
+                    </p>
                     <div className="self-start mt-4">
                         <Link href="/adopt">
-                            <Button variant="outline" className="text-gray-600 bg-teal-400 uppercase p-8 hover:bg-teal-300">way to help</Button>
+                            <Button
+                                variant="outline"
+                                className="text-gray-600 bg-teal-400 uppercase p-8 hover:bg-teal-300"
+                            >
+                                way to help
+                            </Button>
                         </Link>
                     </div>
                 </div>
