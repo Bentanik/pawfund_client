@@ -1,15 +1,10 @@
 "use client";
-import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-export const metadata: Metadata = {
-    title: "Home Page",
-    description: "Home page for PawFund",
-};
 
 export default function HomePage() {
     const [isVisible, setIsVisible] = useState(false);
@@ -34,7 +29,7 @@ export default function HomePage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-full bg-gray-100">
             <div className="bg-[url('/images/background.jpg')] bg-cover bg-center w-full h-[120vh] shadow-md flex flex-col items-center justify-center relative">
-                <div className="absolute inset-0 bg-black opacity-30"></div>
+                <div className="absolute inset-0 bg-black opacity-25"></div>
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -51,7 +46,7 @@ export default function HomePage() {
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
                     className="max-w-lg text-center mb-4 relative z-10"
                 >
-                    <h5 className="text-lg">
+                    <h5 className="text-white text-lg">
                         "Time spent with cats is never wasted" - Sigmund Freud
                     </h5>
                 </motion.div>
