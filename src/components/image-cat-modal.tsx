@@ -1,67 +1,53 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React, { useRef } from 'react';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
 
 interface ImageModalProps {
+    images: string[];
+    currentIndex: number;
     isOpen: boolean;
     onRequestClose: () => void;
-    images: string[]; 
-    currentIndex: number; 
-    onImageChange: (index: number) => void;   
 }
 
-const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onRequestClose, images, currentIndex, onImageChange }) => {
-    const handlePrevious = () => {
-        if (currentIndex > 0) {
-            onImageChange(currentIndex - 1);
-        }
-    };
+const ImageModal: React.FC<ImageModalProps> = ({ images, currentIndex, isOpen, onRequestClose }) => {
+    const lightboxRef = useRef<PhotoSwipeLightbox | null>(null);
 
-    const handleNext = () => {
-        if (currentIndex < images.length - 1) {
-            onImageChange(currentIndex + 1);
+    React.useEffect(() => {
+        if (isOpen) {
+            const lightbox = new PhotoSwipeLightbox({
+                gallery: '#gallery',
+                children: 'a',
+                pswpModule: () => import('photoswipe')
+            });
+
+            lightbox.init();
+            lightboxRef.current = lightbox;
+            lightboxRef.current.loadAndOpen(currentIndex);
         }
-    };
+
+        return () => {
+            if (lightboxRef.current) {
+                lightboxRef.current.destroy();
+                lightboxRef.current = null;
+            }
+        };
+    }, [isOpen, currentIndex]);
 
     return (
-        <Modal
-            isOpen={isOpen}
-            onRequestClose={onRequestClose}
-            ariaHideApp={false}
-            style={{
-                content: {
-                    top: '50%',
-                    left: '50%',
-                    right: 'auto',
-                    bottom: 'auto',
-                    marginRight: '-50%',
-                    transform: 'translate(-50%, -50%)',
-                    maxWidth: '500px',
-                    width: '60%',
-                    zIndex: 1000,
-                },
-                overlay: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 999,
-                },
-            }}
-        >
-            <button onClick={onRequestClose} className="text-red-500 absolute top-0 right-1 text-2xl"><i className="fa-solid fa-xmark"></i></button>
-            
-            <div className="flex justify-between items-center">
-                {currentIndex > 0 && (
-                    <button onClick={handlePrevious} className="text-black">
-                        <i className="fa-solid fa-arrow-left"></i>
-                    </button>
-                )}
-                <img src={images[currentIndex]} alt={`Hình ảnh lớn ${currentIndex + 1}`} className="w-96 object-cover" />
-                {currentIndex < images.length - 1 && (
-                    <button onClick={handleNext} className="text-black">
-                        <i className="fa-solid fa-arrow-right"></i>
-                    </button>
-                )}
-            </div>
-        </Modal>
+        <div id="gallery" style={{ display: isOpen ? 'block' : 'none' }}>
+            {images.map((image, index) => (
+                <a
+                    href={image}
+                    key={index}
+                    data-pswp-width="1200"  
+                    data-pswp-height="800"  
+                >
+                    <img src={image} alt={`Image ${index}`} style={{ display: 'none' }} />
+                </a>
+            ))}
+        </div>
     );
 };
+
 
 export default ImageModal;

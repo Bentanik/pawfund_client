@@ -1,11 +1,17 @@
 "use client";
+import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-const HomePage: React.FC = () => {
+export const metadata: Metadata = {
+    title: "Home Page",
+    description: "Home page for PawFund",
+};
+
+export default function HomePage() {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -27,56 +33,66 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-full bg-gray-100">
-            <div className="bg-[url('/background.jpg')] bg-cover bg-center w-full h-[120vh] rounded-lg shadow-md flex flex-col items-center justify-center">
+            <div className="bg-[url('/images/background.jpg')] bg-cover bg-center w-full h-[120vh] shadow-md flex flex-col items-center justify-center relative">
+                <div className="absolute inset-0 bg-black opacity-30"></div>
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: "easeOut" }}
-                    className="text-7xl w-1/2 font-bold text-center text-white mb-4"
+                    className="text-7xl w-1/2 font-bold text-center text-white mb-4 relative z-10"
                 >
                     Welcome to Cat Adoption Foundation
                 </motion.h1>
+
+
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-                    className="max-w-lg text-center mb-4"
+                    className="max-w-lg text-center mb-4 relative z-10"
                 >
                     <h5 className="text-lg">"Time spent with cats is never wasted" - Sigmund Freud</h5>
                 </motion.div>
+
+
                 <motion.div
-                    className="flex gap-6"
+                    className="flex gap-6 relative z-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.5 }}
                 >
+
                     <Button className={`text-lg transform transition-transform duration-700 relative group ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} uppercase p-6`} variant="outline">
                         <span className="inline-block transition-transform duration-300 transform group-hover:-translate-x-2">
                             learn about us
                         </span>
                         <span className="inline-block ml-2 opacity-0 transition-all duration-300 transform group-hover:opacity-100 group-hover:translate-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
                         </span>
                     </Button>
+
+
                     <Button className={`text-lg bg-pink-600 border-none transform transition-transform duration-700 relative group ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} uppercase p-6`} variant="outline">
                         <span className="inline-block transition-transform duration-300 transform group-hover:-translate-x-2">
                             donate
                         </span>
                         <span className="inline-block ml-2 opacity-0 transition-all duration-300 transform group-hover:opacity-100 group-hover:translate-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
                         </span>
                     </Button>
+
+
                     <Button className={`text-lg transform transition-transform duration-700 relative group ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} uppercase p-6`} variant="outline">
                         <span className="inline-block transition-transform duration-300 transform group-hover:-translate-x-2">
                             latest news
                         </span>
                         <span className="inline-block ml-2 opacity-0 transition-all duration-300 transform group-hover:opacity-100 group-hover:translate-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
                         </span>
                     </Button>
@@ -112,7 +128,7 @@ const HomePage: React.FC = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="col-span-6 bg-[url('/home1.jpg')] bg-cover bg-center w-full h-[92vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home1.jpg')] bg-cover bg-center w-full h-[92vh]"></div>
             </motion.div>
 
             <motion.div
@@ -123,7 +139,7 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 0.7 }}
                 className="grid grid-cols-12"
             >
-                <div className="col-span-6 bg-[url('/home2.webp')] bg-cover bg-center w-full h-[101vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home2.webp')] bg-cover bg-center w-full h-[101vh]"></div>
                 <div className="flex flex-col justify-center items-center col-span-6 p-36">
                     <div className="self-start mb-4">
                         <h5>Would you like to help?</h5>
@@ -158,10 +174,9 @@ const HomePage: React.FC = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="col-span-6 bg-[url('/home3.webp')] bg-cover bg-center w-full h-[97vh]"></div>
+                <div className="col-span-6 bg-[url('/images/home3.webp')] bg-cover bg-center w-full h-[97vh]"></div>
             </motion.div>
         </div>
     );
 };
 
-export default HomePage;
