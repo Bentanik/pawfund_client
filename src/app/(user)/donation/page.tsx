@@ -26,7 +26,7 @@ export default function DonationPage() {
         <div>
             <div className="relative">
                 <img
-                    src="/background.jpg"
+                    src="/images/background.jpg"
                     alt="thumb hero"
                     className="w-[100%]"
                 />
