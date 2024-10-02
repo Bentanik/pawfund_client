@@ -6,7 +6,7 @@ interface InputAuthProps {
   type: "text" | "password",
   autoComplete: "on" | "off",
   label: string,
-  register: any,
+  register?: any,
   error?: string,
   value?: string,
   onClickEyePassword?: any,
@@ -21,7 +21,7 @@ export default function InputAuth({ id, label, type, autoComplete, register, err
         </label>
       </div>
       <div className={`relative block p-2 border-2 border-gray-300 rounded-md focus-visible::border-gray-600 ${error && "border-red-500"}`}>
-        <input id={id} type={type} autoComplete={autoComplete ?? "off"} className={`border-none outline-none w-full`} {...register} />
+        <input id={id} type={type} autoComplete={autoComplete ?? "off"} className={`border-none outline-none w-full bg-transparent`} {...register} />
         {(value !== "" && (id === "password" || id === "confirmpassword")) && <div className="absolute select-none top-[50%] -translate-y-[50%] right-[3%]">
           <span onClick={onClickEyePassword} className="label-auth hover:text-gray-700 cursor-pointer">
             {type === 'password' ? <EyeOff /> : <Eye />}
