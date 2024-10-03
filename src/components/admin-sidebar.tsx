@@ -8,19 +8,18 @@ export default function AdminSidebar() {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const toggleDropdown = (dropdown: string) => {
-        // Nếu dropdown đã mở thì đóng nó, ngược lại mở dropdown mới
         setOpenDropdown(openDropdown === dropdown ? null : dropdown);
     };
 
     return (
         <aside className="w-72 bg-gray-900 text-white h-screen flex items-center">
             <div className="p-4 ml-4 w-full">
-                <h1 className="text-2xl font-bold text-white mb-8 flex items-center space-x-2">
+                {/* <h1 className="text-2xl font-bold text-white mb-8 flex items-center space-x-2">
                     <span className="bg-indigo-500 w-8 h-8 flex items-center justify-center rounded-md">
                         <img src="/tailadmin-logo.svg" alt="TailAdmin Logo" className="w-5 h-5" />
                     </span>
                     <span>TailAdmin</span>
-                </h1>
+                </h1> */}
                 <ul className="space-y-1">
                     <li className="pt-4 text-sm font-semibold text-gray-400">ADMIN</li>
                     <li>
