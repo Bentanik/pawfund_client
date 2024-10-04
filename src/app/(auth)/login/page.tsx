@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function LogIn() {
   return (
-    <div>
+    <div className="w-full">
       <LoginForm />
     </div>
   )
