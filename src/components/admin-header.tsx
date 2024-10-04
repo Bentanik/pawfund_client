@@ -4,13 +4,18 @@ import { VscBellDot } from "react-icons/vsc";
 import { CiSearch } from "react-icons/ci";
 
 export default function AdminHeader() {
+    const [notificationOpen, setNotificationOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const notificationRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setDropdownOpen(false);
+            }
+            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+                setNotificationOpen(false);
             }
         };
 
@@ -34,8 +39,36 @@ export default function AdminHeader() {
             </div>
 
             <div className="flex items-center space-x-4 relative">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 bg-slate-200">
-                    <VscBellDot className="text-black h-6 w-6 cursor-pointer" />
+                <div className="relative" ref={notificationRef}>
+                    <div
+                        onClick={() => setNotificationOpen(!notificationOpen)}
+                        className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 bg-slate-200 cursor-pointer"
+                    >
+                        <VscBellDot className="text-black h-6 w-6" />
+                    </div>
+
+                    {notificationOpen && (
+                        <div
+                            id="notificationDropdown"
+                            className="z-10 absolute right-0 mt-2 bg-white rounded-lg shadow w-80 max-h-80 overflow-y-auto border border-gray-200"
+                        >
+                            <div className="px-4 py-3 text-lg font-semibold text-gray-800 border-b border-gray-200">
+                                Notification
+                            </div>
+                            <ul className="py-2">
+                                {[...Array(3)].map((_, index) => (
+                                    <li key={index} className="px-4 py-3 border-b border-gray-200">
+                                        <div className="text-sm text-gray-700 mb-1">
+                                            {`Notification message ${index + 1} - A brief description that fits nicely.`}
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                            {`${new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}`}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
 
                 <div className="relative" ref={dropdownRef}>
