@@ -1,11 +1,8 @@
 'use client'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { LoginBody, LoginBodyType } from "@/utils/schemaValidations/auth.schema";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
 import InputAuth from "@/components/input-auth";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -68,11 +65,13 @@ export default function LoginForm() {
                                     </span>
                                 </Link>
                             </p>
-                            <p className="text-[1rem]">
-                                <span className="font-bold cursor-pointer">
-                                    Forgot password?
-                                </span>
-                            </p>
+                            <Link href="/forgot-password">
+                                <p className="text-[1rem]">
+                                    <span className="font-bold cursor-pointer">
+                                        Forgot password?
+                                    </span>
+                                </p>
+                            </Link>
                         </div>
                     </div>
                 </form>
