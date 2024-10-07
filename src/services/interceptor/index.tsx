@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios"
 
 const request = axios.create({
-    baseURL: 'http://localhost:8080/api', // Thay URL API của bạn
+    baseURL: process.env.NEXT_PUBLIC_SERVER, // Thay URL API của bạn
     timeout: 10000, // Thời gian chờ tối đa cho mỗi yêu cầu (ms)
     headers: {
         'Content-Type': 'application/json',
@@ -9,6 +9,8 @@ const request = axios.create({
 });
 
 const errorHandler = async (error: AxiosError) => {
+    // const { status, error, message }: TMeta = error.response;
+    console.log("Error: ", error)
 };
 
 request.interceptors.request.use(
@@ -27,7 +29,8 @@ request.interceptors.response.use(
         return response;
     },
     (error) => {
-        errorHandler(error)
+        return errorHandler(error)
     }
 );
 
+export default request
