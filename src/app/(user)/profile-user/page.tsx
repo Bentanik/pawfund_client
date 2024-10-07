@@ -8,22 +8,22 @@ import Profile from "@/components/profile";
 import TabButton from "@/components/ui/tab-button";
 
 export default function UserProfilePage() {
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
     const pathname = usePathname();
     const [activeTab, setActiveTab] = useState("profile"); // Đặt tab mặc định là "profile"
 
     // Khi component mount, luôn đặt về tab "profile" và thay đổi URL
-    useEffect(() => {
-        const tab = searchParams.get("tab");
-        // Kiểm tra nếu có giá trị 'tab' trong URL thì giữ nguyên tab đó
-        // Nếu không có giá trị thì bạn có thể đặt giá trị mặc định
-        if (tab) {
-            setActiveTab(tab);
-        } else {
-            // Đặt tab mặc định nếu không có giá trị nào trong URL, ví dụ "profile"
-            setActiveTab("profile");
-        }
-    }, [pathname]);
+    // useEffect(() => {
+    //     const tab = searchParams.get("tab");
+    //     // Kiểm tra nếu có giá trị 'tab' trong URL thì giữ nguyên tab đó
+    //     // Nếu không có giá trị thì bạn có thể đặt giá trị mặc định
+    //     if (tab) {
+    //         setActiveTab(tab);
+    //     } else {
+    //         // Đặt tab mặc định nếu không có giá trị nào trong URL, ví dụ "profile"
+    //         setActiveTab("profile");
+    //     }
+    // }, [pathname]);
 
     // Hàm render nội dung dựa trên tab hiện tại
     const renderContent = () => {
