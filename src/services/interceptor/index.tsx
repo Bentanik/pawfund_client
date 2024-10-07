@@ -1,21 +1,22 @@
-import axios, { AxiosError } from "axios"
+import { getStorageItem } from "@/utils/local-storage";
+import axios, { AxiosError } from "axios";
 
 const request = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SERVER, // Thay URL API của bạn
     timeout: 10000, // Thời gian chờ tối đa cho mỗi yêu cầu (ms)
     headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
     },
 });
 
 const errorHandler = async (error: AxiosError) => {
-    // const { status, error, message }: TMeta = error.response;
-    console.log("Error: ", error)
+    const responseMeta: TMeta = error.response?.data as TMeta;
+    return Promise.reject(responseMeta);
 };
 
 request.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('accessToken');
+        const token = getStorageItem("accessToken");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -29,8 +30,8 @@ request.interceptors.response.use(
         return response;
     },
     (error) => {
-        return errorHandler(error)
+        return errorHandler(error);
     }
 );
 
-export default request
+export default request;

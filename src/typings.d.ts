@@ -1,5 +1,6 @@
 declare type TMeta = {
-  status: number;
-  message: string;
-  error: string;
+    detail: string;
+    errorCode: string;
+    status: number;
+    title: string;
 };
