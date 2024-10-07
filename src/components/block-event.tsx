@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 const ListEvent = [
     {
         thumb: "/images/meo2.jpg",
@@ -19,35 +20,18 @@ const ListEvent = [
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
     {
-        thumb: "/images/meo5.jpeg",
-        title: "Pet Lovers’ Picnic",
+        thumb: "/images/meo2.jpg",
+        title: "Paws for a Cause Charity Walk",
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
-    {
-        thumb: "/images/meo6.jpeg",
-        title: "Rescue Run 5K",
-        desc: "A fam and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
-    },
-
     {
         thumb: "/images/meo3.jpg",
         title: "Furry Friends Adoption Day",
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
     {
-        thumb: "/images/meo5.jpeg",
-        title: "Pet Lovers’ Picnic",
-        desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
-    },
-    {
-        thumb: "/images/meo6.jpeg",
-        title: "Rescue Run 5K",
-        desc: "A fam and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
-    },
-
-    {
-        thumb: "/images/meo3.jpg",
-        title: "Furry Friends Adoption Day",
+        thumb: "/images/meo4.jpg",
+        title: "Purrfect Paws Gala",
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
 ];
@@ -55,28 +39,43 @@ export default function BlockEvent() {
     const renderListEvent = () => {
         return ListEvent.map((item) => {
             return (
-                <Link
-                    href="/event-detail"
-                    className="block w-[32%] hover:opacity-70"
-                >
-                    <div className="bg-[#00000011] rounded-xl hover:shadow-[0_0_0_2px_#2dd4bf] transition-all duration-300 ease-in-out">
-                        <div className="p-[15px]">
+                <div>
+                    <Link
+                        href="/event-detail"
+                        className="block my-[30px] relative group"
+                    >
+                        <div className="relative w-full max-w-sm">
                             <img
                                 src={item.thumb}
-                                alt="event-thumb"
-                                className="w-full h-[200px] object-cover"
+                                alt="Event"
+                                className="w-[430px] h-[300px] object-cover"
                             />
-                            <div className="mt-[10px]">
-                                <h3 className="text-[1.5rem] font-medium line-clamp-1">
+                            {/* Nội dung chỉ xuất hiện khi hover vào thẻ Link */}
+                            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#00000095] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-2">
+                                <p className="text-[white] text-[0.9rem]">
                                     {item.title}
-                                </h3>
-                                <p className="line-clamp-2 mt-[5px] text-[0.875rem] text-gray-700">
+                                </p>
+                                <p className="text-[white] text-[0.9rem] line-clamp-2 overflow-hidden">
                                     {item.desc}
                                 </p>
                             </div>
                         </div>
+                    </Link>
+
+                    <div className="flex justify-between">
+                        <p>Nov21 - Nov23</p>
+                        <label className="inline-flex items-center mb-5 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                value=""
+                                className="sr-only peer"
+                            />
+
+                            <span className=" mr-[20px]">Receive Alerts</span>
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2dd4be59] dark:peer-focus:ring-[#2DD4BF] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2DD4BF]"></div>
+                        </label>
                     </div>
-                </Link>
+                </div>
             );
         });
     };
@@ -84,7 +83,7 @@ export default function BlockEvent() {
     return (
         <div>
             <div>
-                <div className="flex flex-wrap gap-[10px]">
+                <div className="flex gap-[5%] flex-wrap">
                     {renderListEvent()}
                 </div>
             </div>
