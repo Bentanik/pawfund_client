@@ -3,8 +3,8 @@ import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import Donation from "./donation";
 
 export const metadata: Metadata = {
-    title: "About Us",
-    description: "About us page for PawFund",
+    title: "Donation",
+    description: "Page Donate for PawFund",
 };
 export default function DonationPage() {
     return (
