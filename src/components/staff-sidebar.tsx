@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BsGrid, BsCalendar, BsPerson, BsTable, BsGear, BsChevronDown, BsBoxArrowInRight } from "react-icons/bs";
 import { AiOutlineForm, AiOutlinePieChart } from "react-icons/ai";
-import { RiHome2Line } from "react-icons/ri";
 
-export default function AdminSidebar() {
+export default function StaffSidebar() {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const toggleDropdown = (dropdown: string) => {
@@ -22,8 +21,8 @@ export default function AdminSidebar() {
                     <span>TailAdmin</span>
                 </h1> */}
                 <ul className="space-y-1">
-                    <li className="pt-4 text-sm font-semibold text-gray-400">ADMIN</li>
-                    {/* <li>
+                    <li className="pt-4 text-sm font-semibold text-gray-400">STAFF</li>
+                    <li>
                         <button
                             onClick={() => toggleDropdown('dashboard')}
                             className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
@@ -46,12 +45,6 @@ export default function AdminSidebar() {
                                 </li>
                             </ul>
                         )}
-                    </li> */}
-                    <li>
-                        <Link href="/admin/dashboard" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
-                            <RiHome2Line className="text-lg" />
-                            <span>Dashboard</span>
-                        </Link>
                     </li>
                     <li>
                         <Link href="/admin/calendar" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
@@ -60,9 +53,9 @@ export default function AdminSidebar() {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/admin/manageuser" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+                        <Link href="/admin/profile" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
                             <BsPerson className="text-lg" />
-                            <span>Manage User</span>
+                            <span>Profile</span>
                         </Link>
                     </li>
                     <li>

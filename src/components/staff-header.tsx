@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { VscBellDot } from "react-icons/vsc";
 import { CiSearch } from "react-icons/ci";
 
-export default function AdminHeader() {
+export default function StaffHeader() {
     const [notificationOpen, setNotificationOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
