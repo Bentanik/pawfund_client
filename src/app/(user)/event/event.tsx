@@ -3,6 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import BlockEvent from "@/components/block-event";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
 import {
     Pagination,
     PaginationContent,
@@ -24,14 +26,26 @@ export default function UserProfilePage() {
     return (
         <div className="min-h-screen px-[7%]">
             <div className="flex  py-[20px]">
-                <img
-                    src="/images/thumb-event1.jpg"
-                    alt="thumb-hero"
-                    className="flex-1 w-full h-[600px] object-cover"
-                />
-                <div className="flex-[1]">
+                <motion.div
+                    initial={{ x: 100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 1 }}
+                    className="flex-1"
+                >
+                    <img
+                        src="/images/thumb-event1.jpg"
+                        alt="thumb-hero"
+                        className="w-full h-[600px] object-cover"
+                    />
+                </motion.div>
+                <motion.div
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 1 }}
+                    className="flex-1"
+                >
                     <div className="p-[10%]">
-                        <h1 className="text-[3.5rem] font-semibold after:content-[''] after:absolute after:right-[38%] after:top-[290px] after:w-[7%] after:h-1 after:bg-black">
+                        <h1 className="text-[3.5rem] font-semibold after:content-[''] after:absolute after:left-[11%] after:top-[150px] after:w-[7%] after:h-1 after:bg-black">
                             Cat events
                         </h1>
                         <p className="mt-[70px] ml-[20px]">
@@ -43,7 +57,7 @@ export default function UserProfilePage() {
                             impact in cat lives.
                         </p>
                         <div className="w-full border-t mt-[30px]">
-                            <h2 className="mt-[20px] text-[1.5rem]">
+                            <h2 className="mt-[20px] text-[1.3rem] font-semibold">
                                 You want to become a volunteer ?
                             </h2>
                             <p className="mt-10px">
@@ -56,7 +70,7 @@ export default function UserProfilePage() {
                             </Button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             <div className="mt-[20px]">
