@@ -3,7 +3,6 @@
 import { useLoginForm } from "@/app/(auth)/login/hooks/useLoginForm";
 import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
-import { getStorageItem } from "@/utils/local-storage";
 import Link from "next/link";
 
 export default function LoginForm() {

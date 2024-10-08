@@ -1,8 +1,11 @@
-import { login } from "@/services/auth/api-services";
+import { login, register } from "@/services/auth/api-services";
 import { useAppDispatch } from "@/stores/store";
 import { loginUser } from "@/stores/user-slice";
 import { setStorageItem } from "@/utils/local-storage";
-import { LoginBodyType } from "@/utils/schemaValidations/auth.schema";
+import {
+  LoginBodyType,
+  RegisterBodyType,
+} from "@/utils/schemaValidations/auth.schema";
 import { useMutation } from "@tanstack/react-query";
 
 export const useServiceLogin = () => {
@@ -17,5 +20,11 @@ export const useServiceLogin = () => {
       // Save auth profile in redux storage
       dispatch(loginUser(authProfile));
     },
+  });
+};
+
+export const useServiceRegister = () => {
+  return useMutation<TResponse, TMeta, RegisterBodyType>({
+    mutationFn: register,
   });
 };

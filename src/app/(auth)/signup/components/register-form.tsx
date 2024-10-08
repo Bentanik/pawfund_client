@@ -1,36 +1,15 @@
 'use client'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RegisterBody, RegisterBodyType } from "@/utils/schemaValidations/auth.schema";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useRegisterForm } from "@/app/(auth)/signup/hooks/useRegisterForm";
+import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function RegisterForm() {
-    const { register, handleSubmit, setError, formState: { errors },
-        reset, } =
-        useForm<RegisterBodyType>({
-            resolver: zodResolver(RegisterBody),
-            defaultValues: {
-                firstName: "",
-                lastName: "",
-                email: "",
-                password: "",
-            },
-        });
-
-    const onSubmit = (data: RegisterBodyType) => {
-        try {
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    const { register, errors, handleSubmit, onSubmit, valuePassword, typePassword, valueConfirmPassword, typeConfirmPassword, handleToggleTypePassword, handleToggleConfirmPassword, isPending } = useRegisterForm();
 
     return (
         <div>
-            <div className="w-[70%] px-5 py-4 m-auto">
+            <div className="w-[70%] px-5 py-4 pt-10 m-auto">
                 <h2 className="text-[1.5rem] leading-8 font-medium">Sign up</h2>
                 <span className="text-gray-500 inline-block mt-2">
                     Help us build a better world for animals in need – sign up and become part of our rescue family!
@@ -48,10 +27,31 @@ export default function RegisterForm() {
                         <InputAuth id="email" label="Email" type="text" autoComplete="off" register={register("email")} error={errors?.email?.message} />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <InputAuth id="password" label="Password" type="password" autoComplete="off" register={register("password")} error={errors?.password?.message} />
+                        <InputAuth id="phonenumber" label="Phone Number" type="text" autoComplete="off" register={register("phoneNumber")} error={errors?.phoneNumber?.message} />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <InputAuth id="password" label="Confirm Password" type="password" autoComplete="off" register={register("confirmPassword")} error={errors?.confirmPassword?.message} />
+                        <InputAuth
+                            id="password"
+                            label="Password"
+                            type={typePassword === false ? "password" : "text"}
+                            autoComplete="off"
+                            register={register("password")}
+                            error={errors?.password?.message}
+                            value={valuePassword}
+                            onClickEyePassword={handleToggleTypePassword}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                        <InputAuth
+                            id="confirmpassword"
+                            label="Confirm Password"
+                            type={typeConfirmPassword === false ? "password" : "text"}
+                            autoComplete="off"
+                            register={register("confirmPassword")}
+                            error={errors?.confirmPassword?.message}
+                            value={valueConfirmPassword}
+                            onClickEyePassword={handleToggleConfirmPassword}
+                        />
                     </div>
                     <div className="flex flex-col gap-y-5">
                         <button className={`mt-2 block w-[100%] rounded-md py-2 ${Object.keys(errors).length === 0 ? "bg-[#7a3cdd]" : "bg-[#C3B1E1]"}`}>
@@ -71,15 +71,16 @@ export default function RegisterForm() {
                                     </span>
                                 </Link>
                             </p>
-                            <p className="text-[1rem]">
-                                <span className="font-bold cursor-pointer">
-                                    Forgot password?
-                                </span>
-                            </p>
+                            <Link href="/forgot-password">
+                                <p className="text-[1rem]">
+                                    <span className="font-bold cursor-pointer">Forgot password?</span>
+                                </p>
+                            </Link>
                         </div>
                     </div>
                 </form>
             </div>
+            <Backdrop open={isPending} />
         </div>
     )
 }
