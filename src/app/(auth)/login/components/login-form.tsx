@@ -1,37 +1,13 @@
-'use client'
-import { LoginBody, LoginBodyType } from "@/utils/schemaValidations/auth.schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from '@hookform/resolvers/zod'
+'use client';
+
+import { useLoginForm } from "@/app/(auth)/login/hooks/useLoginForm";
+import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
+import { getStorageItem } from "@/utils/local-storage";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function LoginForm() {
-
-    const [typePassword, setTypePassword] = useState<boolean>(false);
-
-    const { register, watch, handleSubmit, setError, formState: { errors },
-        reset, } =
-        useForm<LoginBodyType>({
-            resolver: zodResolver(LoginBody),
-            defaultValues: {
-                email: "",
-                password: "",
-            },
-        });
-
-    const onSubmit = (data: LoginBodyType) => {
-        try {
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const valuePassword = watch("password");
-
-    const handleToggleTypePassword = () => {
-        setTypePassword(prev => !prev);
-    }
+    const { register, errors, handleSubmit, onSubmit, valuePassword, typePassword, handleToggleTypePassword, isPending } = useLoginForm();
 
     return (
         <div>
@@ -45,10 +21,21 @@ export default function LoginForm() {
                         <InputAuth id="email" label="Email" type="text" autoComplete="off" register={register("email")} error={errors?.email?.message} />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <InputAuth id="password" label="Password" type={typePassword === false ? "password" : "text"} autoComplete="off" register={register("password")} error={errors?.password?.message} value={valuePassword} onClickEyePassword={handleToggleTypePassword} />
+                        <InputAuth
+                            id="password"
+                            label="Password"
+                            type={typePassword === false ? "password" : "text"}
+                            autoComplete="off"
+                            register={register("password")}
+                            error={errors?.password?.message}
+                            value={valuePassword}
+                            onClickEyePassword={handleToggleTypePassword}
+                        />
                     </div>
                     <div className="flex flex-col gap-y-5">
-                        <button className={`mt-2 block w-[100%] rounded-md py-2 ${Object.keys(errors).length === 0 ? "bg-[#7a3cdd]" : "bg-[#C3B1E1]"}`}>
+                        <button
+                            className={`mt-2 block w-[100%] rounded-md py-2 ${Object.keys(errors).length === 0 ? "bg-[#7a3cdd]" : "bg-[#C3B1E1]"}`}
+                        >
                             <span className="text-base text-gray-200">Log In</span>
                         </button>
                         <div className="flex items-center justify-between gap-3">
@@ -60,22 +47,19 @@ export default function LoginForm() {
                             <p className="text-[1rem]">
                                 First time using PawFund?{" "}
                                 <Link href="/signup">
-                                    <span className="font-bold cursor-pointer">
-                                        Sign up
-                                    </span>
+                                    <span className="font-bold cursor-pointer">Sign up</span>
                                 </Link>
                             </p>
                             <Link href="/forgot-password">
                                 <p className="text-[1rem]">
-                                    <span className="font-bold cursor-pointer">
-                                        Forgot password?
-                                    </span>
+                                    <span className="font-bold cursor-pointer">Forgot password?</span>
                                 </p>
                             </Link>
                         </div>
                     </div>
                 </form>
             </div>
+            <Backdrop open={isPending} />
         </div>
-    )
+    );
 }

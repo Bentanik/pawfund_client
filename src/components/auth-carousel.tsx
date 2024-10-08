@@ -22,7 +22,7 @@ export default function AuthCarousel() {
                             layout="fill"
                             priority
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+                        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                         <div className="relative top-[60%]">
                             <p className='text-3xl leading-normal text-gray-50 text-center font-montserrat_alternates'>
                                 Log in to bring hope to abandoned cats
@@ -40,7 +40,7 @@ export default function AuthCarousel() {
                             layout="fill"
                             priority
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+                        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                         <div className="relative top-[60%]">
                             <p className='text-3xl leading-normal text-gray-50 text-center font-montserrat_alternates'>
                                 Amid life’s stress, a cat brings calm and joy

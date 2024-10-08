@@ -44,11 +44,44 @@ const Header: React.FC = () => {
                 <Link href="/adopt" className={`text-gray-600 ${currentPath === "/adopt" ? "text-teal-400" : "hover:text-teal-400"}`}>Adopt</Link>
                 <Link href="/volunteer" className={`text-gray-600 ${currentPath === "/volunteer" ? "text-teal-400" : "hover:text-teal-400"}`}>Volunteer</Link>
                 <Link href="/donation">
-                    <Button variant="outline" className="text-gray-600 bg-teal-400">Donate</Button>
+                    <Button
+                        variant="outline"
+                        className="text-gray-600 bg-teal-400"
+                    >
+                        Donate
+                    </Button>
                 </Link>
-                <Link href="/newandevent" className={`text-gray-600 ${currentPath === "/newandevent" ? "text-teal-400" : "hover:text-teal-400"}`}>News and Events</Link>
-                <Link href="/sponsors" className={`text-gray-600 ${currentPath === "/sponsors" ? "text-teal-400" : "hover:text-teal-400"}`}>Sponsors</Link>
-                <Link href="/login" className={`text-gray-600 ${currentPath === "/login" ? "text-teal-400" : "hover:text-teal-400"}`}>Login</Link>
+                <Link
+                    href="/event"
+                    className={`text-gray-600 ${
+                        currentPath === "/newandevent"
+                            ? "text-teal-400"
+                            : "hover:text-teal-400"
+                    }`}
+                >
+                    News and Events
+                </Link>
+                <Link
+                    href="/sponsors"
+                    className={`text-gray-600 ${
+                        currentPath === "/sponsors"
+                            ? "text-teal-400"
+                            : "hover:text-teal-400"
+                    }`}
+                >
+                    Sponsors
+                </Link>
+                <Link
+                    href="/login"
+                    className={`text-gray-600 ${
+                        currentPath === "/sponsors"
+                            ? "text-teal-400"
+                            : "hover:text-teal-400"
+                    }`}
+                >
+                    Login
+                </Link>
+                
                 <div className="relative" ref={dropdownRef}>
                     <div className="flex items-center">
                         <img
