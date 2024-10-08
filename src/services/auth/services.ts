@@ -1,15 +1,21 @@
 import { login } from "@/services/auth/api-services";
+import { useAppDispatch } from "@/stores/store";
+import { loginUser } from "@/stores/user-slice";
+import { setStorageItem } from "@/utils/local-storage";
 import { LoginBodyType } from "@/utils/schemaValidations/auth.schema";
 import { useMutation } from "@tanstack/react-query";
 
 export const useServiceLogin = () => {
+  const dispatch = useAppDispatch();
+
   return useMutation<API.TAuthResponse, TMeta, LoginBodyType>({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log("I'm first! Data:", data.token.accessToken); // Log dữ liệu trả về từ API
+      const { authProfile, token } = data;
+      // Save access token in local storage
+      setStorageItem("accessToken", `${token.tokenType} ${token.accessToken}`);
+      // Save auth profile in redux storage
+      dispatch(loginUser(authProfile));
     },
-    onError: (error) => {
-        // if(error)
-    }
   });
 };

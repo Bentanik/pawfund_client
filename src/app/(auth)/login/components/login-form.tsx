@@ -1,11 +1,13 @@
 'use client';
 
 import { useLoginForm } from "@/app/(auth)/login/hooks/useLoginForm";
+import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
+import { getStorageItem } from "@/utils/local-storage";
 import Link from "next/link";
 
 export default function LoginForm() {
-    const { register, errors, handleSubmit, onSubmit, valuePassword, typePassword, handleToggleTypePassword } = useLoginForm();
+    const { register, errors, handleSubmit, onSubmit, valuePassword, typePassword, handleToggleTypePassword, isPending } = useLoginForm();
 
     return (
         <div>
@@ -57,6 +59,7 @@ export default function LoginForm() {
                     </div>
                 </form>
             </div>
+            <Backdrop open={isPending} />
         </div>
     );
 }

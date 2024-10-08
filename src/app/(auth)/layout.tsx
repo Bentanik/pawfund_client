@@ -7,6 +7,7 @@ export default function AuthLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    
     return (
         <div className="relative text-base flex items-center">
             <section className="fixed top-0 h-screen w-[45%]">

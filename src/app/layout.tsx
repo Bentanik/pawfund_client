@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import Provider from "@/provider";
+import Provider from "@/provider/query-provider";
+import { StoreProvider } from "@/provider/redux-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -22,9 +23,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${inter.className} ${poppins.className}`}>
-                <Provider>
-                    {children}
-                </Provider>
+                <StoreProvider>
+                    <Provider>
+                        {children}
+                    </Provider>
+                </StoreProvider>
             </body>
         </html>
     );

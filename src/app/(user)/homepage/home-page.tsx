@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useAppSelector } from "@/stores/store";
 
 
 export default function HomePage() {
@@ -25,6 +26,8 @@ export default function HomePage() {
     const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.2 });
     const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.2 });
     const [ref4, inView4] = useInView({ triggerOnce: true, threshold: 0.2 });
+
+    const userState = useAppSelector(state => state.userSlice);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-full bg-gray-100">
