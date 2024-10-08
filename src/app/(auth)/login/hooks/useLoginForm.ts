@@ -8,8 +8,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useServiceLogin } from "@/services/auth/services";
+import { useRouter } from "next/navigation";
 
 export function useLoginForm() {
+  const router = useRouter();
   const [typePassword, setTypePassword] = useState<boolean>(false);
   const { mutate, isPending } = useServiceLogin();
 
@@ -34,6 +36,7 @@ export function useLoginForm() {
         onSuccess: async (data) => {
           if (data) {
             reset();
+            router.push("/");
           }
         },
         onError: (error) => {
