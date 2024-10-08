@@ -53,7 +53,7 @@ export default function BlockEvent() {
                             {/* Nội dung chỉ xuất hiện khi hover vào thẻ Link */}
                             <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#00000095] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-2">
                                 <div className="pt-10">
-                                    <p className="text-[white] text-[0.9rem]">
+                                    <p className="text-[white] text-[0.9rem] text-center">
                                         Click here to view detail
                                     </p>
                                 </div>
