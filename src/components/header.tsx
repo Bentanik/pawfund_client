@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                     </Button>
                 </Link>
                 <Link
-                    href="/donation"
+                    href="/event"
                     className={`text-gray-600 ${
                         currentPath === "/newandevent"
                             ? "text-teal-400"

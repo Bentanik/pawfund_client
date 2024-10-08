@@ -7,7 +7,10 @@ export const metadata: Metadata = {
     description: "Profile User Pages for PawFund",
 };
 
-const ProfileUser = dynamic(() => import('@/app/(user)/profile-user/profile_user'), { ssr: false });
+const ProfileUser = dynamic(
+    () => import("@/app/(user)/profile-user/profile_user"),
+    { ssr: false }
+);
 
 export default function ProfileUserPage() {
     return (
