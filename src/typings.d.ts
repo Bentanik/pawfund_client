@@ -5,6 +5,7 @@ declare type TMeta = {
   title: string;
 };
 
+
 declare type TResponse = {
   value: {
     code: string;
