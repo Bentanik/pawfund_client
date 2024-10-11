@@ -10,6 +10,10 @@ declare namespace API {
     authProfile: TAuthProfile;
   };
 
+  type TAuthVerifyEmail = {
+    email: string;
+  }
+
   type TAuthToken = {
     accessToken: string;
     tokenType: string;
