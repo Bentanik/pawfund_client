@@ -30,3 +30,40 @@ export const verifyEmail = async ({ email }: API.TAuthVerifyEmail) => {
   });
   return response.data;
 };
+
+export const forgotPasswordEmail = async (
+  body: API.TAuthForgotPasswordEmail
+) => {
+  const response = await request<TResponseData>(
+    API_ENDPOINTS.FORGOT_PASSWORD_EMAIL,
+    {
+      method: "POST",
+      data: body,
+    }
+  );
+  return response.data;
+};
+
+export const forgotPasswordOtp = async (body: API.TAuthForgotPasswordOtp) => {
+  const response = await request<TResponseData>(
+    API_ENDPOINTS.FORGOT_PASSWORD_OTP,
+    {
+      method: "POST",
+      data: body,
+    }
+  );
+  return response.data;
+};
+
+export const forgotPasswordChange = async (
+  body: API.TAuthForgotPasswordChange
+) => {
+  const response = await request<TResponseData>(
+    API_ENDPOINTS.FORGOT_PASSWORD_CHANGE,
+    {
+      method: "POST",
+      data: body,
+    }
+  );
+  return response.data;
+};
