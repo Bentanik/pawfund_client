@@ -12,7 +12,22 @@ declare namespace API {
 
   type TAuthVerifyEmail = {
     email: string;
-  }
+  };
+
+  type TAuthForgotPasswordEmail = {
+    email: string;
+  };
+
+  type TAuthForgotPasswordOtp = {
+    email: string;
+    otp: string;
+  };
+
+  type TAuthForgotPasswordChange = {
+    email: string;
+    otp: string;
+    password: string;
+  };
 
   type TAuthToken = {
     accessToken: string;
@@ -24,5 +39,10 @@ declare namespace API {
     firstName: string;
     lastName: string;
     role: AuthRole;
+  };
+
+  type TAuthForgotPassword = {
+    email: string;
+    otp: string;
   };
 }
