@@ -8,15 +8,6 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -46,14 +37,9 @@ export default function Donation() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: "easeOut", delay: 1.2 }}
-                    className="absolute top-[200px] transform pl-[10%]"
+                    className="absolute top-[150px] transform pl-[10%]"
                 >
                     <Tabs defaultValue="one-time" className="w-[400px]">
-                        <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="one-time">One-Time</TabsTrigger>
-                            <TabsTrigger value="weekly">Weekly</TabsTrigger>
-                            <TabsTrigger value="monthly">Monthly</TabsTrigger>
-                        </TabsList>
                         <TabsContent value="one-time">
                             <StepForm />
                         </TabsContent>
