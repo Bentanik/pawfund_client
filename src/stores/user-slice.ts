@@ -19,9 +19,12 @@ const userSlice = createSlice({
     loginUser: (state, action: PayloadAction<API.TAuthProfile>) => {
       state.user = action.payload;
     },
+    resetUser: (state) => {
+      state.user = null;
+    },
   },
 });
 
-export const { loginUser } = userSlice.actions;
+export const { loginUser, resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

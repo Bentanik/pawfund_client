@@ -3,12 +3,13 @@ import {
   forgotPasswordEmail,
   forgotPasswordOtp,
   login,
+  logout,
   register,
   verifyEmail,
 } from "@/services/auth/api-services";
 import { useAppDispatch } from "@/stores/store";
-import { loginUser } from "@/stores/user-slice";
-import { setStorageItem } from "@/utils/local-storage";
+import { loginUser, resetUser } from "@/stores/user-slice";
+import { removeStorageItem, setStorageItem } from "@/utils/local-storage";
 import {
   LoginBodyType,
   RegisterBodyType,
@@ -16,6 +17,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query";
 import { ForgotPasswordEmailBodyType } from "@/utils/schemaValidations/forgotPassword.schema";
+import { store } from "@/stores/store";
 
 export const useServiceLogin = () => {
   const dispatch = useAppDispatch();
@@ -65,5 +67,19 @@ export const useServiceForgotPasswordOtp = () => {
 export const useServiceForgotPasswordChange = () => {
   return useMutation<TResponseData, TMeta, API.TAuthForgotPasswordChange>({
     mutationFn: forgotPasswordChange,
+  });
+};
+
+export const useServiceLogout = () => {
+  return useMutation<TResponseData, TMeta>({
+    mutationFn: logout,
+    onSuccess: (data) => {
+      removeStorageItem("accessToken");
+      store.dispatch(resetUser());
+    },
+    onError: (error) => {
+      removeStorageItem("accessToken");
+      store.dispatch(resetUser());
+    },
   });
 };
