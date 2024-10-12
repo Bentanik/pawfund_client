@@ -11,6 +11,8 @@ import { FaMoon } from "react-icons/fa";
 import { TbMessageReportFilled } from "react-icons/tb";
 import { LuLogOut } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
+import useLogout from "@/hooks/use-logout";
+import { Backdrop } from "../backdrop";
 // import { BiArrowBack } from "react-icons/bi";
 
 const Header: React.FC = () => {
@@ -20,6 +22,7 @@ const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const { handleLogout, isPending } = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -213,9 +216,9 @@ const Header: React.FC = () => {
                   </li>
                 </ul>
                 <div className="py-1">
-                  <a
-                    href="#"
-                    className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
+                  <div
+                    onClick={handleLogout}
+                    className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
                   >
                     <div className="flex items-center">
                       <LuLogOut
@@ -224,7 +227,7 @@ const Header: React.FC = () => {
                       />
                       <span className="text-black">Đăng xuất</span>
                     </div>
-                  </a>
+                  </div>
                 </div>
               </div>
             )}
@@ -297,6 +300,7 @@ const Header: React.FC = () => {
           </div>
         )}
       </nav>
+      <Backdrop open={isPending} />
     </header>
   );
 };
