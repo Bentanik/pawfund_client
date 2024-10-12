@@ -34,6 +34,10 @@ declare namespace API {
     tokenType: string;
   };
 
+  type TAuthLoginGoogle = {
+    accessTokenGoogle: string;
+  };
+
   type TAuthProfile = {
     userId: string;
     firstName: string;

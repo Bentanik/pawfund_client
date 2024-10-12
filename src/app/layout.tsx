@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import dynamic from "next/dynamic";
+import Provider from "@/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -14,18 +14,6 @@ export const metadata: Metadata = {
   description: "This is PawFund",
 };
 
-const StoreProvider = dynamic(
-  () => import("@/provider/redux-provider").then((mod) => mod.StoreProvider),
-  {
-    ssr: false,
-  }
-);
-
-const ReactQueryProvider = dynamic(
-  () => import("@/provider/query-provider").then((mod) => mod.default),
-  { ssr: false }
-);
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${poppins.className}`}>
-        <StoreProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
-        </StoreProvider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
