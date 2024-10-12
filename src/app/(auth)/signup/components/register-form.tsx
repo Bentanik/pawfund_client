@@ -129,7 +129,7 @@ export default function RegisterForm() {
             </div>
             <button
               type="button"
-              onClick={handleLoginGoogle}
+              onClick={() => handleLoginGoogle()}
               className={`block w-[100%] rounded-md py-2 bg-white border border-gray-400 hover:bg-gray-300`}
             >
               <div className="relative">
