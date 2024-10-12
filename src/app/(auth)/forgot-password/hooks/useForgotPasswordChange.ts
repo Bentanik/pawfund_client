@@ -79,7 +79,15 @@ export default function useForgotPasswordChange() {
             handleReset();
           }
         },
-        onError: (error) => {},
+        onError: (error) => {
+          if (error.errorCode.includes("auth_email_02")) {
+            addToast("Error", {
+              description: error.detail,
+              type: "error",
+              duration: 5000,
+            });
+          }
+        },
       });
     } catch (err) {
       console.log(err);
