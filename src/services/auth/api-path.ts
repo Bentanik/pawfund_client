@@ -6,6 +6,8 @@ const VERIFY_EMAIL = AUTH + "/verify-email";
 const FORGOT_PASSWORD_EMAIL = AUTH + "/forgot-password-email";
 const FORGOT_PASSWORD_OTP = AUTH + "/forgot-password-otp";
 const FORGOT_PASSWORD_CHANGE = AUTH + "/forgot-password-change";
+const LOGOUT = AUTH + "/logout";
+const REFRESH_TOKEN = AUTH + "/refresh-token";
 
 export default {
   LOGIN,
@@ -14,4 +16,6 @@ export default {
   FORGOT_PASSWORD_EMAIL,
   FORGOT_PASSWORD_OTP,
   FORGOT_PASSWORD_CHANGE,
+  LOGOUT,
+  REFRESH_TOKEN,
 };
