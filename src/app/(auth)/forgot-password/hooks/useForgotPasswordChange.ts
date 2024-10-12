@@ -73,8 +73,6 @@ export default function useForgotPasswordChange() {
                 type: "success",
                 duration: 5000,
               });
-              reset();
-              router.push("/");
             }
             handleReset();
           }
