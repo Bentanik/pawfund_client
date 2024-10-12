@@ -2,6 +2,7 @@
 import { useRegisterForm } from "@/app/(auth)/signup/hooks/useRegisterForm";
 import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
+import useLoginGoogle from "@/hooks/use-login-google";
 import Link from "next/link";
 
 export default function RegisterForm() {
@@ -18,6 +19,8 @@ export default function RegisterForm() {
     handleToggleConfirmPassword,
     isPending,
   } = useRegisterForm();
+
+  const { handleLoginGoogle, isPendingGoogle } = useLoginGoogle();
 
   return (
     <div>
@@ -124,6 +127,24 @@ export default function RegisterForm() {
                 }`}
               ></div>
             </div>
+            <button
+              type="button"
+              onClick={handleLoginGoogle}
+              className={`block w-[100%] rounded-md py-2 bg-white border border-gray-400 hover:bg-gray-300`}
+            >
+              <div className="relative">
+                <figure className="absolute top-1/2 -translate-y-1/2 left-[38%]">
+                  <img
+                    src={"/images/Google-icon.svg"}
+                    alt="Login with Google"
+                    width={25}
+                    height={25}
+                    className="block"
+                  />
+                </figure>
+                <span className="text-base text-gray-700">Google</span>
+              </div>
+            </button>
             <div className="flex justify-between">
               <p className="text-[1rem]">
                 Have an account PawFund?{" "}
@@ -143,6 +164,7 @@ export default function RegisterForm() {
         </form>
       </div>
       <Backdrop open={isPending} />
+      <Backdrop open={isPendingGoogle} />
     </div>
   );
 }

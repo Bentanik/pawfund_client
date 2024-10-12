@@ -84,3 +84,14 @@ export const refreshToken = async () => {
   );
   return response.data;
 };
+
+export const loginGoogle = async (body: API.TAuthLoginGoogle) => {
+  const response = await request<API.TAuthResponse>(
+    API_ENDPOINTS.LOGIN_GOOGLE,
+    {
+      method: "POST",
+      data: body,
+    }
+  );
+  return response.data;
+};

@@ -9,11 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useServiceLogin } from "@/services/auth/services";
 import { useRouter } from "next/navigation";
+import useToast from "@/hooks/use-toast";
 
 export function useLoginForm() {
   const router = useRouter();
   const [typePassword, setTypePassword] = useState<boolean>(false);
   const { mutate, isPending } = useServiceLogin();
+  const { addToast } = useToast();
 
   const {
     register,
@@ -49,6 +51,13 @@ export function useLoginForm() {
 
           if (error.errorCode.includes("auth_password")) {
             setError("password", {
+              type: "manual",
+              message: error.detail,
+            });
+          }
+
+          if (error.errorCode.includes("auth_noti_11")) {
+            setError("email", {
               type: "manual",
               message: error.detail,
             });

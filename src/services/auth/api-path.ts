@@ -8,6 +8,7 @@ const FORGOT_PASSWORD_OTP = AUTH + "/forgot-password-otp";
 const FORGOT_PASSWORD_CHANGE = AUTH + "/forgot-password-change";
 const LOGOUT = AUTH + "/logout";
 const REFRESH_TOKEN = AUTH + "/refresh-token";
+const LOGIN_GOOGLE = AUTH + "/login-google";
 
 export default {
   LOGIN,
@@ -18,4 +19,5 @@ export default {
   FORGOT_PASSWORD_CHANGE,
   LOGOUT,
   REFRESH_TOKEN,
+  LOGIN_GOOGLE,
 };

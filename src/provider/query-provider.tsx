@@ -11,7 +11,7 @@ const ReactQueryProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      {children}
+        {children}
     </QueryClientProvider>
   );
 };
