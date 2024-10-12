@@ -1,7 +1,7 @@
 "use client";
 import useToast from "@/hooks/use-toast";
 import { useServiceVerifyEmail } from "@/services/auth/services";
-import { isTMeta, isTResponse } from "@/utils/local-storage";
+import { isTMeta, isTResponse } from "@/utils/compare";
 import { useState } from "react";
 
 export default function useVerifySignup() {
