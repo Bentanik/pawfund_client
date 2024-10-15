@@ -15,6 +15,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import userSlice from "@/stores/user-slice";
 import authSlice from "@/stores/auth-slice";
+import createPetSlice from "@/stores/create-pet-slice";
 
 const persistConfig = {
   key: "root",
@@ -26,6 +27,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   userSlice: userSlice,
   authSlice: authSlice,
+  createPetSlice: createPetSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

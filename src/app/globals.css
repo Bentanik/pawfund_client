@@ -97,6 +97,25 @@ body {
   } */
 }
 
+.ql-container {
+  border: 2px solid #9ca3af  !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 6px !important;
+}
+
+/* Customize the Quill editor */
+.ql-editor {
+  padding: 16px !important; /* Add padding */
+  font-size: 14px !important; /* Custom font size */
+  color: #333 !important; /* Custom text color */
+  height: 200px !important;
+}
+
+/* Customize the Quill toolbar */
+.ql-toolbar {
+  border: 2px solid #9ca3af  !important; /* Remove toolbar border */
+  border-radius: 6px;
+}
 @layer base {
   * {
     @apply border-border;

@@ -91,8 +91,6 @@ const CatProfile: React.FC<CatProfileProps> = ({
                             <p>No additional images</p>
                         )}
                     </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
                 </Carousel>
 
                 {/* Modal component */}
