@@ -1,5 +1,3 @@
-"use client";
-
 import CarouselStaffCat from "@/components/CarouselStaffCat";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, DragEvent, useEffect, useState } from "react";
@@ -21,20 +19,33 @@ export default function UploadImageCat() {
     event.stopPropagation();
   };
 
-  const onDragLeave = () => {};
-
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
     const newFiles = event.target.files;
     if (!newFiles) return;
-    setFileList((prev) => [
-      ...prev,
-      {
-        file: newFiles[0],
-        previewUrl: URL.createObjectURL(newFiles[0]),
-      },
-    ]);
+
+    const newFileList = Array.from(newFiles).map((file) => {
+      const fileType = file.type;
+      if (!fileType.startsWith("image/")) {
+        alert("Please upload only image files.");
+        return null;
+      }
+      return {
+        file,
+        previewUrl: URL.createObjectURL(file),
+      };
+    });
+
+    const validFiles = newFileList.filter((file) => file !== null);
+    setFileList((prev) => [...prev, ...validFiles]);
+  };
+
+  // Hàm xử lý xóa ảnh
+  const handleDeleteImage = (previewUrl: string) => {
+    setFileList((prev) =>
+      prev.filter((item) => item.previewUrl !== previewUrl)
+    ); // So sánh với previewUrl
   };
 
   return (
@@ -71,7 +82,8 @@ export default function UploadImageCat() {
       </div>
       <div>
         <CarouselStaffCat
-          otherImages={fileList?.map((item) => item.previewUrl)}
+          otherImages={fileList.map((item) => item.previewUrl)}
+          handleDeleteImage={handleDeleteImage} // Truyền hàm xóa
         />
       </div>
     </div>

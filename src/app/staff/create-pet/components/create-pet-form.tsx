@@ -11,16 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import usePropertyCat from "../hooks/usePropertyCat";
-import UploadImageCat from "./upload-images-cat";
-import { Button } from "@/components/ui/button";
-
-import { Card, CardContent } from "@/components/ui/card";
-import ImageModal from "@/components/image-cat-modal";
-import { useState } from "react";
-import CarouselStaffCat from "@/components/CarouselStaffCat";
-
-
+import usePropertyCat from "@/app/staff/create-pet/hooks/usePropertyCat";
+import UploadImageCat from "@/app/staff/create-pet/components/upload-images-cat";
+import useCreatePetForm from "@/app/staff/create-pet/hooks/useCreatePetForm";
+import { useEffect } from "react";
+import { number } from "zod";
 
 export default function CreatePetForm() {
   // Quill
@@ -44,16 +39,52 @@ export default function CreatePetForm() {
     ],
   });
 
-  // Get api proptery cat
+  useEffect(() => {
+    if (quill) {
+      quill.on("text-change", () => {
+        const content = quill.root.innerHTML;
+        const length = quill.getLength();
+        handleQuillChange(content, length);
+      });
+    }
+  }, [quill]);
+
+  // Get api property cat
   const { sexProperties, breedProperties, colorProperties } = usePropertyCat();
 
-  // Handle upload image
+  // Use create pet form
+  const { register, handleSubmit, onSubmit, errors, setError, setValue } =
+    useCreatePetForm();
+
+  const handleQuillChange = (content: string, length: number) => {
+    if (length === 1) {
+      return setValue("description", "");
+    }
+    setValue("description", content);
+  };
+
+  const handleFormSubmit = (data: any) => {
+    if (quill) {
+      const descriptionContent = quill.root.innerHTML;
+
+      if (!descriptionContent.trim()) {
+        setError("description", {
+          type: "manual",
+          message: "Description is required",
+        });
+        return;
+      }
+
+      const ageValue = parseInt(data.age, 10);
+      onSubmit({ ...data, description: descriptionContent, age: ageValue });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-4">
       <div>Product</div>
       <h1 className="text-3xl font-semibold">Create pet</h1>
-      <form>
+      <form className="w-full h-full" onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="w-full flex gap-x-3">
           <div className="basis-6/10 rounded-lg border-2 border-gray-300">
             <div className="px-5 py-4">
@@ -61,18 +92,35 @@ export default function CreatePetForm() {
               <div className="my-3 flex flex-col gap-y-3">
                 <div className="flex flex-col gap-y-2">
                   <label>Cat name</label>
-                  <Input className="border-2 border-gray-400 focus-visible:ring-0 focus-visible:none" />
+                  <Input
+                    className="border-2 border-gray-400 focus-visible:ring-0 focus-visible:none"
+                    {...register("catName")}
+                  />
+                  {errors?.catName && (
+                    <span className="text-red-500">
+                      {errors?.catName?.message}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-y-2">
                   <label>Age</label>
                   <Input
                     type="number"
                     className="border-2 border-gray-400 focus-visible:ring-0 focus-visible:none"
+                    {...register("age", { valueAsNumber: true })}
                   />
+                  {errors?.age && (
+                    <span className="text-red-500">{errors?.age?.message}</span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-y-2">
                   <label>Description</label>
                   <div ref={quillRef} className="quill-custom-styles" />
+                  {errors?.description && (
+                    <span className="text-red-500">
+                      {errors?.description?.message}
+                    </span>
+                  )}
                 </div>
                 <div className="grid grid-cols-4 gap-x-2">
                   <div className="flex flex-col gap-y-2">
@@ -83,13 +131,11 @@ export default function CreatePetForm() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {sexProperties?.map((item, index) => {
-                            return (
-                              <SelectItem key={index} value={item?.id}>
-                                {item?.value}
-                              </SelectItem>
-                            );
-                          })}
+                          {sexProperties?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.value}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -102,13 +148,11 @@ export default function CreatePetForm() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {breedProperties?.map((item, index) => {
-                            return (
-                              <SelectItem key={index} value={item?.id}>
-                                {item?.value}
-                              </SelectItem>
-                            );
-                          })}
+                          {breedProperties?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.value}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -121,13 +165,11 @@ export default function CreatePetForm() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {colorProperties?.map((item, index) => {
-                            return (
-                              <SelectItem key={index} value={item?.id}>
-                                {item?.value}
-                              </SelectItem>
-                            );
-                          })}
+                          {colorProperties?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.value}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -140,13 +182,11 @@ export default function CreatePetForm() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {sexProperties?.map((item, index) => {
-                            return (
-                              <SelectItem key={index} value={item?.id}>
-                                {item?.value}
-                              </SelectItem>
-                            );
-                          })}
+                          {sexProperties?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.value}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -173,7 +213,7 @@ export default function CreatePetForm() {
                     <span className="text-white">Review</span>
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     className="bg-blue-400 px-3 py-2 rounded-lg shadow-sm"
                   >
                     <span className="text-white">Submit</span>

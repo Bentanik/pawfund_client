@@ -1,38 +1,49 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { X } from "lucide-react";
 
 interface CarouselStaffCat {
   otherImages: string[];
+  handleDeleteImage: (previewUrl: string) => void; // Thay đổi thành nhận previewUrl
 }
 
-export default function CarouselStaffCat({ otherImages }: CarouselStaffCat) {
+export default function CarouselStaffCat({
+  otherImages,
+  handleDeleteImage,
+}: CarouselStaffCat) {
   return (
     <div>
       {otherImages?.length > 0 ? (
-        <div className="relative overflow-x-scroll whitespace-nowrap">
+        <div className="relative overflow-x-auto whitespace-nowrap">
           <div>
-            {otherImages.map((image, index) => (
+            {otherImages.map((image) => (
               <div
-                key={index}
+                key={image}
                 className="inline-block md:basis-1/3 lg:basis-1/4 p-1"
               >
                 <Card>
-                  <CardContent className="w-full p-1 transition-transform transform hover:scale-105">
+                  <CardContent className="relative w-full p-1 transition-transform transform hover:scale-105">
                     <img
                       src={image}
-                      alt={`Other image ${index + 1}`}
+                      alt={`Other image`}
                       className="h-20 w-20 object-cover rounded-lg cursor-pointer"
                     />
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteImage(image)} // Gọi hàm xóa với previewUrl
+                      className="absolute top-[5px] right-2"
+                    >
+                      <span>
+                        <X className="text-gray-100 w-5 h-5 bg-slate-400 rounded-md" />
+                      </span>
+                    </button>
                   </CardContent>
                 </Card>
               </div>
             ))}
           </div>
-
-          {/* Modal for displaying selected image */}
-          {/* <Modal isOpen={isModalOpen} onClose={closeModal} image={selectedImage} /> */}
         </div>
       ) : (
-        <p>No image</p>
+        <p className="text-gray-400 select-none">No image</p>
       )}
     </div>
   );
