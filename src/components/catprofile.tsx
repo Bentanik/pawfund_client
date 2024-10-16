@@ -9,7 +9,9 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import ImageModal from './image-cat-modal';
-
+import AdoptionModal from './adoptionmodal';
+import { useServiceCreateAdoptApplication } from "@/services/adopt/services";
+import useToast from "@/hooks/use-toast";
 interface CatProfileProps {
     mainImage: string;
     otherImages: string[];
@@ -21,6 +23,7 @@ interface CatProfileProps {
     color: string;
     chipStatus: string;
     description: string;
+    catId: string
 }
 
 const CatProfile: React.FC<CatProfileProps> = ({
@@ -34,22 +37,70 @@ const CatProfile: React.FC<CatProfileProps> = ({
     color,
     chipStatus,
     description,
+    catId,
 }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [adoptionModalIsOpen, setAdoptionModalIsOpen] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
+    const { mutate, isPending } = useServiceCreateAdoptApplication();
+    const { addToast } = useToast();
+
     const openModal = (index: number) => {
         setCurrentImageIndex(index);
-        setIsDisabled(true);  
+        setIsDisabled(true);
         setModalIsOpen(true);
     };
 
     const closeModal = () => {
         setModalIsOpen(false);
-        setIsDisabled(false);  
+        setIsDisabled(false);
     };
 
-    
+    const openAdoptionModal = () => {
+        setAdoptionModalIsOpen(true);
+    };
+
+    const closeAdoptionModal = () => {
+        setAdoptionModalIsOpen(false);
+    };
+
+    const handleAdopt = async (data: any) => {
+        const applicationData = {
+            description: data?.description,
+            catId: catId,
+        };
+        try {
+            mutate(applicationData, {
+                onSuccess: async (data) => {
+                    if (data) {
+                        if (data.value.code.includes("adopt_noti")) {
+                            addToast("Success", {
+                                description: data.value.message,
+                                type: "success",
+                                duration: 5000,
+                            });
+                        }
+                    }
+                },
+                onError: (error) => {
+                    if (error.errorCode.includes("adopt_noti")) {
+                        addToast("Error", {
+                            description: error.detail,
+                            type: "error",
+                            duration: 5000,
+                        });
+                    }
+                },
+            });
+
+        } catch (error) {
+            console.error('Có lỗi xảy ra khi gửi yêu cầu nhận nuôi:', error);
+
+        }
+    };
+
+
     const allImages = [mainImage, ...otherImages];
 
     return (
@@ -60,7 +111,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                     src={mainImage}
                     alt={`Main image of ${name}`}
                     className={`w-full h-96 rounded-lg object-cover cursor-pointer ${isDisabled ? '' : 'transition-transform transform hover:scale-105'}`}
-                    onClick={() => openModal(0)} 
+                    onClick={() => openModal(0)}
                 />
 
                 <Carousel
@@ -80,7 +131,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                                                     src={image}
                                                     alt={`Other image ${index + 1}`}
                                                     className="h-48 w-full object-cover rounded-lg cursor-pointer"
-                                                    onClick={() => openModal(index + 1)} 
+                                                    onClick={() => openModal(index + 1)}
                                                 />
                                             </CardContent>
                                         </Card>
@@ -99,7 +150,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                 <ImageModal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
-                    images={allImages} 
+                    images={allImages}
                     currentIndex={currentImageIndex}
                 />
 
@@ -164,10 +215,15 @@ const CatProfile: React.FC<CatProfileProps> = ({
                         <h3 className='text-gray-500'>Mèo (Felis catus) là loài động vật có vú phổ biến và được nuôi làm thú cưng. Chúng có nhiều giống với hình dáng và màu sắc đa dạng. Mèo nổi bật với tính cách độc lập, khả năng tự chăm sóc và kỹ năng săn mồi. Chúng giao tiếp qua âm thanh như kêu và cử chỉ thân thiện như cọ mũi. Mèo không chỉ mang lại niềm vui cho con người mà còn giúp giảm căng thẳng.</h3>
                     </div>
                 </div>
-                <button className="mt-6 bg-teal-400 text-white px-6 py-3 rounded-lg hover:bg-teal-300 transition-transform transform hover:scale-105 ml-20">
-                    GIÚP ĐỠ
+                <button className="mt-6 bg-teal-400 text-white px-6 py-3 rounded-lg hover:bg-teal-300 transition-transform transform hover:scale-105 ml-20" onClick={openAdoptionModal}>
+                    NHẬN NUÔI
                 </button>
             </div>
+            <AdoptionModal
+                isOpen={adoptionModalIsOpen}
+                onRequestClose={closeAdoptionModal}
+                onSubmit={handleAdopt}
+            />
         </div>
     );
 };
