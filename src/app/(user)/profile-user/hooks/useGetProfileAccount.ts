@@ -26,3 +26,4 @@ export default function useGetProfileAccount() {
 
     return { isPending, getProfileAccount };
 }
+

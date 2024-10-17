@@ -14,11 +14,17 @@ interface CatData {
     color: string;
     chipStatus: string;
     description: string;
+    catId: string;
 }
 
-const ViewProfileCatPage = () => {
+interface ViewProfileCatProps {
+    catId: string;
+}
+
+const ViewProfileCat = ({ catId }: ViewProfileCatProps) => {
+    console.log(catId);
     const [catData, setCatData] = useState<CatData>({
-        mainImage: "", // Khởi tạo rỗng, sau này sẽ được cập nhật từ API
+        mainImage: "", // Khởi tạo rỗng, q sau này sẽ được cập nhật từ API
         otherImages: [],
         name: "",
         gender: "",
@@ -28,6 +34,7 @@ const ViewProfileCatPage = () => {
         color: "",
         chipStatus: "",
         description: "",
+        catId: "",
     });
 
     useEffect(() => {
@@ -48,7 +55,8 @@ const ViewProfileCatPage = () => {
                 size: '',
                 color: '',
                 chipStatus: 'Adopted',
-                description: 'Hello',
+                description: '123',
+                catId: 'A7AF8EAA-2E88-4B47-B618-78F66114CBCXs',
             };
 
             setCatData(data);
@@ -70,9 +78,10 @@ const ViewProfileCatPage = () => {
                 color={catData.color}
                 chipStatus={catData.chipStatus}
                 description={catData.description}
+                catId={catId}
             />
         </div>
     );
 };
 
-export default ViewProfileCatPage;
+export default ViewProfileCat;
