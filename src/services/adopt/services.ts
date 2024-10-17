@@ -9,7 +9,6 @@ export const useServiceCreateAdoptApplication = () => {
   return useMutation<TResponse, TMeta, REQUEST.CreateAdoptApplicationBody>({
     mutationFn: createAdoptApplication,
     onSuccess: (data) => {
-      // Xử lý thành công nếu cần
       console.log("Yêu cầu nhận nuôi đã được gửi:", data);
     },
   });
@@ -24,3 +23,6 @@ export const useServiceGetApplicationAdopt = async (
     queryFn: () => getAllApplicationByAdopter(params),
   });
 };
+
+
+

@@ -59,47 +59,53 @@ export default function HomePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: "easeOut", delay: 0.5 }}
                 >
-                    <Button
-                        className={`hover:bg-transparent text-lg w-56 transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`}
-                        variant="outline"
-                    >
-                        <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
-                            learn about us
-                        </span>
-                        <span
-                            className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-4"
+                    <Link href="/aboutus">
+                        <Button
+                            className={`hover:bg-transparent text-lg w-56 transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`}
+                            variant="outline"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </span>
-                    </Button>
+                            <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
+                                learn about us
+                            </span>
+                            <span
+                                className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-4"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </Button>
+                    </Link>
 
-                    <Button className={`hover:bg-pink-600 text-lg w-32 bg-pink-600 border-none transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`} variant="outline">
-                        <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
-                            donate
-                        </span>
-                        <span
-                            className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-2"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </span>
-                    </Button>
+                    <Link href="/donation">
+                        <Button className={`hover:bg-pink-600 text-lg w-32 bg-pink-600 border-none transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`} variant="outline">
+                            <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
+                                donate
+                            </span>
+                            <span
+                                className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </Button>
+                    </Link>
 
-                    <Button className={`hover:bg-transparent text-lg w-48 transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`} variant="outline">
-                        <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
-                            latest news
-                        </span>
-                        <span
-                            className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-5"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </span>
-                    </Button>
+                    <Link href="/event">
+                        <Button className={`hover:bg-transparent text-lg w-48 transform transition-transform duration-700 relative group flex items-center justify-center uppercase p-6`} variant="outline">
+                            <span className="text-white inline-block transition-transform duration-300 transform group-hover:-translate-x-4">
+                                latest news
+                            </span>
+                            <span
+                                className="transition-transform duration-300 transform opacity-0 group-hover:opacity-100 absolute right-5"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </Button>
+                    </Link>
 
                 </motion.div>
             </div>
@@ -169,7 +175,7 @@ export default function HomePage() {
                         We have a range of volunteer roles available.
                     </p>
                     <div className="self-start mt-4">
-                        <Link href="/adopt">
+                        <Link href="/event-detail">
                             <Button
                                 variant="outline"
                                 className="text-gray-600 uppercase p-8 border-black hover:bg-teal-400"

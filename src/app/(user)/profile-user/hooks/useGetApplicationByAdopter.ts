@@ -14,13 +14,6 @@ export default function useGetApplicationByAdopter() {
   ) => {
     setPending(true);
     try {
-      // const res = await useServiceGetApplicationAdopt(params);
-      // if (isTResponseData(res)) {
-      //     return res as TResponseData<API.ResponseData>;
-      // } else {
-      //     addToast("Failed to fetch applications", { type: "error" });
-      //     return null;
-      // }
       const res = await getAllApplicationByAdopter(params);
       if (isTResponseData(res)) {
         return res as TResponseData<API.ResponseData>;

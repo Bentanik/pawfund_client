@@ -31,5 +31,6 @@ export const getAllApplicationByAdopter = async ({
     }
   );
 
-  return response.data; // Trả về dữ liệu từ phản hồi
+  return response.data;
 };
+
