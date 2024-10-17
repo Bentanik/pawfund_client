@@ -14,14 +14,19 @@ const AdoptionModal: React.FC<AdoptionModalProps> = ({ isOpen, onRequestClose, o
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-       
+        // Gửi yêu cầu tạo đơn nhận nuôi
         console.log("Adoption request submitted with description:", description);
 
-        setDescription('');
+        // Gọi hàm onSubmit với dữ liệu mô tả
         onSubmit({
             description: description
         });
-        
+
+        // Reset lại mô tả sau khi tạo đơn
+        setDescription('');
+
+        // Đóng modal
+        onRequestClose();
     };
 
     return (
