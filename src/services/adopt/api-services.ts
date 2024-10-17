@@ -34,3 +34,24 @@ export const getAllApplicationByAdopter = async ({
   return response.data;
 };
 
+export const getAllApplicationByStaff = async ({
+  pageIndex,
+  pageSize,
+  isAscCreatedDate,
+  status
+}: REQUEST.GetApplications): Promise<TResponseData<API.ResponseData>> => {
+  const response = await request<TResponseData<API.ResponseData>>(
+    API_ENDPOINTS.GET_ALL_APPLICATION_BY_STAFF,
+    {
+      method: "GET",
+      params: {
+        pageSize,
+        pageIndex,
+        isAscCreatedDate,
+        status,
+      },
+    }
+  );
+
+  return response.data;
+};

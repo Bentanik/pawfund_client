@@ -8,6 +8,7 @@ declare namespace REQUEST {
     pageIndex: number;
     pageSize: number;
     isAscCreatedDate: boolean;
+    status?: number;
   }
 }
 
@@ -35,7 +36,7 @@ declare namespace API {
         id: string;
         meetingDate: string | null;
         reasonReject: string | null;
-        status: string;
+        status?: string;
         isFinalized: boolean;
         description: string;
         createdDate: string;

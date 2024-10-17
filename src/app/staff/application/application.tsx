@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useGetApplicationByAdopter from "@/app/(user)/profile-user/hooks/useGetApplicationByAdopter";
 import {
     Pagination,
     PaginationContent,
@@ -9,23 +8,25 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import useGetApplicationByStaff from "./hooks/useGetApplicationByStaff";
 
-export default function AdoptApplication() {
-    const { isPending, getAllApplicationByAdopterApi } = useGetApplicationByAdopter();
+export default function StaffApplication() {
+    const { isPending, getAllApplicationByStaffApi } = useGetApplicationByStaff();
     const [applications, setApplications] = useState<API.ResponseData>();
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedStatus, setSelectedStatus] = useState<number | null>(null); // Trạng thái đã chọn là số
 
     const pageSize = 10; 
     const isAscCreatedDate = false; 
 
     const fetchApplications = async (pageNumber: number) => {
-        const res = await getAllApplicationByAdopterApi({
+        const res = await getAllApplicationByStaffApi({
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            
+            status: selectedStatus ?? undefined, 
         });
 
         if (res && res.value) {
@@ -34,17 +35,21 @@ export default function AdoptApplication() {
             setTotalItems(totalCount);
             setTotalPages(Math.ceil(totalCount / pageSize));
         }
-        console.log("data", res);
     };
 
     useEffect(() => {
         fetchApplications(currentPage);
-    }, [currentPage]);
+    }, [currentPage, selectedStatus]); // Cập nhật khi selectedStatus thay đổi
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
         }
+    };
+
+    const handleStatusChange = (status: number | null) => {
+        setSelectedStatus(status);
+        setCurrentPage(1); // Reset về trang 1 khi thay đổi trạng thái
     };
 
     const renderApplications = () => {
@@ -61,31 +66,68 @@ export default function AdoptApplication() {
                 key={app.application.id}
                 className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
             >
-                <div>
+                <div className="flex-grow">
                     <a href="#">
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {app.application.description}
                         </h5>
                     </a>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
                         Sex: {app.application.cat.sex}
                     </p>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
                         Name: {app.application.cat.name}
                     </p>
+                    <p className="font-normal text-gray-700 dark:text-gray-400">
+                        Status: {app.application.status ?? "N/A"} {/* Hiển thị trạng thái trả về từ BE */}
+                    </p>
                 </div>
-                <a
-                    href="#"
-                    className="w-32 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
-                >
-                    Update
-                </a>
             </div>
         ));
     };
 
     return (
         <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            {/* Các tab trạng thái */}
+            <div className="mb-4 flex space-x-2">
+                <button
+                    onClick={() => handleStatusChange(null)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === null ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    All
+                </button>
+                <button
+                    onClick={() => handleStatusChange(0)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    Pending
+                </button>
+                <button
+                    onClick={() => handleStatusChange(1)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    Approved
+                </button>
+                <button
+                    onClick={() => handleStatusChange(2)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 2 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    Approved Outside
+                </button>
+                <button
+                    onClick={() => handleStatusChange(3)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 3 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    Rejected Outside
+                </button>
+                <button
+                    onClick={() => handleStatusChange(-1)}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === -1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                >
+                    Rejected
+                </button>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {renderApplications()}
             </div>
