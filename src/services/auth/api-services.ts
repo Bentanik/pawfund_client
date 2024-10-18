@@ -21,12 +21,10 @@ export const register = async (body: RegisterBodyType) => {
   return response.data;
 };
 
-export const verifyEmail = async ({ email }: API.TAuthVerifyEmail) => {
+export const verifyEmail = async (body: REQUEST.TAuthVerifyEmail) => {
   const response = await request<TResponse>(API_ENDPOINTS.VERIFY_EMAIL, {
-    method: "GET",
-    params: {
-      email: email,
-    },
+    method: "POST",
+    data: body,
   });
   return response.data;
 };

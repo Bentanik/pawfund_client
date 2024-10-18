@@ -10,10 +10,12 @@ export default function ActiveAuthSignup({
   children: React.ReactNode;
   email: string;
 }>) {
-  const { isPending, verifyEmail } = useVerifySignup();
+  const { isPending, verifySignup } = useVerifySignup();
 
   useEffect(() => {
-    verifyEmail(email);
+    verifySignup({
+      email: email,
+    });
   }, []);
 
   return (

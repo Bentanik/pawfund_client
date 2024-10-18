@@ -30,7 +30,6 @@ export default function useForgotPasswordChange() {
     register,
     watch,
     handleSubmit,
-    setError,
     formState: { errors },
     reset,
   } = useForm<ForgotPasswordChangeBodyType>({
