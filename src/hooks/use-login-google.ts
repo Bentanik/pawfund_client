@@ -32,7 +32,7 @@ export default function useLoginGoogle() {
       } catch (error: unknown) {
         if (isTMeta(error)) {
           if (error?.errorCode?.includes("auth_noti")) {
-            addToast("Error", {
+            addToast({
               description: error?.detail,
               type: "error",
               duration: 5000,

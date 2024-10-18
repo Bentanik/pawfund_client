@@ -44,7 +44,7 @@ export function useRegisterForm() {
         onSuccess: async (data) => {
           if (data) {
             if (data.value.code.includes("auth_noti")) {
-              addToast("Success", {
+              addToast({
                 description: data.value.message,
                 type: "success",
                 duration: 5000,
