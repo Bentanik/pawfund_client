@@ -9,13 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useServiceLogin } from "@/services/auth/services";
 import { useRouter } from "next/navigation";
-import useToast from "@/hooks/use-toast";
 
 export function useLoginForm() {
   const router = useRouter();
   const [typePassword, setTypePassword] = useState<boolean>(false);
   const { mutate, isPending } = useServiceLogin();
-  const { addToast } = useToast();
 
   const {
     register,

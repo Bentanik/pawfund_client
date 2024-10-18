@@ -7,7 +7,7 @@ export const RegisterBody = z
     email: z.string().email(),
     password: z.string().min(6).max(100),
     confirmPassword: z.string().min(6).max(100),
-    phoneNumber: z.string().length(10),
+    phoneNumber: z.string().min(9).max(10),
   })
   .strict()
   .superRefine(({ confirmPassword, password }, ctx) => {

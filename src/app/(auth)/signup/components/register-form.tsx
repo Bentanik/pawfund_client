@@ -25,7 +25,7 @@ export default function RegisterForm() {
   return (
     <div>
       <div className="w-[70%] px-5 py-4 pt-10 m-auto">
-        <h2 className="text-[1.5rem] leading-8 font-medium">Sign up</h2>
+        <h2 className="text-[1.5rem] leading-8 font-medium">Sign Up</h2>
         <span className="text-gray-500 inline-block mt-2">
           Help us build a better world for animals in need – sign up and become
           part of our rescue family!
@@ -67,15 +67,39 @@ export default function RegisterForm() {
             />
           </div>
           <div className="flex flex-col gap-y-2">
-            <InputAuth
-              id="phonenumber"
-              label="Phone Number"
-              type="text"
-              autoComplete="off"
-              register={register("phoneNumber")}
-              error={errors?.phoneNumber?.message}
-            />
+            <div className="flex gap-x-4 items-end">
+              <div className="flex flex-col gap-y-2">
+                <div className="flex justify-between">
+                  <label htmlFor="Code" className="text-gray-600 mt-2">
+                    Code
+                  </label>
+                </div>
+                <div
+                  className={`block p-2 border-2 border-gray-300 rounded-md text-center ${
+                    errors?.phoneNumber?.message && "border-red-500"
+                  }`}
+                >
+                  +84
+                </div>
+              </div>
+              <div className="flex-1 flex flex-col gap-y-2">
+                <InputAuth
+                  id="phonenumber"
+                  label="Phone Number"
+                  type="number"
+                  autoComplete="off"
+                  register={register("phoneNumber")}
+                  error={errors?.phoneNumber?.message}
+                />
+              </div>
+            </div>
+            {errors?.phoneNumber?.message && (
+              <p className="text-base text-red-400">
+                {errors?.phoneNumber?.message}
+              </p>
+            )}
           </div>
+
           <div className="flex flex-col gap-y-2">
             <InputAuth
               id="password"

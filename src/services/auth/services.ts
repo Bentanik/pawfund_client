@@ -18,6 +18,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query";
 import { ForgotPasswordEmailBodyType } from "@/utils/schemaValidations/forgotPassword.schema";
 import { store } from "@/stores/store";
+import useToast from "@/hooks/use-toast";
 
 export const useServiceLogin = () => {
   const dispatch = useAppDispatch();
@@ -40,14 +41,17 @@ export const useServiceRegister = () => {
   });
 };
 
-export const useServiceVerifyEmail = async (email: string) => {
-  const queryClient = getQueryClient();
-  return await queryClient.fetchQuery<TResponse, TMeta, API.TAuthVerifyEmail>({
-    queryKey: ["authentication"],
-    queryFn: async () =>
-      await verifyEmail({
-        email: email,
-      }),
+export const useServiceVerifyEmail = () => {
+  const { addToast } = useToast();
+  return useMutation<TResponse, TMeta, REQUEST.TAuthVerifyEmail>({
+    mutationFn: verifyEmail,
+    onSuccess: (data) => {
+      addToast({
+        type: "success",
+        description: data.value.message,
+        duration: 5000,
+      });
+    },
   });
 };
 

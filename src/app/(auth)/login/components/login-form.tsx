@@ -23,7 +23,7 @@ export default function LoginForm() {
   return (
     <div>
       <div className="w-[70%] px-5 py-4 m-auto">
-        <h2 className="text-[1.5rem] leading-8 font-medium">Log in</h2>
+        <h2 className="text-[1.5rem] leading-8 font-medium">Log In</h2>
         <span className="text-gray-500 inline-block mt-2">
           Become a hero for animals in need, starting your journey here by
           logging in and making a difference today.
