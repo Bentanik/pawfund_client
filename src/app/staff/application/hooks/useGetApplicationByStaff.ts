@@ -1,5 +1,8 @@
 import useToast from "@/hooks/use-toast";
-import { getAllApplicationByAdopter, getAllApplicationByStaff } from "@/services/adopt/api-services";
+import {
+  getAllApplicationByAdopter,
+  getAllApplicationByStaff,
+} from "@/services/adopt/api-services";
 import { useServiceGetApplicationAdopt } from "@/services/adopt/services";
 import { isTResponseData } from "@/utils/compare";
 import { useQuery } from "@tanstack/react-query";
@@ -18,12 +21,16 @@ export default function useGetApplicationByStaff() {
       if (isTResponseData(res)) {
         return res as TResponseData<API.ResponseData>;
       } else {
-        addToast("Failed to fetch applications", { type: "error" });
+        addToast({
+          type: "error",
+          description: "Failed to fetch applications",
+        });
         return null;
       }
     } catch (error) {
-      addToast("An error occurred while fetching applications", {
+      addToast({
         type: "error",
+        description: "An error occurred while fetching applications",
       });
       return null;
     } finally {
