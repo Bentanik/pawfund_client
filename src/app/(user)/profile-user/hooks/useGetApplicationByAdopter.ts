@@ -18,12 +18,16 @@ export default function useGetApplicationByAdopter() {
       if (isTResponseData(res)) {
         return res as TResponseData<API.ResponseData>;
       } else {
-        addToast("Failed to fetch applications", { type: "error" });
+        addToast({
+          type: "error",
+          description: "Failed to fetch applications",
+        });
         return null;
       }
     } catch (error) {
-      addToast("An error occurred while fetching applications", {
+      addToast({
         type: "error",
+        description: "An error occurred while fetching applications",
       });
       return null;
     } finally {
