@@ -19,7 +19,7 @@ export default function LoginForm() {
   } = useLoginForm();
 
   const { handleLoginGoogle, isPendingGoogle } = useLoginGoogle();
-  
+
   return (
     <div>
       <div className="w-[70%] px-5 py-4 m-auto">

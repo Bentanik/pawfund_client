@@ -5,12 +5,6 @@ declare namespace REQUEST {
 }
 
 declare namespace API {
-  enum AuthRole {
-    USER = "user",
-    STAFF = "staff",
-    ADMIN = "admin",
-  }
-
   type TAuthResponse = {
     token: TAuthToken;
     authProfile: TAuthProfile;
@@ -45,7 +39,7 @@ declare namespace API {
     firstName: string;
     lastName: string;
     avatarLink: string;
-    role: AuthRole;
+    roleId: AuthRole;
   };
 
   type TAuthForgotPassword = {

@@ -1,4 +1,3 @@
-"use client";
 import StaffHeader from '@/components/staff-header'
 import StaffSidebar from '@/components/staff-sidebar';
 import React from 'react'
