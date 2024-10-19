@@ -1,10 +1,4 @@
 declare namespace API {
-  enum AuthRole {
-    USER = "user",
-    STAFF = "staff",
-    ADMIN = "admin",
-  }
-
   type TAuthResponse = {
     token: TAuthToken;
     authProfile: TAuthProfile;
