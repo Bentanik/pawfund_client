@@ -1,12 +1,20 @@
 import CarouselStaffCat from "@/components/CarouselStaffCat";
 import { Input } from "@/components/ui/input";
+import { ImagePlus } from "lucide-react";
 import { ChangeEvent, DragEvent, useEffect, useState } from "react";
 
-export default function UploadImageCat() {
+interface UploadImageCatProps {
+  fileList: { file: File; previewUrl: string }[];
+  setFileList: React.Dispatch<
+    React.SetStateAction<{ file: File; previewUrl: string }[]>
+  >;
+}
+
+export default function UploadImageCat({
+  fileList,
+  setFileList,
+}: UploadImageCatProps) {
   // Upload image
-  const [fileList, setFileList] = useState<
-    { file: File; previewUrl: string }[]
-  >([]);
 
   useEffect(() => {
     return () => {
@@ -41,16 +49,15 @@ export default function UploadImageCat() {
     setFileList((prev) => [...prev, ...validFiles]);
   };
 
-  // Hàm xử lý xóa ảnh
   const handleDeleteImage = (previewUrl: string) => {
     setFileList((prev) =>
       prev.filter((item) => item.previewUrl !== previewUrl)
-    ); // So sánh với previewUrl
+    );
   };
 
   return (
-    <div className="flex flex-col gap-y-2">
-      <div className="relative border-2 border-dashed h-[200px] rounded-md border-gray-300 hover:border-gray-700 transition-all group">
+    <div className="flex flex-col gap-y-4">
+      <div className="relative border-2 border-dashed h-[320px] rounded-md border-gray-500 hover:border-gray-800 transition-all group">
         <Input
           onDragEnter={onDragEnter}
           onChange={onFileChange}
@@ -61,29 +68,21 @@ export default function UploadImageCat() {
         />
         <div className="z-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="w-full flex flex-col items-center justify-center gap-y-2">
-            <figure className="bg-orange-200 px-16 py-4">
-              <img
-                src="/images/cat.png"
-                alt="Upload"
-                width={100}
-                height={100}
-              />
+            <figure className="px-16 py-4">
+              <div className="flex items-center gap-x-3">
+                <ImagePlus className="w-[30px] h-[30px] text-zinc-400" />
+                <span className="text-xl font-semibold text-zinc-400">
+                  Upload
+                </span>
+              </div>
             </figure>
-            <div className="flex flex-col">
-              <span className="font-mono text-base text-center text-gray-400 group-hover:text-gray-800">
-                Click here
-              </span>
-              <span className="font-mono text-base text-center text-gray-400 group-hover:text-gray-800">
-                Drag and drop image
-              </span>
-            </div>
           </div>
         </div>
       </div>
       <div>
         <CarouselStaffCat
           otherImages={fileList.map((item) => item.previewUrl)}
-          handleDeleteImage={handleDeleteImage} // Truyền hàm xóa
+          handleDeleteImage={handleDeleteImage}
         />
       </div>
     </div>

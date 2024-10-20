@@ -2,8 +2,10 @@ import { z } from "zod";
 
 export const CreatePetBody = z.object({
   catName: z.string().min(1, "Cat name is required"),
-  age: z.number().int().min(0, "Age must be a positive number"),
-  description: z.string().min(1, "Description is required"), // Yêu cầu description không được rỗng
+  age: z.string().min(1, "Age name is required"),
+  weight: z.number().int().min(0, "Age must be a positive number"),
+  description: z.string().min(1, "Description is required"),
+  color: z.string().min(1, "Color is required"),
 });
 
 export type CreatePetBodyType = z.TypeOf<typeof CreatePetBody>;

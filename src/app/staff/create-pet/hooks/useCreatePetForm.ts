@@ -18,18 +18,26 @@ export default function useCreatePetForm() {
     resolver: zodResolver(CreatePetBody),
     defaultValues: {
       catName: "",
-      age: 0,
+      age: "",
+      weight: 0,
       description: "",
+      color: "",
     },
   });
 
-  const onSubmit = (data: CreatePetBodyType) => {
+  const onSubmit = (data: REQUEST.TCreateCat) => {
+    try {
+      console.log("Data: ", data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return {
     register,
     handleSubmit,
     onSubmit,
+    watch,
     errors,
     setError,
     setValue,

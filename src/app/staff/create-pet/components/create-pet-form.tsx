@@ -1,8 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
 import {
   Select,
   SelectContent,
@@ -11,89 +9,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import usePropertyCat from "@/app/staff/create-pet/hooks/usePropertyCat";
 import UploadImageCat from "@/app/staff/create-pet/components/upload-images-cat";
 import useCreatePetForm from "@/app/staff/create-pet/hooks/useCreatePetForm";
-import { useEffect } from "react";
-import { number } from "zod";
+import { useState } from "react";
+import { breedCats, sexCats } from "@/const/propteryCat";
+import { Textarea } from "@/components/ui/textarea";
+import { CreatePetBodyType } from "@/utils/schemaValidations/create-pet.schema";
 
 export default function CreatePetForm() {
-  // Quill
-  const { quill, quillRef } = useQuill({
-    modules: {
-      toolbar: [
-        [{ header: "1" }, { header: "2" }],
-        [{ size: [] }],
-        ["bold", "italic", "underline"],
-        [{ list: "ordered" }, { list: "bullet" }],
-      ],
-    },
-    formats: [
-      "size",
-      "header",
-      "bold",
-      "italic",
-      "underline",
-      "list",
-      "script",
-    ],
-  });
-
-  useEffect(() => {
-    if (quill) {
-      quill.on("text-change", () => {
-        const content = quill.root.innerHTML;
-        const length = quill.getLength();
-        handleQuillChange(content, length);
-      });
-    }
-  }, [quill]);
-
-  // Get api property cat
-  const { sexProperties, breedProperties, colorProperties } = usePropertyCat();
-
   // Use create pet form
-  const { register, handleSubmit, onSubmit, errors, setError, setValue } =
-    useCreatePetForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    onSubmit,
+    errors,
+    setError,
+    setValue,
+  } = useCreatePetForm();
 
-  const handleQuillChange = (content: string, length: number) => {
-    if (length === 1) {
-      return setValue("description", "");
-    }
-    setValue("description", content);
+  const [fileList, setFileList] = useState<
+    { file: File; previewUrl: string }[]
+  >([]);
+
+  const [breed, setBreed] = useState<string>(breedCats[0]?.name || "");
+  const [sexCat, setSexCat] = useState<string>(sexCats[0]?.sex || "");
+
+  const handleFormSubmit = (data: CreatePetBodyType) => {
+    const form: REQUEST.TCreateCat = {
+      catName: data.catName,
+      age: data.age,
+      sex: sexCat,
+      weight: data.weight,
+      breed: breed,
+      description: data.description,
+      color: data.color,
+      images: fileList.map((item) => item.file),
+    };
+    onSubmit(form);
   };
 
-  const handleFormSubmit = (data: any) => {
-    if (quill) {
-      const descriptionContent = quill.root.innerHTML;
-
-      if (!descriptionContent.trim()) {
-        setError("description", {
-          type: "manual",
-          message: "Description is required",
-        });
-        return;
-      }
-
-      const ageValue = parseInt(data.age, 10);
-      onSubmit({ ...data, description: descriptionContent, age: ageValue });
-    }
+  const handleSearchBreed = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filtered = breedCats.filter((breed) =>
+      breed.name.toLowerCase().includes(e.target.value.toLocaleLowerCase())
+    );
+    const value = filtered?.length > 0 ? filtered[0].name : breedCats[0].name;
+    setBreed(value);
   };
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div>Product</div>
-      <h1 className="text-3xl font-semibold">Create pet</h1>
+    <div className="flex">
       <form className="w-full h-full" onSubmit={handleSubmit(handleFormSubmit)}>
-        <div className="w-full flex gap-x-3">
-          <div className="basis-6/10 rounded-lg border-2 border-gray-300">
-            <div className="px-5 py-4">
-              <h3 className="text-[18px] text-gray-500">Cat</h3>
-              <div className="my-3 flex flex-col gap-y-3">
+        <div className="w-full flex gap-x-7">
+          <div className="w-[60%] rounded-lg">
+            <div>
+              <h4 className="text-2xl font-semibold">Cat information</h4>
+              <div className="my-5 flex flex-col gap-y-5">
                 <div className="flex flex-col gap-y-2">
-                  <label>Cat name</label>
+                  <label className="text-base font-semibold">Cat name</label>
                   <Input
-                    className="border-2 border-gray-400 focus-visible:ring-0 focus-visible:none"
+                    className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
+                    autoComplete="off"
+                    placeholder="e.g. Hehe"
                     {...register("catName")}
                   />
                   {errors?.catName && (
@@ -102,123 +79,150 @@ export default function CreatePetForm() {
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col gap-y-2">
-                  <label>Age</label>
-                  <Input
-                    type="number"
-                    className="border-2 border-gray-400 focus-visible:ring-0 focus-visible:none"
-                    {...register("age", { valueAsNumber: true })}
-                  />
+                <div className="flex flex-col gap-y-1">
+                  <div className="flex items-center gap-x-5">
+                    <div className="w-[70%] flex flex-col gap-y-2">
+                      <label className="text-base font-semibold">Age</label>
+                      <Input
+                        className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
+                        autoComplete="off"
+                        placeholder="e.g. YoungOlder"
+                        {...register("age")}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-col gap-y-2">
+                        <label className="text-base font-semibold">Sex</label>
+                        <Select
+                          value={sexCat}
+                          onValueChange={(value) => setSexCat(value)}
+                        >
+                          <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
+                            <SelectValue placeholder="Choose sex cat" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {sexCats?.map((item, index) => (
+                                <SelectItem key={index} value={item?.sex}>
+                                  {item?.sex}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                   {errors?.age && (
                     <span className="text-red-500">{errors?.age?.message}</span>
                   )}
                 </div>
+
                 <div className="flex flex-col gap-y-2">
-                  <label>Description</label>
-                  <div ref={quillRef} className="quill-custom-styles" />
-                  {errors?.description && (
+                  <label className="text-base font-semibold">Color</label>
+                  <Input
+                    className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
+                    autoComplete="off"
+                    placeholder="e.g. Mau dom"
+                    {...register("color")}
+                  />
+                  {errors?.color && (
                     <span className="text-red-500">
-                      {errors?.description?.message}
+                      {errors?.color?.message}
                     </span>
                   )}
                 </div>
-                <div className="grid grid-cols-4 gap-x-2">
-                  <div className="flex flex-col gap-y-2">
-                    <label>Sex</label>
-                    <Select>
-                      <SelectTrigger className="w-[180px] border-2 border-gray-400">
-                        <SelectValue placeholder="Choose gender" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {sexProperties?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.value}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+
+                <div className="flex flex-col gap-y-2">
+                  <label className="text-base font-semibold">Weight</label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none pr-11"
+                      placeholder="eg. 10"
+                      {...register("weight", { valueAsNumber: true })}
+                    />
+                    <span className="absolute top-1/2 -translate-y-1/2 right-5 text-base text-gray-400">
+                      Kg
+                    </span>
                   </div>
-                  <div className="flex flex-col gap-y-2">
-                    <label>Breed</label>
-                    <Select>
-                      <SelectTrigger className="w-[180px] border-2 border-gray-400">
-                        <SelectValue placeholder="Choose breed" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {breedProperties?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.value}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                  {errors?.weight && (
+                    <span className="text-red-500">
+                      {errors?.weight?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-y-2">
+                  <div className="flex items-center gap-x-4">
+                    <label className="text-[15px] font-semibold">Breed</label>
+                    <div>
+                      <div className="w-[200px]">
+                        <Input
+                          type="text"
+                          className="text-xs py-3 h-6 border bg-[#f2f4f7] focus-visible:ring-1 focus-visible:none"
+                          placeholder="eg. Abyssinian"
+                          onChange={handleSearchBreed}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-y-2">
-                    <label>Color</label>
-                    <Select>
-                      <SelectTrigger className="w-[180px] border-2 border-gray-400">
-                        <SelectValue placeholder="Choose color" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {colorProperties?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.value}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <label>Size</label>
-                    <Select>
-                      <SelectTrigger className="w-[180px] border-2 border-gray-400">
-                        <SelectValue placeholder="Choose size" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {sexProperties?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.value}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                  <Select
+                    value={breed}
+                    onValueChange={(value) => setBreed(value)}
+                  >
+                    <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
+                      <SelectValue placeholder="Choose breed cat" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {breedCats?.map((item, index) => (
+                          <SelectItem key={index} value={item?.name}>
+                            {item?.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-y-2">
+                  <label className="text-base font-semibold">Description</label>
+                  <div className="flex flex-col gap-y-1">
+                    <Textarea
+                      className="border h-[250px] bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none resize-none"
+                      {...register("description")}
+                    />
+                    <div className="flex items-center justify-between">
+                      <span className="text-red-500">
+                        {errors?.description?.message}
+                      </span>
+                      <span className="text-[14px] text-gray-600">
+                        {watch("description").length} character
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex-1 rounded-lg border-2 border-gray-300">
-            <div className="px-5 py-4">
-              <h3 className="text-[18px] text-gray-500">Cat</h3>
-              <div className="my-3 flex flex-col gap-y-6">
-                <div className="flex flex-col gap-y-3">
-                  <div className="flex flex-col gap-y-2">
-                    <label>Images</label>
-                    <UploadImageCat />
-                  </div>
+          <div className="flex-1 rounded-lg">
+            <div className="flex flex-col gap-y-6">
+              <div className="flex flex-col gap-y-3">
+                <div className="flex flex-col gap-y-4">
+                  <label className="text-base font-semibold">Cat name</label>
+                  <UploadImageCat
+                    fileList={fileList}
+                    setFileList={setFileList}
+                  />
                 </div>
-                <div className="flex items-center justify-end gap-x-4">
-                  <button
-                    type="button"
-                    className="bg-blue-400 px-3 py-2 rounded-lg shadow-sm"
-                  >
-                    <span className="text-white">Review</span>
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-blue-400 px-3 py-2 rounded-lg shadow-sm"
-                  >
-                    <span className="text-white">Submit</span>
-                  </button>
-                </div>
+              </div>
+              <div className="flex items-center justify-end gap-x-4">
+                <button
+                  type="submit"
+                  className="bg-blue-400 px-4 py-2 rounded-lg shadow-sm"
+                >
+                  <span className="text-white">Submit</span>
+                </button>
               </div>
             </div>
           </div>
