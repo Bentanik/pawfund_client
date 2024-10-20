@@ -2,7 +2,7 @@ declare namespace REQUEST {
   type TCreateCat = {
     catName: string;
     age: string;
-    sex: string;
+    sex: int;
     weight: number;
     breed: string;
     description: string;

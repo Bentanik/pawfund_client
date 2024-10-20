@@ -12,7 +12,7 @@ import {
 import UploadImageCat from "@/app/staff/create-pet/components/upload-images-cat";
 import useCreatePetForm from "@/app/staff/create-pet/hooks/useCreatePetForm";
 import { useState } from "react";
-import { breedCats, sexCats } from "@/const/propteryCat";
+import { breedCats, sexCats, TSexCat } from "@/const/propteryCat";
 import { Textarea } from "@/components/ui/textarea";
 import { CreatePetBodyType } from "@/utils/schemaValidations/create-pet.schema";
 
@@ -33,7 +33,7 @@ export default function CreatePetForm() {
   >([]);
 
   const [breed, setBreed] = useState<string>(breedCats[0]?.name || "");
-  const [sexCat, setSexCat] = useState<string>(sexCats[0]?.sex || "");
+  const [sexCat, setSexCat] = useState<TSexCat>(sexCats[0]);
 
   const handleFormSubmit = (data: CreatePetBodyType) => {
     const form: REQUEST.TCreateCat = {
@@ -94,8 +94,12 @@ export default function CreatePetForm() {
                       <div className="flex flex-col gap-y-2">
                         <label className="text-base font-semibold">Sex</label>
                         <Select
-                          value={sexCat}
-                          onValueChange={(value) => setSexCat(value)}
+                          value={sexCat.sex}
+                          onValueChange={(value) =>
+                            setSexCat(
+                              value === "Male" ? sexCats[0] : sexCats[1]
+                            )
+                          }
                         >
                           <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
                             <SelectValue placeholder="Choose sex cat" />
@@ -103,7 +107,7 @@ export default function CreatePetForm() {
                           <SelectContent>
                             <SelectGroup>
                               {sexCats?.map((item, index) => (
-                                <SelectItem key={index} value={item?.sex}>
+                                <SelectItem key={index} value={item.sex}>
                                   {item?.sex}
                                 </SelectItem>
                               ))}

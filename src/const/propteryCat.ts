@@ -1,8 +1,14 @@
-export const sexCats = [
+export type TSexCat = {
+  id: number;
+  sex: string;
+};
+export const sexCats: TSexCat[] = [
   {
+    id: 0,
     sex: "Male",
   },
   {
+    id: 1,
     sex: "Female",
   },
 ];
