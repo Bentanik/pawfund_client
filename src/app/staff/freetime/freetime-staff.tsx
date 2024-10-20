@@ -21,6 +21,7 @@ export default function ManageData() {
   const [newDateTime, setNewDateTime] = useState<Date | null>(null);
   const [newQuantity, setNewQuantity] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newData = [...data];
@@ -77,6 +78,7 @@ export default function ManageData() {
   const handleDelete = (index: number) => {
     const newData = data.filter((_, i) => i !== index);
     setData(newData);
+    closeModalDelete();
   };
 
   const handleSubmit = async () => {
@@ -86,6 +88,15 @@ export default function ManageData() {
     } else {
       console.error("Không có dữ liệu để cập nhật");
     }
+  };
+
+  const openModalDelete = () => {
+    setIsModalOpenDelete(true);
+  };
+
+  // Hàm đóng modal
+  const closeModalDelete = () => {
+    setIsModalOpenDelete(false);
   };
 
   return (
@@ -99,7 +110,7 @@ export default function ManageData() {
           <div className="mr-2">
             <FaPlus />
           </div>
-          Add Time
+          Add New Time
         </Button>
       </div>
 
@@ -107,9 +118,9 @@ export default function ManageData() {
         <table className="w-full text-md bg-white shadow-md rounded mb-4">
           <thead>
             <tr className="border-b bg-gray-300">
-              <th className="text-left p-3 px-5">Ngày và Giờ</th>
-              <th className="text-left p-3 px-5">Số lượng</th>
-              <th className="p-3 px-5">Xóa</th>
+              <th className="text-left p-3 px-5">Date and Time</th>
+              <th className="text-left p-3 px-5">Quantity</th>
+              <th className="p-3 px-5">Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -152,11 +163,73 @@ export default function ManageData() {
                   </td>
                   <td className="p-3 px-5 text-center">
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={openModalDelete}
                       className="text-red-500 hover:text-red-700"
                     >
                       <FaRegTrashCan />
                     </button>
+                    {isModalOpenDelete && (
+                      <div className="fixed inset-0 bg-black bg-opacity-20 z-40" onClick={closeModalDelete}></div>
+                    )}
+                    {isModalOpenDelete && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto transform translate-x-32">
+                        <div className="relative p-4 w-full max-w-md flex">
+                          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <button
+                              onClick={closeModalDelete}
+                              className="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+                            >
+                              <svg
+                                className="w-3 h-3"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 14"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                />
+                              </svg>
+                              <span className="sr-only">Đóng modal</span>
+                            </button>
+                            <div className="p-4 text-center">
+                              <svg
+                                className="mx-auto mb-4 text-gray-400 w-12 h-12"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                              </svg>
+                              <h3 className="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this information?</h3>
+                              <button
+                                onClick={() => handleDelete(index)}
+                                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5"
+                              >
+                                Yes, I am sure.
+                              </button>
+                              <button
+                                onClick={closeModalDelete}
+                                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                              >
+                                No, cancel.
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
@@ -214,8 +287,8 @@ export default function ManageData() {
                 }}
               >
                 <div className="mb-4">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Ngày và Giờ
+                  <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
+                    Date and time
                   </label>
                   <DateTimePicker
                     value={selectedDate === null ? undefined : selectedDate}
@@ -230,8 +303,8 @@ export default function ManageData() {
                   )}
                 </div>
                 <div className="mb-4">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Số lượng
+                  <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
+                    Quantity
                   </label>
                   <input
                     type="number"
@@ -245,20 +318,20 @@ export default function ManageData() {
                   type="submit"
                   className="inline-flex justify-center w-full rounded-lg border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                 >
-                  Thêm
+                  Add New Time
                 </button>
               </form>
             </div>
           </div>
         </div>
       )}
-      <Button
+      <div className="flex justify-end px-2"><Button
         onClick={handleSubmit}
         disabled={isPending}
-        className="bg-teal-400 flex items-center m-4"
+        className="bg-teal-400 flex items-center"
       >
-        Lưu
-      </Button>
+        Submit
+      </Button></div>
     </div>
   );
 }
