@@ -17,14 +17,14 @@ export default function StaffHeader() {
   const { addToast } = useToast();
 
   useEffect(() => {
-    if (userState.user?.roleId !== 2) {
-      router.push("/");
-      return addToast({
-        type: "error",
-        description: "Sorry, you do not have permission to access this page.",
-        duration: 5000,
-      });
-    }
+    // if (userState.user?.roleId !== 2) {
+    //   router.push("/");
+    //   return addToast({
+    //     type: "error",
+    //     description: "Sorry, you do not have permission to access this page.",
+    //     duration: 5000,
+    //   });
+    // }
 
     const handleClickOutside = (event: MouseEvent) => {
       if (

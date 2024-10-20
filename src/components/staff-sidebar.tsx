@@ -53,9 +53,9 @@ export default function StaffSidebar() {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/admin/profile" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+                        <Link href="/staff/freetime" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
                             <BsPerson className="text-lg" />
-                            <span>Profile</span>
+                            <span>Free Time</span>
                         </Link>
                     </li>
                     <li>

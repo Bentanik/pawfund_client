@@ -9,56 +9,57 @@ declare namespace REQUEST {
     pageSize: number;
     isAscCreatedDate: boolean;
     status?: number;
-  }
+  };
+  type MeetingData = {
+    meetingTime: string; 
+    numberOfStaffsFree: number; 
+  };
+
+  type GetMeetingResponse = MeetingData[];
 }
 
 declare namespace API {
-    type Account = {
-        id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        phoneNumber: string;
-    };
-    
-    type Cat = {
-        id: string;
-        sex: string;
-        name: string;
-        age: number;
-        breed: string;
-        size: number;
-        color: string;
-        description: string;
-    };
-    
-    type Application = {
-        id: string;
-        meetingDate: string | null;
-        reasonReject: string | null;
-        status?: string;
-        isFinalized: boolean;
-        description: string;
-        createdDate: string;
-        account: Account;
-        cat: Cat;
-    };
-    
-    type Item = {
-        application: Application;
-    };
+  type Account = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+  };
 
-    type ResponseData = {
-        items: Item[];
-        pageIndex: number;
-        pageSize: number;
-        totalCount: number;
-        hasNextPage: boolean;
-        hasPreviousPage: boolean;
-    };
+  type Cat = {
+    id: string;
+    sex: string;
+    name: string;
+    age: number;
+    breed: string;
+    size: number;
+    color: string;
+    description: string;
+  };
+
+  type Application = {
+    id: string;
+    meetingDate: string | null;
+    reasonReject: string | null;
+    status?: string;
+    isFinalized: boolean;
+    description: string;
+    createdDate: string;
+    account: Account;
+    cat: Cat;
+  };
+
+  type Item = {
+    application: Application;
+  };
+
+  type ResponseData = {
+    items: Item[];
+    pageIndex: number;
+    pageSize: number;
+    totalCount: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
 }
-
-
-
-
-

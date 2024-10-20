@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   createAdoptApplication,
   getAllApplicationByAdopter,
+  updateMeetingTime,
 } from "@/services/adopt/api-services";
 import { getQueryClient } from "@/lib/query";
 
@@ -25,4 +26,11 @@ export const useServiceGetApplicationAdopt = async (
 };
 
 
-
+export const useServiceUpdateMeetingTime = () => {
+  return useMutation<TResponse, TMeta, REQUEST.GetMeetingResponse>({
+    mutationFn: updateMeetingTime,
+    onSuccess: (data) => {
+      console.log("Đã update", data);
+    },
+  });
+};
