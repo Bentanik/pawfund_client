@@ -30,7 +30,6 @@ export default function useForgotPasswordChange() {
     register,
     watch,
     handleSubmit,
-    setError,
     formState: { errors },
     reset,
   } = useForm<ForgotPasswordChangeBodyType>({
@@ -68,7 +67,7 @@ export default function useForgotPasswordChange() {
         onSuccess: async (data) => {
           if (data) {
             if (data.value.code.includes("auth_noti")) {
-              addToast("Success", {
+              addToast({
                 description: data.value.message,
                 type: "success",
                 duration: 5000,
@@ -79,7 +78,7 @@ export default function useForgotPasswordChange() {
         },
         onError: (error) => {
           if (error.errorCode.includes("auth_email_02")) {
-            addToast("Error", {
+            addToast({
               description: error.detail,
               type: "error",
               duration: 5000,

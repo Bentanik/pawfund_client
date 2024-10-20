@@ -97,16 +97,7 @@ const Header: React.FC = () => {
         >
           News and Events
         </Link>
-        <Link
-          href="/sponsors"
-          className={`text-gray-600 ${
-            currentPath === "/sponsors"
-              ? "text-teal-400"
-              : "hover:text-teal-400"
-          }`}
-        >
-          Sponsors
-        </Link>
+        
         {userState.user === null ? (
           <Link
             href="/login"

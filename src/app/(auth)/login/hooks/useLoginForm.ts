@@ -9,13 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useServiceLogin } from "@/services/auth/services";
 import { useRouter } from "next/navigation";
-import useToast from "@/hooks/use-toast";
 
 export function useLoginForm() {
   const router = useRouter();
   const [typePassword, setTypePassword] = useState<boolean>(false);
   const { mutate, isPending } = useServiceLogin();
-  const { addToast } = useToast();
 
   const {
     register,
@@ -32,13 +30,23 @@ export function useLoginForm() {
     },
   });
 
-  const onSubmit = async (data: LoginBodyType) => {
+  const onSubmit = async (request: LoginBodyType) => {
     try {
-      mutate(data, {
+      mutate(request, {
         onSuccess: async (data) => {
           if (data) {
             reset();
-            router.push("/");
+            // Navigate
+            switch (data.authProfile.roleId) {
+              case 1:
+                return router.push("/admin/dashboard");
+              case 2:
+                return router.push("/staff/dashboard");
+              case 3:
+                return router.push("/");
+              default:
+                return router.push("/");
+            }
           }
         },
         onError: (error) => {

@@ -2,7 +2,6 @@ import Auth from "@/app/(auth)/auth";
 import AuthCarousel from "@/components/auth-carousel";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { Toaster } from "sonner";
 
 export default function AuthLayout({
     children,
@@ -11,12 +10,6 @@ export default function AuthLayout({
 }>) {
     return (
         <Auth>
-            <Toaster
-                position="top-right"
-                richColors
-                expand={true}
-                style={{ marginRight: 28 }}
-            />
             <div className="relative text-base flex items-center">
                 <section className="fixed top-0 h-screen w-[45%]">
                     <AuthCarousel />

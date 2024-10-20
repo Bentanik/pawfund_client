@@ -1,17 +1,13 @@
-declare namespace API {
-  enum AuthRole {
-    USER = "user",
-    STAFF = "staff",
-    ADMIN = "admin",
-  }
+declare namespace REQUEST {
+  type TAuthVerifyEmail = {
+    email: string;
+  };
+}
 
+declare namespace API {
   type TAuthResponse = {
     token: TAuthToken;
     authProfile: TAuthProfile;
-  };
-
-  type TAuthVerifyEmail = {
-    email: string;
   };
 
   type TAuthForgotPasswordEmail = {
@@ -43,7 +39,7 @@ declare namespace API {
     firstName: string;
     lastName: string;
     avatarLink: string;
-    role: AuthRole;
+    roleId: AuthRole;
   };
 
   type TAuthForgotPassword = {

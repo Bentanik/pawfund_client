@@ -6,6 +6,7 @@ import InquiryHistory from "@/components/history-inquiry";
 import FavoritePets from "@/components/favorite-pet";
 import Profile from "@/components/profile";
 import TabButton from "@/components/ui/tab-button";
+import AdoptApplication from "@/components/adopt-application-user";
 
 export default function UserProfile() {
     const searchParams = useSearchParams();
@@ -53,6 +54,8 @@ export default function UserProfile() {
                 return <FavoritePets />;
             case "active-inquiries":
                 return <ActiveInquiry />;
+            case "adopt-applications":
+                return <AdoptApplication />;
             default:
                 return <Profile />;
         }
@@ -85,6 +88,12 @@ export default function UserProfile() {
                     activeTab={activeTab}
                     onClick={handleTabClick}
                     label="Favorite Pets"
+                />
+                <TabButton
+                    tabName="adopt-applications"
+                    activeTab={activeTab}
+                    onClick={handleTabClick}
+                    label="Adopt Application"
                 />
             </div>
 

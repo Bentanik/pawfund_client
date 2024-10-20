@@ -2,7 +2,6 @@
 import useVerifySignup from "@/app/active/active-auth-signup/hooks/useVerifySignup";
 import { Backdrop } from "@/components/backdrop";
 import { useEffect } from "react";
-import { Toaster } from "sonner";
 
 export default function ActiveAuthSignup({
   children,
@@ -11,20 +10,16 @@ export default function ActiveAuthSignup({
   children: React.ReactNode;
   email: string;
 }>) {
-  const { isPending, verifyEmail } = useVerifySignup();
+  const { isPending, verifySignup } = useVerifySignup();
 
   useEffect(() => {
-    verifyEmail(email);
+    verifySignup({
+      email: email,
+    });
   }, []);
 
   return (
     <div>
-      <Toaster
-        position="top-right"
-        richColors
-        expand={true}
-        style={{ marginRight: 28 }}
-      />
       <main>{children}</main>
       <Backdrop open={isPending} />
     </div>

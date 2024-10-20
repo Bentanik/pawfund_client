@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BsGrid, BsCalendar, BsPerson, BsTable, BsGear, BsChevronDown, BsBoxArrowInRight } from "react-icons/bs";
 import { AiOutlineForm, AiOutlinePieChart } from "react-icons/ai";
-
+import { LuBookMarked } from "react-icons/lu";
 export default function StaffSidebar() {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
@@ -47,9 +47,9 @@ export default function StaffSidebar() {
                         )}
                     </li>
                     <li>
-                        <Link href="/admin/calendar" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
-                            <BsCalendar className="text-lg" />
-                            <span>Calendar</span>
+                        <Link href="/staff/application" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+                            <LuBookMarked className="text-lg" />
+                            <span>Application</span>
                         </Link>
                     </li>
                     <li>

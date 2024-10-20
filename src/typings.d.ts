@@ -5,7 +5,6 @@ declare type TMeta = {
   title: string;
 };
 
-
 declare type TResponse = {
   value: {
     code: string;
@@ -19,11 +18,11 @@ declare type TResponse = {
   };
 };
 
-declare type TResponseData = {
+declare type TResponseData<T = object> = {
   value: {
     code: string;
     message: string;
-    data: object;
+    data: T;
   };
   isSuccess: boolean;
   isFailure: boolean;
@@ -32,4 +31,3 @@ declare type TResponseData = {
     message: string;
   };
 };
-
