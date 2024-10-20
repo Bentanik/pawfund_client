@@ -46,17 +46,25 @@ const ViewProfileCat = ({ catId }: ViewProfileCatProps) => {
 
             // Mô phỏng dữ liệu được trả về từ API
             const data: CatData = {
-                mainImage: '/images/meo5.jpeg',
-                otherImages: ['/images/meo2.jpg', '/images/meo3.jpg', '/images/meo4.jpg', '/images/meo3.jpg', '/images/meo3.jpg', '/images/meo3.jpg', '/images/meo3.jpg'],
-                name: 'hello',
-                gender: 'Male',
-                age: '5',
-                breed: '',
-                size: '',
-                color: '',
-                chipStatus: 'Adopted',
-                description: '123',
-                catId: 'A7AF8EAA-2E88-4B47-B618-78F66114CBCXs',
+                mainImage: "/images/meo5.jpeg",
+                otherImages: [
+                    "/images/meo2.jpg",
+                    "/images/meo3.jpg",
+                    "/images/meo4.jpg",
+                    "/images/meo3.jpg",
+                    "/images/meo3.jpg",
+                    "/images/meo3.jpg",
+                    "/images/meo3.jpg",
+                ],
+                name: "hello",
+                gender: "Male",
+                age: "5",
+                breed: "",
+                size: "",
+                color: "",
+                chipStatus: "Adopted",
+                description: "123",
+                catId: "A7AF8EAA-2E88-4B47-B618-78F66114CBCXs",
             };
 
             setCatData(data);

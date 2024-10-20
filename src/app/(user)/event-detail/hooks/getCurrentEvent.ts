@@ -1,25 +1,20 @@
 import useToast from "@/hooks/use-toast";
-import {
-    getAllApplicationByAdopter,
-    getAllApplicationByStaff,
-} from "@/services/adopt/api-services";
-import { useServiceGetApplicationAdopt } from "@/services/adopt/services";
+import { getApprovedEventsActivity } from "@/services/event-activity/api-services";
 import { isTResponseData } from "@/utils/compare";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function useGetApplicationByStaff() {
-    const { addToast } = useToast();
-    const [isPending, setPending] = useState(false);
+export default function useCurrentEvent() {
+    const { addToast } = useToast(); // Toast hook for notifications
+    const [isPending, setPending] = useState<boolean>(false); // Track loading state
 
-    const getAllApplicationByStaffApi = async (
-        params: REQUEST.GetApplications
+    const getApprovedEventsActivityApi = async (
+        params: REQUEST.TGetApprovedEventsActivity
     ) => {
         setPending(true);
         try {
-            const res = await getAllApplicationByStaff(params);
+            const res = await getApprovedEventsActivity(params);
             if (isTResponseData(res)) {
-                return res as TResponseData<API.ResponseData>;
+                return res as TResponseData<API.ActivityEvent[]>;
             } else {
                 addToast({
                     type: "error",
@@ -38,5 +33,5 @@ export default function useGetApplicationByStaff() {
         }
     };
 
-    return { isPending, getAllApplicationByStaffApi };
+    return { isPending, getApprovedEventsActivityApi };
 }

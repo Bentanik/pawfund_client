@@ -10,19 +10,12 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useAppSelector } from "@/stores/store";
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
+import VolunteerForm from "./volunteer-form";
+import getCurrentEvent from "../hooks/getCurrentEvent";
 
 const ListEventActivity = [
     {
@@ -51,32 +44,14 @@ const ListEventActivity = [
     },
 ];
 
-const ListEventOption = [
-    {
-        name: "Sua bong den cho nha ba hang xom ",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-];
+interface EventDetail {
+    eventId: string;
+}
 
-export default function EventDetail() {
-    const [isVisible, setIsVisible] = useState(false);
+const EventDetail = ({ eventId }: EventDetail) => {
     const [progress, setProgress] = useState(13);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(true);
-        }, 200);
-        const progress = setTimeout(() => setProgress(66), 500);
-        return () => clearTimeout(timer);
-    }, []);
+    // const [catData, setCatData] = useState<CatData>();
+    const [popupEvent, setPopupEvent] = useState<boolean>(false);
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
@@ -89,24 +64,62 @@ export default function EventDetail() {
 
     const userState = useAppSelector((state) => state.userSlice);
 
+    const handleOpenPopup = () => {
+        setPopupEvent(true);
+    };
+
+    const handleClosePopup = () => {
+        setPopupEvent(false);
+    };
+
+    const { isPending, getApprovedEventsActivityApi } = getCurrentEvent();
+
+    const [eventActivities, setEventActivities] =
+        useState<API.ActivityEvent[]>();
+
+    const getListApprovedEventsActivity = async (id: string) => {
+        const res = await getApprovedEventsActivityApi({
+            eventId: id,
+        });
+        setEventActivities(res?.value.data);
+    };
+
+    useEffect(() => {
+        getListApprovedEventsActivity(eventId);
+    }, []);
+
+    useEffect(() => {
+        if (popupEvent == true) {
+            getListApprovedEventsActivity(eventId);
+        }
+    }, [popupEvent, eventId]);
+
     const renderListEvent = () => {
-        return ListEventActivity.map((item) => {
+        return eventActivities?.map((item, index) => {
+            const numberOfVolunteer = Math.round(
+                (item?.activityDTO.numberOfVolunteer /
+                    item?.activityDTO.quantity) *
+                    100
+            );
+
+            console.log(numberOfVolunteer);
+
             return (
-                <div>
-                    <AccordionItem value={item.item}>
+                <div key={index}>
+                    <AccordionItem value={`item-${index + 1}`}>
                         <AccordionTrigger className="mt-[20px] text-[1.1rem] ">
-                            {item.name}
+                            {item?.activityDTO.name}
                         </AccordionTrigger>
                         <AccordionContent className="">
                             <div className="border rounded-xl">
                                 <div className="p-[20px]">
                                     <div className="flex gap-2">
                                         <div>Date time: </div>
-                                        <div>{item.dateTime}</div>
+                                        <div>{item.activityDTO.startDate}</div>
                                     </div>
                                     <div className="flex gap-2 mt-4">
                                         <div>Number of volunteer: </div>
-                                        <div>{item.numOfVolunteer}</div>
+                                        <div>{item.activityDTO.quantity}</div>
                                         {/* <div className="w-[40%] bg-gray-200 rounded">
                                             <div
                                                 className="bg-green-500 text-xs font-medium text-white text-center p-[10px] leading-none rounded-l "
@@ -116,31 +129,21 @@ export default function EventDetail() {
                                             ></div>
                                         </div> */}
                                         <Progress
-                                            value={progress}
+                                            value={numberOfVolunteer}
                                             className="w-[50%] h-[10px] mt-[5px]"
                                         />
                                     </div>
 
                                     <div className="flex gap-2 mt-4">
                                         <div>Description: </div>
-                                        <div>{item.desc}</div>
+                                        <div>
+                                            {item?.activityDTO.description}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
-                </div>
-            );
-        });
-    };
-    const renderListOption = () => {
-        return ListEventOption.map((item) => {
-            return (
-                <div>
-                    <div className="flex items-center space-x-2 mt-[10px]">
-                        <Checkbox />
-                        <Label className="text-[#0000008b]">{item.name}</Label>
-                    </div>
                 </div>
             );
         });
@@ -344,51 +347,12 @@ export default function EventDetail() {
                             <h1 className="text-[2rem]">
                                 Activities for volunteers
                             </h1>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="hover:bg-[#2DD4BF]">
-                                        Be come volunteer
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px] bg-white">
-                                    <DialogHeader>
-                                        <DialogTitle>
-                                            Volunteer Application Form
-                                        </DialogTitle>
-                                        <DialogDescription></DialogDescription>
-                                    </DialogHeader>
-                                    <div className="grid gap-4 py-4">
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label
-                                                htmlFor="username"
-                                                className="text-right"
-                                            >
-                                                Description
-                                            </Label>
-                                            <Input
-                                                id="username"
-                                                className="col-span-3"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div className="text-[1rem] text-[#2DD4BF] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-[20px]">
-                                            Choose your activity you want to
-                                            join
-                                        </div>
-                                        {renderListOption()}
-                                    </div>
-                                    <DialogFooter className="!justify-center mt-[30px]">
-                                        <Button
-                                            type="submit"
-                                            className="hover:bg-[#2DD4BF] !justify-center"
-                                        >
-                                            Apply Now
-                                        </Button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                            <Button
+                                className="hover:bg-[#2DD4BF]"
+                                onClick={handleOpenPopup}
+                            >
+                                Be come volunteer
+                            </Button>
                         </div>
 
                         <div>
@@ -403,6 +367,14 @@ export default function EventDetail() {
                     </div>
                 </div>
             </div>
+            <VolunteerForm
+                eventId={eventId}
+                open={popupEvent}
+                onClose={handleClosePopup}
+                eventActivities={eventActivities ?? []}
+            />
         </div>
     );
-}
+};
+
+export default EventDetail;

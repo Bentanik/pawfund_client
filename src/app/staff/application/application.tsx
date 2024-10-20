@@ -11,22 +11,23 @@ import {
 import useGetApplicationByStaff from "./hooks/useGetApplicationByStaff";
 
 export default function StaffApplication() {
-    const { isPending, getAllApplicationByStaffApi } = useGetApplicationByStaff();
+    const { isPending, getAllApplicationByStaffApi } =
+        useGetApplicationByStaff();
     const [applications, setApplications] = useState<API.ResponseData>();
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedStatus, setSelectedStatus] = useState<number | null>(null); // Trạng thái đã chọn là số
 
-    const pageSize = 10; 
-    const isAscCreatedDate = false; 
+    const pageSize = 10;
+    const isAscCreatedDate = false;
 
     const fetchApplications = async (pageNumber: number) => {
         const res = await getAllApplicationByStaffApi({
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            status: selectedStatus ?? undefined, 
+            status: selectedStatus ?? undefined,
         });
 
         if (res && res.value) {
@@ -79,7 +80,8 @@ export default function StaffApplication() {
                         Name: {app.application.cat.name}
                     </p>
                     <p className="font-normal text-gray-700 dark:text-gray-400">
-                        Status: {app.application.status ?? "N/A"} {/* Hiển thị trạng thái trả về từ BE */}
+                        Status: {app.application.status ?? "N/A"}{" "}
+                        {/* Hiển thị trạng thái trả về từ BE */}
                     </p>
                 </div>
             </div>
@@ -92,37 +94,61 @@ export default function StaffApplication() {
             <div className="mb-4 flex space-x-2">
                 <button
                     onClick={() => handleStatusChange(null)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === null ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === null
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     All
                 </button>
                 <button
                     onClick={() => handleStatusChange(0)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === 0
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     Pending
                 </button>
                 <button
                     onClick={() => handleStatusChange(1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === 1
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     Approved
                 </button>
                 <button
                     onClick={() => handleStatusChange(2)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 2 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === 2
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     Approved Outside
                 </button>
                 <button
                     onClick={() => handleStatusChange(3)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 3 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === 3
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     Rejected Outside
                 </button>
                 <button
                     onClick={() => handleStatusChange(-1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === -1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${
+                        selectedStatus === -1
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                     Rejected
                 </button>
@@ -137,16 +163,28 @@ export default function StaffApplication() {
                     <PaginationItem>
                         <PaginationPrevious
                             href="#"
-                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}
-                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handlePageChange(currentPage - 1);
+                            }}
+                            className={
+                                currentPage === 1
+                                    ? "pointer-events-none opacity-50"
+                                    : ""
+                            }
                         />
                     </PaginationItem>
                     {[...Array(totalPages)].map((_, index) => (
                         <PaginationItem key={index}>
                             <PaginationLink
                                 href="#"
-                                onClick={(e) => { e.preventDefault(); handlePageChange(index + 1); }}
-                                className={index + 1 === currentPage ? "active" : ""}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handlePageChange(index + 1);
+                                }}
+                                className={
+                                    index + 1 === currentPage ? "active" : ""
+                                }
                             >
                                 {index + 1}
                             </PaginationLink>
@@ -155,8 +193,15 @@ export default function StaffApplication() {
                     <PaginationItem>
                         <PaginationNext
                             href="#"
-                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}
-                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handlePageChange(currentPage + 1);
+                            }}
+                            className={
+                                currentPage === totalPages
+                                    ? "pointer-events-none opacity-50"
+                                    : ""
+                            }
                         />
                     </PaginationItem>
                 </PaginationContent>
