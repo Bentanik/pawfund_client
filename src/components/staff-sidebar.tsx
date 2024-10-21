@@ -15,9 +15,8 @@ export default function StaffSidebar() {
 
   return (
     <aside
-      className={`${
-        staffState.openSidebar === false ? "w-72" : "w-0"
-      } bg-gray-900 text-white h-screen transition-all`}
+      className={`${staffState.openSidebar === false ? "w-72" : "w-0"
+        } bg-gray-900 text-white h-screen transition-all`}
     >
       {staffState.openSidebar === false && (
         <div className="p-4 ml-4">
@@ -34,9 +33,8 @@ export default function StaffSidebar() {
                     <span>Dashboard</span>
                   </div>
                   <BsChevronDown
-                    className={`transform transition-transform ${
-                      openDropdown === "dashboard" ? "rotate-180" : ""
-                    } text-gray-400`}
+                    className={`transform transition-transform ${openDropdown === "dashboard" ? "rotate-180" : ""
+                      } text-gray-400`}
                   />
                 </button>
                 {openDropdown === "dashboard" && (
@@ -62,12 +60,9 @@ export default function StaffSidebar() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/admin/profile"
-                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
-                >
+                <Link href="/staff/freetime" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
                   <BsPerson className="text-lg" />
-                  <span>Profile</span>
+                  <span>Free Time</span>
                 </Link>
               </li>
               <li>
@@ -80,9 +75,8 @@ export default function StaffSidebar() {
                     <span>Forms</span>
                   </div>
                   <BsChevronDown
-                    className={`transform transition-transform ${
-                      openDropdown === "forms" ? "rotate-180" : ""
-                    } text-gray-400`}
+                    className={`transform transition-transform ${openDropdown === "forms" ? "rotate-180" : ""
+                      } text-gray-400`}
                   />
                 </button>
                 {openDropdown === "forms" && (
