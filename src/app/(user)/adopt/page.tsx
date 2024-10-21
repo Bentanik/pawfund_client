@@ -1,4 +1,4 @@
-import Adopt from "@/app/(user)/adopt/adopt";
+import Adopt from "@/app/(user)/adopt/components/adopt";
 
 export default function AdoptPage() {
     return (
