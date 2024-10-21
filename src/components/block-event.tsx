@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { useAppSelector } from "@/stores/store";
+
+import getAllEvents from "@/app/(user)/event/hooks/getEvents";
 const ListEvent = [
     {
         thumb: "/images/meo2.jpg",
@@ -36,8 +39,51 @@ const ListEvent = [
     },
 ];
 export default function BlockEvent() {
+    const [popupEvent, setPopupEvent] = useState<boolean>(false);
+    const [events, setEvents] = useState<API.Event[]>([]);
+
+    const userState = useAppSelector((state) => state.userSlice);
+
+    const { isPendingAllEvent, getAllEvent } = getAllEvents();
+
+    const getListEvent = async () => {
+        const res = await getAllEvent();
+        setEvents(res?.value.data || []);
+        console.log(res?.value.data);
+    };
+
+    useEffect(() => {
+        getListEvent();
+    }, []); // Added eventId to dependency array
+    useEffect(() => {
+        if (popupEvent) {
+            getListEvent();
+        }
+    }, [popupEvent]); // No need for nested condition, use popupEvent directly
+
+    const formatDate = (stringDate: any) => {
+        const date = new Date(stringDate);
+        const day = date.getDate(); // Lấy ngày không cần 0 phía trước
+        const months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ];
+        const month = months[date.getMonth()]; // Lấy tên tháng viết tắt
+
+        return `${month} ${day}`; // Ví dụ: "Nov 10"
+    };
     const renderListEvent = () => {
-        return ListEvent.map((item) => {
+        return events?.map((item) => {
             return (
                 <div>
                     <Link
@@ -46,7 +92,7 @@ export default function BlockEvent() {
                     >
                         <div className="relative w-full max-w-sm">
                             <img
-                                src={item.thumb}
+                                src="/images/meo1.jpg"
                                 alt="Event"
                                 className="w-[430px] h-[300px] object-cover"
                             />
@@ -63,14 +109,16 @@ export default function BlockEvent() {
                     <div className="w-[380px]">
                         <div className="py-[20px]">
                             <div className="mb-[10px] font-semibold">
-                                {item.title}
+                                {item?.eventDTO.name}
                             </div>
                             <div className=" line-clamp-2 overflow-hidden text-[0.9rem]">
-                                {item.desc}
+                                {item?.eventDTO.description}
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <p>Nov21 - Nov23</p>
+                            <p>{`${formatDate(
+                                item?.eventDTO.startDate
+                            )} - ${formatDate(item?.eventDTO.endDate)}`}</p>
                             <label className="inline-flex items-center mb-5 cursor-pointer">
                                 <input
                                     type="checkbox"

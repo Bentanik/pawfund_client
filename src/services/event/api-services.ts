@@ -13,3 +13,13 @@ export const getEvents = async ({ eventId }: REQUEST.TGetEventById) => {
     );
     return response.data;
 };
+
+export const getAllEvents = async () => {
+    const response = await request<TResponseData<API.Event[]>>(
+        API_ENDPOINTS.GET_ALL_EVENT,
+        {
+            method: "GET",
+        }
+    );
+    return response.data;
+};

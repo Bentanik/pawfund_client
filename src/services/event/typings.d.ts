@@ -17,7 +17,7 @@ declare namespace API {
         endDate: Date;
         description: string;
         maxAttendees: number;
-        // status: string;
+        status: string;
     };
 
     type BranchDTO = {

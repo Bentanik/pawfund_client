@@ -22,7 +22,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-export default function UserProfilePage() {
+const Event = () => {
     return (
         <div className="min-h-screen px-[7%]">
             <div className="flex  py-[20px]">
@@ -125,4 +125,6 @@ export default function UserProfilePage() {
             </div>
         </div>
     );
-}
+};
+
+export default Event;
