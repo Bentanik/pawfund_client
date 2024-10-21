@@ -12,7 +12,12 @@ import {
 import UploadImageCat from "@/app/staff/create-pet/components/upload-images-cat";
 import useCreatePetForm from "@/app/staff/create-pet/hooks/useCreatePetForm";
 import { useState } from "react";
-import { breedCats, sexCats, TSexCat } from "@/const/propteryCat";
+import {
+  breedCats,
+  sexCats,
+  sterilizations,
+  TSexCat,
+} from "@/const/propteryCat";
 import { Textarea } from "@/components/ui/textarea";
 import { CreatePetBodyType } from "@/utils/schemaValidations/create-pet.schema";
 import { Backdrop } from "@/components/backdrop";
@@ -36,6 +41,7 @@ export default function CreatePetForm() {
 
   const [breed, setBreed] = useState<string>(breedCats[0]?.name || "");
   const [sexCat, setSexCat] = useState<TSexCat>(sexCats[0]);
+  const [sterilization, setSterilization] = useState<string>("0");
 
   const handleFormSubmit = (data: CreatePetBodyType) => {
     try {
@@ -48,9 +54,11 @@ export default function CreatePetForm() {
         description: data.description,
         color: data.color,
         images: fileList.map((item) => item.file),
+        sterilization: sterilization === "0" ? false : true,
       };
       onSubmit(form, () => setFileList([]));
-      setBreed("");
+      setBreed(breedCats[0]?.name);
+      setSterilization("0");
     } catch (err) {}
   };
 
@@ -86,7 +94,7 @@ export default function CreatePetForm() {
                 </div>
                 <div className="flex flex-col gap-y-1">
                   <div className="flex items-center gap-x-5">
-                    <div className="w-[70%] flex flex-col gap-y-2">
+                    <div className="w-[40%] flex flex-col gap-y-2">
                       <label className="text-base font-semibold">Age</label>
                       <Input
                         className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
@@ -114,6 +122,33 @@ export default function CreatePetForm() {
                               {sexCats?.map((item, index) => (
                                 <SelectItem key={index} value={item.sex}>
                                   {item?.sex}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-col gap-y-2">
+                        <label className="text-base font-semibold">
+                          Sterilization
+                        </label>
+                        <Select
+                          value={sterilization}
+                          onValueChange={(value) => setSterilization(value)}
+                        >
+                          <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
+                            <SelectValue placeholder="Choose sex cat" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {sterilizations?.map((item, index) => (
+                                <SelectItem
+                                  key={index}
+                                  value={item.value ? "1" : "0"}
+                                >
+                                  {item?.value ? "True" : "False"}
                                 </SelectItem>
                               ))}
                             </SelectGroup>

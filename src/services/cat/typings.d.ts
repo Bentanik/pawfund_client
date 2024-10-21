@@ -8,6 +8,7 @@ declare namespace REQUEST {
     description: string;
     color: string;
     images: File[];
+    sterilization: boolean;
   };
 }
 
