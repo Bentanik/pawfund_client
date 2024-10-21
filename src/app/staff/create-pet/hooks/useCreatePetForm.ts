@@ -1,3 +1,4 @@
+import { useServiceCreateCat } from "@/services/cat/services";
 import {
   CreatePetBody,
   CreatePetBodyType,
@@ -25,9 +26,16 @@ export default function useCreatePetForm() {
     },
   });
 
-  const onSubmit = (data: REQUEST.TCreateCat) => {
+  const { mutate, isPending } = useServiceCreateCat();
+
+  const onSubmit = (data: REQUEST.TCreateCat, clearImages: () => void) => {
     try {
-      console.log("Data: ", data);
+      mutate(data, {
+        onSuccess: () => {
+          reset();
+          clearImages();
+        },
+      });
     } catch (err) {
       console.log(err);
     }
@@ -41,5 +49,6 @@ export default function useCreatePetForm() {
     errors,
     setError,
     setValue,
+    isPending,
   };
 }

@@ -15,6 +15,7 @@ import { useState } from "react";
 import { breedCats, sexCats, TSexCat } from "@/const/propteryCat";
 import { Textarea } from "@/components/ui/textarea";
 import { CreatePetBodyType } from "@/utils/schemaValidations/create-pet.schema";
+import { Backdrop } from "@/components/backdrop";
 
 export default function CreatePetForm() {
   // Use create pet form
@@ -26,6 +27,7 @@ export default function CreatePetForm() {
     errors,
     setError,
     setValue,
+    isPending,
   } = useCreatePetForm();
 
   const [fileList, setFileList] = useState<
@@ -36,17 +38,20 @@ export default function CreatePetForm() {
   const [sexCat, setSexCat] = useState<TSexCat>(sexCats[0]);
 
   const handleFormSubmit = (data: CreatePetBodyType) => {
-    const form: REQUEST.TCreateCat = {
-      catName: data.catName,
-      age: data.age,
-      sex: sexCat,
-      weight: data.weight,
-      breed: breed,
-      description: data.description,
-      color: data.color,
-      images: fileList.map((item) => item.file),
-    };
-    onSubmit(form);
+    try {
+      const form: REQUEST.TCreateCat = {
+        catName: data.catName,
+        age: data.age,
+        sex: sexCat.id,
+        weight: data.weight,
+        breed: breed,
+        description: data.description,
+        color: data.color,
+        images: fileList.map((item) => item.file),
+      };
+      onSubmit(form, () => setFileList([]));
+      setBreed("");
+    } catch (err) {}
   };
 
   const handleSearchBreed = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -232,6 +237,7 @@ export default function CreatePetForm() {
           </div>
         </div>
       </form>
+      <Backdrop open={isPending} />
     </div>
   );
 }
