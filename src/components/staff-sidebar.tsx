@@ -1,12 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  BsPerson,
-  BsTable,
-  BsGear,
-  BsChevronDown,
-} from "react-icons/bs";
+import { BsPerson, BsTable, BsGear, BsChevronDown } from "react-icons/bs";
 import { AiOutlineForm } from "react-icons/ai";
 import { LuBookMarked } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
@@ -22,7 +17,7 @@ export default function StaffSidebar() {
     <aside
       className={`${
         staffState.openSidebar === false ? "w-72" : "w-0"
-      } bg-gray-900 text-white h-screen transition-shadow`}
+      } bg-gray-900 text-white h-screen transition-all`}
     >
       {staffState.openSidebar === false && (
         <div className="p-4 ml-4">
