@@ -12,6 +12,14 @@ export const sexCats: TSexCat[] = [
     sex: "Female",
   },
 ];
+export const sterilizations = [
+  {
+    value: true,
+  },
+  {
+    value: false,
+  },
+];
 export const breedCats = [
   {
     name: "Abyssinian",
