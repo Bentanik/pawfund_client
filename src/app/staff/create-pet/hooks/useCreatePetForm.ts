@@ -19,10 +19,8 @@ export default function useCreatePetForm() {
     resolver: zodResolver(CreatePetBody),
     defaultValues: {
       catName: "",
-      age: "",
       weight: 0,
       description: "",
-      color: "",
     },
   });
 

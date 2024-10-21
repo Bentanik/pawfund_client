@@ -14,6 +14,8 @@ import useCreatePetForm from "@/app/staff/create-pet/hooks/useCreatePetForm";
 import { useState } from "react";
 import {
   breedCats,
+  catAges,
+  catColors,
   sexCats,
   sterilizations,
   TSexCat,
@@ -42,23 +44,27 @@ export default function CreatePetForm() {
   const [breed, setBreed] = useState<string>(breedCats[0]?.name || "");
   const [sexCat, setSexCat] = useState<TSexCat>(sexCats[0]);
   const [sterilization, setSterilization] = useState<string>("0");
+  const [color, setColor] = useState<string>(catColors[0].value);
+  const [age, setAge] = useState<string>(catAges[0].value);
 
   const handleFormSubmit = (data: CreatePetBodyType) => {
     try {
       const form: REQUEST.TCreateCat = {
         catName: data.catName,
-        age: data.age,
+        age: age,
         sex: sexCat.id,
         weight: data.weight,
         breed: breed,
         description: data.description,
-        color: data.color,
+        color: color,
         images: fileList.map((item) => item.file),
         sterilization: sterilization === "0" ? false : true,
       };
       onSubmit(form, () => setFileList([]));
       setBreed(breedCats[0]?.name);
       setSterilization("0");
+      setColor(catColors[0].value);
+      setAge(catAges[0].value);
     } catch (err) {}
   };
 
@@ -96,12 +102,23 @@ export default function CreatePetForm() {
                   <div className="flex items-center gap-x-5">
                     <div className="w-[40%] flex flex-col gap-y-2">
                       <label className="text-base font-semibold">Age</label>
-                      <Input
-                        className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
-                        autoComplete="off"
-                        placeholder="e.g. YoungOlder"
-                        {...register("age")}
-                      />
+                      <Select
+                        value={age}
+                        onValueChange={(value) => setAge(value)}
+                      >
+                        <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
+                          <SelectValue placeholder="Choose sex cat" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {catAges?.map((item, index) => (
+                              <SelectItem key={index} value={item.value}>
+                                {item?.value}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="flex-1">
                       <div className="flex flex-col gap-y-2">
@@ -157,24 +174,27 @@ export default function CreatePetForm() {
                       </div>
                     </div>
                   </div>
-                  {errors?.age && (
-                    <span className="text-red-500">{errors?.age?.message}</span>
-                  )}
                 </div>
 
                 <div className="flex flex-col gap-y-2">
                   <label className="text-base font-semibold">Color</label>
-                  <Input
-                    className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none"
-                    autoComplete="off"
-                    placeholder="e.g. Mau dom"
-                    {...register("color")}
-                  />
-                  {errors?.color && (
-                    <span className="text-red-500">
-                      {errors?.color?.message}
-                    </span>
-                  )}
+                  <Select
+                    value={color}
+                    onValueChange={(value) => setColor(value)}
+                  >
+                    <SelectTrigger className="border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none">
+                      <SelectValue placeholder="Choose breed cat" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {catColors?.map((item, index) => (
+                          <SelectItem key={index} value={item?.value}>
+                            {item?.value}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="flex flex-col gap-y-2">
