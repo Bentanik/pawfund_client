@@ -8,20 +8,37 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import useUpdateMeetingTime from "@/app/staff/freetime/hooks/useUpdateMeetingTime";
 import { Calendar } from "@/components/ui/calendar";
 import DateTimePicker from "@/components/ui/datetime-picker";
+import useGetMeetingTimeByStaff from "./hooks/useGetMeetingTimeByStaff";
 
 interface MeetingData {
-  meetingTime: string; // Chuyển thành string để lưu thời gian UTC
+  meetingTime: string;
   numberOfStaffsFree: number;
 }
 
 export default function ManageData() {
   const { isPending, updateMeetingTimeApi } = useUpdateMeetingTime();
+
+  const meetingTime = useGetMeetingTimeByStaff();
+
   const [data, setData] = useState<MeetingData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDateTime, setNewDateTime] = useState<Date | null>(null);
   const [newQuantity, setNewQuantity] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+
+  useEffect(() => {
+    const fetchMeetingTimes = async () => {
+      const data = await meetingTime.getMeetingTimeByStaffApi();
+      if (data) {
+        console.log("data", data)
+        setData(data);
+
+      }
+    };
+
+    fetchMeetingTimes();
+  }, []);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newData = [...data];
@@ -60,7 +77,12 @@ export default function ManageData() {
       console.log("Selected Date: ", meetingTimeString);
 
       // Thêm mục mới vào data
-      setData([...data, { meetingTime: meetingTimeString, numberOfStaffsFree: newQuantity }]);
+      const newData = [...data, { meetingTime: meetingTimeString, numberOfStaffsFree: newQuantity }];
+
+      // Sắp xếp data theo meetingTime tăng dần
+      newData.sort((a, b) => new Date(a.meetingTime).getTime() - new Date(b.meetingTime).getTime());
+
+      setData(newData);
     }
 
     // Reset modal state
@@ -68,6 +90,7 @@ export default function ManageData() {
     setSelectedDate(null); // Reset selectedDate về null sau khi thêm
     setNewQuantity(1);
   };
+
 
   useEffect(() => {
     if (selectedDate) {
@@ -99,6 +122,140 @@ export default function ManageData() {
     setIsModalOpenDelete(false);
   };
 
+  const formatMeetingTime = (meetingTime: string): string => {
+    const date = new Date(meetingTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0"); // Sử dụng getHours() để lấy giờ địa phương
+    const minutes = String(date.getMinutes()).padStart(2, "0"); // Sử dụng getMinutes() để lấy phút địa phương
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const renderListTime = () => {
+    return <>
+      {(
+        data?.map((item, index) => (
+          <tr key={index} className="border-b">
+            <td className="p-3 px-5">
+              {/* Sử dụng DateTimePicker để cho phép người dùng chỉnh sửa ngày giờ */}
+              {/* <DateTimePicker
+                value={new Date(item.meetingTime)}
+                onChange={(date) => {
+                  const newData = [...data];
+                  newData[index].meetingTime = date ? date.toISOString() : "";
+                  setData(newData);
+                }}
+              /> */}
+              <input type="datetime-local"
+                value={item.meetingTime ? item.meetingTime.slice(0, 16) : ""}
+                onChange={(e) => {
+                  const newData = [...data];
+                  const newMeetingTime = e.target.value;
+                  newData[index].meetingTime = newMeetingTime;
+                  setData(newData);
+                }} />
+            </td>
+            <td className="p-3 px-5 flex items-center">
+              <div className="flex items-center border rounded">
+                <button
+                  onClick={() => decreaseQuantity(index)}
+                  className="border-r p-2 text-black"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={item.numberOfStaffsFree}
+                  onChange={(e) => handleQuantityChange(e, index)}
+                  className="border-none p-2 w-20 text-center mx-0"
+                  min="0"
+                />
+                <button
+                  onClick={() => increaseQuantity(index)}
+                  className="border-l p-2 text-black"
+                >
+                  +
+                </button>
+              </div>
+            </td>
+            <td className="p-3 px-5 text-center">
+              <button
+                onClick={openModalDelete}
+                className="text-red-500 hover:text-red-700"
+              >
+                <FaRegTrashCan />
+              </button>
+              {isModalOpenDelete && (
+                <div className="fixed inset-0 bg-black bg-opacity-20 z-40" onClick={closeModalDelete}></div>
+              )}
+              {isModalOpenDelete && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto transform translate-x-32">
+                  <div className="relative p-4 w-full max-w-md flex">
+                    <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                      <button
+                        onClick={closeModalDelete}
+                        className="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+                      >
+                        <svg
+                          className="w-3 h-3"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 14 14"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                          />
+                        </svg>
+                        <span className="sr-only">Đóng modal</span>
+                      </button>
+                      <div className="p-4 text-center">
+                        <svg
+                          className="mx-auto mb-4 text-gray-400 w-12 h-12"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+                        <h3 className="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this information?</h3>
+                        <button
+                          onClick={() => handleDelete(index)}
+                          className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5"
+                        >
+                          Yes, I am sure.
+                        </button>
+                        <button
+                          onClick={closeModalDelete}
+                          className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                        >
+                          No, cancel.
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </td>
+          </tr>
+        ))
+      )}
+    </>
+  }
+
   return (
     <div className="text-gray-900 bg-gray-100 font-open_sans">
       <h1 className="text-3xl mr-4 p-4 font-semibold">Manage Time</h1>
@@ -124,122 +281,14 @@ export default function ManageData() {
             </tr>
           </thead>
           <tbody>
-            {data.length > 0 ? (
-              data.map((item, index) => (
-                <tr key={index} className="border-b">
-                  <td className="p-3 px-5">
-                    {/* Sử dụng DateTimePicker để cho phép người dùng chỉnh sửa ngày giờ */}
-                    <DateTimePicker
-                      value={new Date(item.meetingTime)}
-                      onChange={(date) => {
-                        const newData = [...data];
-                        newData[index].meetingTime = date ? date.toISOString() : "";
-                        setData(newData);
-                      }}
-                    />
-                  </td>
-                  <td className="p-3 px-5 flex items-center">
-                    <div className="flex items-center border rounded">
-                      <button
-                        onClick={() => decreaseQuantity(index)}
-                        className="border-r p-2 text-black"
-                      >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        value={item.numberOfStaffsFree}
-                        onChange={(e) => handleQuantityChange(e, index)}
-                        className="border-none p-2 w-20 text-center mx-0"
-                        min="0"
-                      />
-                      <button
-                        onClick={() => increaseQuantity(index)}
-                        className="border-l p-2 text-black"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td className="p-3 px-5 text-center">
-                    <button
-                      onClick={openModalDelete}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <FaRegTrashCan />
-                    </button>
-                    {isModalOpenDelete && (
-                      <div className="fixed inset-0 bg-black bg-opacity-20 z-40" onClick={closeModalDelete}></div>
-                    )}
-                    {isModalOpenDelete && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto transform translate-x-32">
-                        <div className="relative p-4 w-full max-w-md flex">
-                          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                            <button
-                              onClick={closeModalDelete}
-                              className="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
-                            >
-                              <svg
-                                className="w-3 h-3"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 14"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                />
-                              </svg>
-                              <span className="sr-only">Đóng modal</span>
-                            </button>
-                            <div className="p-4 text-center">
-                              <svg
-                                className="mx-auto mb-4 text-gray-400 w-12 h-12"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                />
-                              </svg>
-                              <h3 className="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this information?</h3>
-                              <button
-                                onClick={() => handleDelete(index)}
-                                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5"
-                              >
-                                Yes, I am sure.
-                              </button>
-                              <button
-                                onClick={closeModalDelete}
-                                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                              >
-                                No, cancel.
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={3} className="text-center p-4 text-gray-500">
-                  No data available.
-                </td>
-              </tr>
-            )}
+            {/* : (
+            <tr>
+              <td colSpan={3} className="text-center p-4 text-gray-500">
+                No data available.
+              </td>
+            </tr>
+            )} */}
+            {renderListTime()}
           </tbody>
         </table>
       </div>

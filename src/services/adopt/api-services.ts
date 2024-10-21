@@ -68,3 +68,13 @@ export const updateMeetingTime = async (
   );
   return response.data;
 };
+
+export const getMeetingTimeByStaff = async () => {
+  const response = await request<API.ApiResponse>(
+    API_ENDPOINTS.GET_MEETING_TIME_BY_STAFF,
+    {
+      method: "GET",
+    }
+  );
+  return response.data;
+};

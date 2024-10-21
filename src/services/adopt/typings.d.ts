@@ -62,4 +62,32 @@ declare namespace API {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
+
+  type MeetingTime = {
+    meetingTime: string;
+    numberOfStaffsFree: number;
+  };
+  
+  type Data = {
+    listMeetingTime: MeetingTime[];
+  };
+  
+  type Value = {
+    code: string;
+    message: string;
+    data: Data;
+  };
+  
+  type Error = {
+    code: string;
+    message: string;
+  };
+  
+  type ApiResponse = {
+    value: Value;
+    isSuccess: boolean;
+    isFailure: boolean;
+    error: Error;
+  };
+  
 }
