@@ -17,7 +17,7 @@ export default function AdminHeader() {
   const { addToast } = useToast();
 
   useEffect(() => {
-    if (userState.user?.roleId !== 1) {
+    if (userState?.user?.roleId !== 1) {
       router.push("/");
       return addToast({
         type: "error",
