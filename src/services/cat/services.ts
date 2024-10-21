@@ -14,7 +14,8 @@ export const useServiceCreateCat = () => {
       formData.append("Weight", data.weight.toString());
       formData.append("Color", data.color);
       formData.append("Description", data.description);
-      formData.append("BranchId", "04C69A2C-C0C4-4BAD-961B-5C402E21E13A");
+      formData.append("BranchId", "11C9F9B2-BD5A-4834-BF52-2319404F6118");
+      formData.append("sterilization", data.sterilization ? "true" : "false");
 
       data.images.forEach((image) => {
         formData.append("Images", image);
