@@ -1,21 +1,18 @@
 import useToast from "@/hooks/use-toast";
-import { getApprovedEventsActivity } from "@/services/event-activity/api-services";
+import { getEvents } from "@/services/event/api-services";
 import { isTResponseData } from "@/utils/compare";
 import { useState } from "react";
 
 export default function useCurrentEvent() {
     const { addToast } = useToast(); // Toast hook for notifications
-    const [isPendingEventActivity, setPendingEventActivity] =
-        useState<boolean>(false); // Track loading state
+    const [isPendingEvent, setPendingEvent] = useState<boolean>(false); // Track loading state
 
-    const getApprovedEventsActivityApi = async (
-        params: REQUEST.TGetApprovedEventsActivity
-    ) => {
-        setPendingEventActivity(true);
+    const getEventApi = async (params: REQUEST.TGetEventById) => {
+        setPendingEvent(true);
         try {
-            const res = await getApprovedEventsActivity(params);
+            const res = await getEvents(params);
             if (isTResponseData(res)) {
-                return res as TResponseData<API.ActivityEvent[]>;
+                return res as TResponseData<API.Event>;
             } else {
                 addToast({
                     type: "error",
@@ -30,9 +27,9 @@ export default function useCurrentEvent() {
             });
             return null;
         } finally {
-            setPendingEventActivity(false);
+            setPendingEvent(false);
         }
     };
 
-    return { isPendingEventActivity, getApprovedEventsActivityApi };
+    return { isPendingEvent, getEventApi };
 }

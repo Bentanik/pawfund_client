@@ -1,53 +1,36 @@
+declare namespace REQUEST {
+    type TGetEventById = {
+        eventId: string;
+    };
+}
+
 declare namespace API {
-  enum AuthRole {
-    USER = "user",
-    STAFF = "staff",
-    ADMIN = "admin",
-  }
+    type Event = {
+        eventDTO: EventDTO;
+        branchDTO: BranchDTO;
+    };
 
-  type TAuthResponse = {
-    token: TAuthToken;
-    authProfile: TAuthProfile;
-  };
+    type EventDTO = {
+        id: string;
+        name: string;
+        startDate: Date;
+        endDate: Date;
+        description: string;
+        maxAttendees: number;
+        // status: string;
+    };
 
-  type TAuthVerifyEmail = {
-    email: string;
-  };
-
-  type TAuthForgotPasswordEmail = {
-    email: string;
-  };
-
-  type TAuthForgotPasswordOtp = {
-    email: string;
-    otp: string;
-  };
-
-  type TAuthForgotPasswordChange = {
-    email: string;
-    otp: string;
-    password: string;
-  };
-
-  type TAuthToken = {
-    accessToken: string;
-    tokenType: string;
-  };
-
-  type TAuthLoginGoogle = {
-    accessTokenGoogle: string;
-  };
-
-  type TAuthProfile = {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    avatarLink: string;
-    role: AuthRole;
-  };
-
-  type TAuthForgotPassword = {
-    email: string;
-    otp: string;
-  };
+    type BranchDTO = {
+        id: string;
+        name: string;
+        phoneNumberOfBranch: string;
+        emailOfBranch: string;
+        description: string;
+        numberHome: string;
+        streetName: string;
+        ward: string;
+        district: string;
+        province: string;
+        postalCode: string;
+    };
 }

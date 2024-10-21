@@ -8,6 +8,7 @@ declare namespace API {
     type ActivityEvent = {
         activityDTO: ActivityDTO;
         eventDTO: EventDTO;
+        branchDTO: BranchDTO;
     };
 
     type ActivityDTO = {
@@ -28,5 +29,15 @@ declare namespace API {
         description: string;
         maxAttendees: number;
         status: string;
+    };
+
+    type BranchDTO = {
+        phoneNumberOfBranch: string;
+        emailOfBranch: string;
+        numberHome: string;
+        streetName: string;
+        ward: string;
+        district: string;
+        province: string;
     };
 }

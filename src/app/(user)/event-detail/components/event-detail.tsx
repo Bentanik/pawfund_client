@@ -16,33 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import VolunteerForm from "./volunteer-form";
 import getCurrentEvent from "../hooks/getCurrentEvent";
-
-const ListEventActivity = [
-    {
-        item: "item-1",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "July 11, 2021, 02:58:03",
-        progress: "50%",
-    },
-    {
-        item: "item-2",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "June 9, 2015, 00:20:48",
-        progress: "10%",
-    },
-    {
-        item: "item-3",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "July 24, 2017, 13:57:42",
-        progress: "90%",
-    },
-];
+import getEventById from "../hooks/getEventById";
 
 interface EventDetail {
     eventId: string;
@@ -50,9 +24,11 @@ interface EventDetail {
 
 const EventDetail = ({ eventId }: EventDetail) => {
     const [progress, setProgress] = useState(13);
-    // const [catData, setCatData] = useState<CatData>();
     const [popupEvent, setPopupEvent] = useState<boolean>(false);
-
+    const [eventActivities, setEventActivities] = useState<API.ActivityEvent[]>(
+        []
+    );
+    const [event, setEvent] = useState<API.Event>();
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
         visible: { opacity: 1, y: 0 },
@@ -72,27 +48,33 @@ const EventDetail = ({ eventId }: EventDetail) => {
         setPopupEvent(false);
     };
 
-    const { isPending, getApprovedEventsActivityApi } = getCurrentEvent();
-
-    const [eventActivities, setEventActivities] =
-        useState<API.ActivityEvent[]>();
+    const { isPendingEventActivity, getApprovedEventsActivityApi } =
+        getCurrentEvent();
+    const { isPendingEvent, getEventApi } = getEventById();
 
     const getListApprovedEventsActivity = async (id: string) => {
-        const res = await getApprovedEventsActivityApi({
-            eventId: id,
-        });
-        setEventActivities(res?.value.data);
+        const res = await getApprovedEventsActivityApi({ eventId: id });
+        setEventActivities(res?.value.data || []); // Set to empty array if data is undefined
+    };
+
+    const getEvent = async (id: string) => {
+        const res = await getEventApi({ eventId: id }); // Ensure correct function usage
+        setEvent(res?.value.data); // Set to null if data is undefined
     };
 
     useEffect(() => {
-        getListApprovedEventsActivity(eventId);
-    }, []);
+        if (eventId) {
+            getListApprovedEventsActivity(eventId);
+            getEvent(eventId);
+        }
+    }, [eventId]); // Added eventId to dependency array
 
     useEffect(() => {
-        if (popupEvent == true) {
+        if (popupEvent) {
             getListApprovedEventsActivity(eventId);
+            getEvent(eventId);
         }
-    }, [popupEvent, eventId]);
+    }, [popupEvent, eventId]); // No need for nested condition, use popupEvent directly
 
     const renderListEvent = () => {
         return eventActivities?.map((item, index) => {
@@ -101,8 +83,6 @@ const EventDetail = ({ eventId }: EventDetail) => {
                     item?.activityDTO.quantity) *
                     100
             );
-
-            console.log(numberOfVolunteer);
 
             return (
                 <div key={index}>
