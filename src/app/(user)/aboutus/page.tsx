@@ -6,6 +6,7 @@ export const metadata: Metadata = {
     title: "About Us",
     description: "About us page for PawFund",
 };
+
 export default function AboutUsPage() {
   return (
     <div>
