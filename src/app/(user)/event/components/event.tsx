@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import PaginatedComponent from "@/components/paginated";
 import useGetDataEvent from "@/app/(user)/event/hooks/getEvents";
 import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 import {
     Select,
@@ -111,21 +112,39 @@ const Event = () => {
             </div>
 
             <div className="mt-[20px]">
-                <div className="flex flex-col gap-y-2 w-[30%]">
-                    <Select>
-                        <SelectTrigger className="w-[50%] border-2 border-[#00000065]">
-                            <SelectValue placeholder="Newest & Upcoming" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Newest & Upcoming">
-                                Newest & Upcoming
-                            </SelectItem>
-                            <SelectItem value="In progress">
-                                In progress
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+                <div className="flex gap-[40px] justify-between">
+                    <div>
+                        <Select
+                            value={status}
+                            onValueChange={(value) =>
+                                setStatus(value as REQUEST.EventStatus)
+                            }
+                        >
+                            <SelectTrigger className="min-w-[200px] border-2 border-[#00000065]">
+                                <SelectValue placeholder="All" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={"NotStarted"}>
+                                    Not Started
+                                </SelectItem>
+                                <SelectItem value={"Ongoing"}>
+                                    On going
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="flex gap-10 items-center w-[30%]">
+                        <label className="text-base text-[#6f6f6f]">Name</label>
+                        <Input
+                            type="text"
+                            className="w-full border-2 border-gray-500 focus-visible:ring-0"
+                            value={name}
+                            onChange={handleChangeName}
+                        />
+                    </div>
                 </div>
+
                 <div className="mt-[30px]">
                     <BlockEvent events={data} />
                 </div>

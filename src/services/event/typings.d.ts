@@ -11,7 +11,7 @@ declare namespace REQUEST {
         isAscCreatedDate?: boolean;
     };
 
-    type EventStatus = "NotApproved" | "NotStarted" | "Ongoing" | "Completed";
+    type EventStatus = "NotStarted" | "Ongoing";
 }
 
 declare namespace API {
