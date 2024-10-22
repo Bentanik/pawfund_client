@@ -9,9 +9,9 @@ export default function Profile() {
   const { getProfileAccount, isPending } = useGetProfile();
   const accountState = useAppSelector((state) => state.accountSlice);
 
-  useEffect(() => {
-    getProfileAccount();
-  }, []);
+  // useEffect(() => {
+  //   getProfileAccount();
+  // }, []);
 
   return (
     <div className="px-[10%]">

@@ -107,7 +107,6 @@ export default function AvatarMenu() {
           </div>
         </div>
       </div>
-      <Backdrop open={isPending} />
     </div>
   );
 }

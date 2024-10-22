@@ -38,7 +38,8 @@ declare namespace API {
     userId: string;
     firstName: string;
     lastName: string;
-    avatarLink: string;
+    cropAvatarLink: string;
+    fullAvatarLink: string;
     roleId: AuthRole;
   };
 

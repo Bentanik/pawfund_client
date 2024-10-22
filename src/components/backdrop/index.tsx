@@ -10,7 +10,7 @@ export const Backdrop: React.FC<BackdropProps> = ({ open, onClose }) => {
     return (
         <div
             className={cn(
-                "fixed inset-0 flex items-center justify-center bg-black/50 transition-opacity z-50",
+                "fixed inset-0 flex items-center justify-center bg-black/50 transition-opacity z-[99999]",
                 open ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
             onClick={onClose}
