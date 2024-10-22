@@ -38,32 +38,14 @@ const ListEvent = [
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
 ];
-export default function BlockEvent() {
-    const [popupEvent, setPopupEvent] = useState<boolean>(false);
-    const [events, setEvents] = useState<API.Event[]>([]);
 
-    const userState = useAppSelector((state) => state.userSlice);
-
-    const { isPendingAllEvent, getAllEvent } = getAllEvents();
-
-    const getListEvent = async () => {
-        const res = await getAllEvent();
-        setEvents(res?.value.data || []);
-        console.log(res?.value.data);
-    };
-
-    useEffect(() => {
-        getListEvent();
-    }, []); // Added eventId to dependency array
-    useEffect(() => {
-        if (popupEvent) {
-            getListEvent();
-        }
-    }, [popupEvent]); // No need for nested condition, use popupEvent directly
-
+type BlockEventProps = {
+    events: API.Event[];
+};
+const BlockEvent: React.FC<BlockEventProps> = ({ events }) => {
     const formatDate = (stringDate: any) => {
         const date = new Date(stringDate);
-        const day = date.getDate(); // Lấy ngày không cần 0 phía trước
+        const day = date.getDate();
         const months = [
             "Jan",
             "Feb",
@@ -94,7 +76,7 @@ export default function BlockEvent() {
                             <img
                                 src="/images/meo1.jpg"
                                 alt="Event"
-                                className="w-[430px] h-[300px] object-cover"
+                                className="w-full h-[300px] object-cover"
                             />
                             {/* Nội dung chỉ xuất hiện khi hover vào thẻ Link */}
                             <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#00000095] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-2">
@@ -106,19 +88,19 @@ export default function BlockEvent() {
                             </div>
                         </div>
                     </Link>
-                    <div className="w-[380px]">
+                    <div className="w-full">
                         <div className="py-[20px]">
                             <div className="mb-[10px] font-semibold">
-                                {item?.eventDTO.name}
+                                {item?.name}
                             </div>
                             <div className=" line-clamp-2 overflow-hidden text-[0.9rem]">
-                                {item?.eventDTO.description}
+                                {item?.description}
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <p>{`${formatDate(
-                                item?.eventDTO.startDate
-                            )} - ${formatDate(item?.eventDTO.endDate)}`}</p>
+                            <p>{`${formatDate(item?.startDate)} - ${formatDate(
+                                item?.endDate
+                            )}`}</p>
                             <label className="inline-flex items-center mb-5 cursor-pointer">
                                 <input
                                     type="checkbox"
@@ -141,10 +123,12 @@ export default function BlockEvent() {
     return (
         <div>
             <div>
-                <div className="flex gap-[5%] flex-wrap">
+                <div className="grid grid-cols-3 gap-[5%] w-full">
                     {renderListEvent()}
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default BlockEvent;

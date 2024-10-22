@@ -4,16 +4,10 @@ import { usePathname } from "next/navigation";
 import BlockEvent from "@/components/block-event";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import PaginatedComponent from "@/components/paginated";
+import useGetDataEvent from "@/app/(user)/event/hooks/getEvents";
+import { useEffect, useState } from "react";
 
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import {
     Select,
     SelectContent,
@@ -23,6 +17,49 @@ import {
 } from "@/components/ui/select";
 
 const Event = () => {
+    const [name, setName] = useState<string>("all");
+    const [status, setStatus] = useState<REQUEST.EventStatus | undefined>();
+    const [isAscCreatedDate, setIsAscCreatedDate] = useState<boolean>(true);
+    const [data, setData] = useState<API.Event[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(1);
+
+    const { getEventsApi } = useGetDataEvent();
+
+    const handleGetData = async (pageIndex: number) => {
+        try {
+            const res = await getEventsApi({
+                pageIndex: pageIndex,
+                pageSize: 3,
+                name: name,
+                status: status,
+                isAscCreatedDate: isAscCreatedDate,
+            });
+            setTotalPage(res?.value.data.totalPages || 1);
+            setData(res?.value.data.items || []);
+        } catch (err) {
+            setData([]);
+        }
+    };
+
+    console.log(data);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        handleGetData(page);
+    };
+
+    const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+
+    useEffect(() => {
+        if (currentPage !== 1) {
+            handleGetData(1);
+            setCurrentPage(1);
+        } else handleGetData(currentPage);
+    }, [name, status, isAscCreatedDate]);
+
     return (
         <div className="min-h-screen px-[7%]">
             <div className="flex  py-[20px]">
@@ -89,39 +126,18 @@ const Event = () => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="mt-[30px] flex gap-[10px]">
-                    <BlockEvent />
+                <div className="mt-[30px]">
+                    <BlockEvent events={data} />
                 </div>
             </div>
-            <div className="my-[50px]">
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                href="#"
-                                className="bg-blue-500 text-white hover:bg-blue-500 hover:text-white"
-                            ></PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">2</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">3</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">4</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext href="#" />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+            <div className="my-10">
+                <div className="mt-5">
+                    <PaginatedComponent
+                        totalPages={totalPage}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </div>
     );

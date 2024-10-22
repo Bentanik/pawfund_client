@@ -2,35 +2,43 @@ declare namespace REQUEST {
     type TGetEventById = {
         eventId: string;
     };
+
+    type TGetEvents = {
+        pageIndex: number;
+        pageSize?: number;
+        name?: string; // Thay đổi mới
+        status?: EventStatus; // Thay đổi mới
+        isAscCreatedDate?: boolean;
+    };
+
+    type EventStatus = "NotApproved" | "NotStarted" | "Ongoing" | "Completed";
 }
 
 declare namespace API {
     type Event = {
-        eventDTO: EventDTO;
-        branchDTO: BranchDTO;
-    };
-
-    type EventDTO = {
         id: string;
         name: string;
         startDate: Date;
         endDate: Date;
         description: string;
-        maxAttendees: number;
         status: string;
+        branchDto: Branch;
     };
 
-    type BranchDTO = {
+    type Branch = {
         id: string;
         name: string;
         phoneNumberOfBranch: string;
         emailOfBranch: string;
-        description: string;
-        numberHome: string;
-        streetName: string;
-        ward: string;
-        district: string;
-        province: string;
-        postalCode: string;
+    };
+
+    type TGetEvents = {
+        items: Event[];
+        pageIndex: number;
+        pageSize: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
     };
 }
