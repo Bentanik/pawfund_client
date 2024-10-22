@@ -223,3 +223,64 @@ export const breedCats = [
     name: "York Chocolate",
   },
 ];
+export const catColors = [
+  {
+    value: "Black",
+  },
+  {
+    value: "White",
+  },
+  {
+    value: "Yellow",
+  },
+  {
+    value: "Black & White",
+  },
+  {
+    value: "Yellow & White",
+  },
+  {
+    value: "Tabby",
+  },
+  {
+    value: "Calico",
+  },
+  {
+    value: "Bicolor",
+  },
+  {
+    value: "Tortoiseshell",
+  },
+  {
+    value: "Gray",
+  },
+  {
+    value: "Siamese cat",
+  },
+  {
+    value: "Brown",
+  },
+  {
+    value: "Brown yellow",
+  },
+  {
+    value: "Black and yellow",
+  },
+  {
+    value: "Gray & White",
+  },
+  {
+    value: "White brown",
+  },
+];
+export const catAges = [
+  {
+    value: "Young",
+  },
+  {
+    value: "Full grown",
+  },
+  {
+    value: "Old",
+  },
+];

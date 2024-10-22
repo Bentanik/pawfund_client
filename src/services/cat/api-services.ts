@@ -11,3 +11,35 @@ export const createCat = async (body: FormData) => {
   });
   return response.data;
 };
+
+export const getCats = async ({
+  catName = "",
+  age = "",
+  sex = "",
+  color = "",
+  sterilization = "",
+  pageIndex = 1,
+  pageSize = 10,
+}: REQUEST.TGetCats) => {
+  const params: Record<string, any> = {};
+
+  if (pageIndex) params.pageIndex = pageIndex;
+  if (pageSize) params.pageSize = pageSize;
+  if (catName !== "all") params.Name = catName;
+  if (age !== "all") params.Age = age;
+  if (sex !== undefined && sex !== "all")
+    params.CatSex = sex === "Male" ? 0 : 1;
+  if (color !== "all") params.Color = color;
+  if (sterilization !== undefined && sterilization !== "all")
+    params.Sterilization = sterilization;
+
+  const response = await request<TResponseData<API.TGetCats>>(
+    API_ENDPOINTS.GET_CATS,
+    {
+      method: "GET",
+      params: Object.keys(params).length > 0 ? params : undefined,
+    }
+  );
+
+  return response.data;
+};
