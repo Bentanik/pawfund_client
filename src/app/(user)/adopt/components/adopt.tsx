@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import useGetDataAdopt from "@/app/(user)/adopt/hooks/useGetDataAdopt";
 import PaginatedComponent from "@/components/paginated";
 import useDebounce from "@/hooks/use-debounce";
+import Link from "next/link";
 
 const ListProccess = [
   {
@@ -117,13 +118,22 @@ export default function Adopt() {
         key={index}
         className="w-[250px] min-h-[300px] bg-[#f0efef] flex flex-col px-5 py-4 items-center rounded-sm"
       >
-        <figure>
-          <img
-            src="https://www.hanoipetadoption.com/admin/user-content/Animal/f99e0e2f-5f6e-4850-98f5-ccefe81e0d5e.jpeg"
-            alt="avatar"
-            className="block rounded-sm"
-          />
-        </figure>
+        <Link href={`/viewprofilecat/${card.id}`}>
+          <figure className="border border-gray-200 rounded-sm w-full">
+            {card?.imageCats[0]?.imageUrl ? (
+              <img
+                src={card.imageCats[0]?.imageUrl}
+                alt="avatar"
+                className="block rounded-sm w-full h-[200px] object-cover"
+              />
+            ) : (
+              <div className="rounded-sm w-full h-[200px] object-cover flex items-center justify-center">
+                <span className="text-xl">No Image</span>
+              </div>
+            )}
+          </figure>
+        </Link>
+
         <div className="py-3 w-full">
           <h4 className="text-xl font-semibold text-gray-900">{card?.name}</h4>
           <div className="w-14 border border-[#cecece] my-1"></div>
@@ -335,7 +345,7 @@ export default function Adopt() {
             <h1 className="text-4xl text-transform: uppercase font-semibold text-center text-gray-900">
               Find your pet
             </h1>
-            <div className="mt-5 flex items-end gap-x-10">
+            <div className="grid grid-cols-3 gap-x-10 gap-y-3">
               <div className="flex flex-col gap-y-2 w-full">
                 <label className="text-base text-[#6f6f6f]">Gender</label>
                 <Select
