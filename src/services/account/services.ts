@@ -3,6 +3,7 @@ import { getQueryClient } from "@/lib/query";
 import {
   getAccountProfile,
   updateAvatarProfile,
+  updateEmailProfile,
   updateInfoProfile,
 } from "@/services/account/api-services";
 import { useAppDispatch } from "@/stores/store";
@@ -72,6 +73,25 @@ export const useServiceUpdateInfoProfile = () => {
     mutationFn: updateInfoProfile,
     onSuccess: (data) => {
       dispatch(updateInformationProfile(data.value.data));
+      addToast({
+        type: "success",
+        description: data.value.message,
+        duration: 5000,
+      });
+    },
+  });
+};
+
+export const useServiceUpdateEmailProfile = () => {
+  const dispatch = useAppDispatch();
+  const { addToast } = useToast();
+  return useMutation<
+    TResponse,
+    TMeta,
+    REQUEST.TUpdateEmail
+  >({
+    mutationFn: updateEmailProfile,
+    onSuccess: (data) => {
       addToast({
         type: "success",
         description: data.value.message,

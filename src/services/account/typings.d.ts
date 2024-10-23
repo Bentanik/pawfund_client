@@ -10,6 +10,10 @@ declare namespace REQUEST {
     phoneNumber: string;
     gender: number;
   };
+
+  type TUpdateEmail = {
+    email: string;
+  };
 }
 
 declare namespace API {

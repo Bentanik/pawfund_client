@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import EditPersonal from "@/app/(user)/profile/components/edit-personal";
 import { useEffect, useState } from "react";
+import EditEmail from "@/app/(user)/profile/components/edit-email";
 
 const DONATE = [
   {
@@ -32,15 +33,24 @@ const DONATE = [
 ];
 
 export default function Profile() {
-  const [editPopup, setEditPopup] = useState<boolean>(false);
+  const [editInfoPopup, setEditInfoPopup] = useState<boolean>(false);
+  const [editEmailPopup, setEditEmailPopup] = useState<boolean>(false);
   const { getInfoProfileApi, isPending } = useGetProfile();
 
-  const handleCloseEdit = () => {
-    setEditPopup(false);
+  const handleCloseEditInfo = () => {
+    setEditInfoPopup(false);
   };
 
-  const handleOpenEdit = () => {
-    setEditPopup(true);
+  const handleOpenEditInfo = () => {
+    setEditInfoPopup(true);
+  };
+
+  const handleCloseEditEmail = () => {
+    setEditEmailPopup(false);
+  };
+
+  const handleOpenEditEmail = () => {
+    setEditEmailPopup(true);
   };
 
   const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
@@ -86,7 +96,7 @@ export default function Profile() {
               <div className="flex items-center gap-x-3">
                 <Button
                   type="button"
-                  onClick={handleOpenEdit}
+                  onClick={handleOpenEditEmail}
                   className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
                 >
                   <span className="text-gray-700">Change Email</span>
@@ -94,7 +104,7 @@ export default function Profile() {
                 {profileInfo?.loginType === 1 && (
                   <Button
                     type="button"
-                    onClick={handleOpenEdit}
+                    onClick={handleOpenEditInfo}
                     className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
                   >
                     <span className="text-gray-700">Change password</span>
@@ -103,7 +113,7 @@ export default function Profile() {
 
                 <Button
                   type="button"
-                  onClick={handleOpenEdit}
+                  onClick={handleOpenEditInfo}
                   className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
                 >
                   <span className="text-gray-700">Edit information</span>
@@ -147,7 +157,7 @@ export default function Profile() {
                   </label>
                   <h5 className="text-base text-gray-650">
                     {profileInfo.phoneNumber?.length > 0
-                      ? profileInfo.phoneNumber
+                      ? `+84 ${profileInfo.phoneNumber}`
                       : "Unknown"}
                   </h5>
                 </div>
@@ -194,10 +204,18 @@ export default function Profile() {
             </form>
           </div>
         </div>
-        {profileInfo?.email !== "" && (
+        {profileInfo?.email !== "" && editInfoPopup && (
           <EditPersonal
-            open={editPopup}
-            onClose={handleCloseEdit}
+            open={editInfoPopup}
+            onClose={handleCloseEditInfo}
+            information={profileInfo}
+            fetchProfileApi={handleFetchProfile}
+          />
+        )}
+        {profileInfo?.email !== "" && editEmailPopup && (
+          <EditEmail
+            open={editEmailPopup}
+            onClose={handleCloseEditEmail}
             information={profileInfo}
             fetchProfileApi={handleFetchProfile}
           />
