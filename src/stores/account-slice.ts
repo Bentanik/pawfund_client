@@ -6,8 +6,8 @@ export interface InitialState {
 
 let initialState: InitialState = { profile: null };
 
-const userSlice = createSlice({
-  name: "userSlice",
+const accountProfileSlice = createSlice({
+  name: "accountProfileSlice",
   initialState: initialState,
   reducers: {
     updateProfile: (state, action: PayloadAction<API.TProfileAccount>) => {
@@ -19,6 +19,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateProfile, resetProfile } = userSlice.actions;
+export const { updateProfile, resetProfile } = accountProfileSlice.actions;
 
-export default userSlice.reducer;
+export default accountProfileSlice.reducer;

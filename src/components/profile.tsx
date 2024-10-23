@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import useGetProfile from "@/app/(user)/profile/hooks/useGetProfileAccount";
 import { Backdrop } from "@/components/backdrop";
-import { useAppSelector } from "@/stores/store";
 import {
   Table,
   TableBody,
@@ -11,7 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EditPersonal from "@/components/edit-personal";
+import EditPersonal from "@/app/(user)/profile/components/edit-personal";
+import { useEffect, useState } from "react";
 
 const DONATE = [
   {
@@ -32,21 +32,83 @@ const DONATE = [
 ];
 
 export default function Profile() {
-  const { getProfileAccount, isPending } = useGetProfile();
-  const accountState = useAppSelector((state) => state.accountSlice);
+  const [editPopup, setEditPopup] = useState<boolean>(false);
+  const { getInfoProfileApi, isPending } = useGetProfile();
+
+  const handleCloseEdit = () => {
+    setEditPopup(false);
+  };
+
+  const handleOpenEdit = () => {
+    setEditPopup(true);
+  };
+
+  const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    gender: 1,
+    phoneNumber: "",
+    status: false,
+  });
+
+  const handleFetchProfile = async () => {
+    const initialData = {
+      id: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      gender: 1,
+      phoneNumber: "",
+      status: false,
+    };
+    try {
+      const res = await getInfoProfileApi();
+      setProfileInfo(res?.value.data || initialData);
+    } catch (err) {
+      setProfileInfo(initialData);
+    }
+  };
+
+  useEffect(() => {
+    handleFetchProfile();
+  }, []);
 
   return (
     <div>
-      {/* Nội dung cho Settings */}
-      <div className="grid grid-cols-2 gap-x-3 gap-y-3">
+      <div className="flex gap-x-3">
         {/* Profile Form */}
-        <div className="py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
+        <div className="basis-[60%] py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
           <div className="flex flex-col gap-y-6 px-8">
-            <header className="flex items-center justify-between">
+            <header className="flex items-center justify-between gap-x-3">
               <h2 className="text-xl font-semibold">Personal information</h2>
-              <Button className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300">
-                <span className="text-gray-700">Edit</span>
-              </Button>
+              <div className="flex items-center gap-x-3">
+                <Button
+                  type="button"
+                  onClick={handleOpenEdit}
+                  className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                >
+                  <span className="text-gray-700">Change Email</span>
+                </Button>
+                {profileInfo?.loginType === 1 && (
+                  <Button
+                    type="button"
+                    onClick={handleOpenEdit}
+                    className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                  >
+                    <span className="text-gray-700">Change password</span>
+                  </Button>
+                )}
+
+                <Button
+                  type="button"
+                  onClick={handleOpenEdit}
+                  className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                >
+                  <span className="text-gray-700">Edit information</span>
+                </Button>
+              </div>
             </header>
             <form>
               <div className="flex flex-col gap-y-5">
@@ -55,23 +117,38 @@ export default function Profile() {
                     <label className="text-[15px] font-medium text-gray-400">
                       First Name
                     </label>
-                    <h5 className="text-base text-gray-650">Nguyen Mai</h5>
+                    <h5 className="text-base text-gray-650">
+                      {profileInfo?.firstName}
+                    </h5>
                   </div>
 
                   <div className="basis-1/2 flex flex-col gap-y-2">
                     <label className="text-[15px] font-medium text-gray-400">
                       Last Name
                     </label>
-                    <h5 className="text-base text-gray-650">Nguyen Mai</h5>
+                    <h5 className="text-base text-gray-650">
+                      {profileInfo?.lastName}
+                    </h5>
                   </div>
                 </div>
-                {/* Email */}
+
                 <div className="basis-1/2 flex flex-col gap-y-2">
                   <label className="text-[15px] font-medium text-gray-400">
                     Email address
                   </label>
                   <h5 className="text-base text-gray-650">
-                    vietvyqw@gmail.com
+                    {profileInfo.email}
+                  </h5>
+                </div>
+
+                <div className="basis-1/2 flex flex-col gap-y-2">
+                  <label className="text-[15px] font-medium text-gray-400">
+                    Phone number
+                  </label>
+                  <h5 className="text-base text-gray-650">
+                    {profileInfo.phoneNumber?.length > 0
+                      ? profileInfo.phoneNumber
+                      : "Unknown"}
                   </h5>
                 </div>
 
@@ -79,13 +156,15 @@ export default function Profile() {
                   <label className="text-[15px] font-medium text-gray-400">
                     Gender
                   </label>
-                  <h5 className="text-base text-gray-650">Male</h5>
+                  <h5 className="text-base text-gray-650">
+                    {profileInfo.gender === 1 ? "Male" : "Female"}
+                  </h5>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <div className="py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
+        <div className="flex-1 py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
           <div className="flex flex-col gap-y-6 px-8">
             <header className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Donate</h2>
@@ -115,7 +194,14 @@ export default function Profile() {
             </form>
           </div>
         </div>
-        <EditPersonal open={true} onClose={() => {}} />
+        {profileInfo?.email !== "" && (
+          <EditPersonal
+            open={editPopup}
+            onClose={handleCloseEdit}
+            information={profileInfo}
+            fetchProfileApi={handleFetchProfile}
+          />
+        )}
       </div>
       <Backdrop open={isPending} />
     </div>

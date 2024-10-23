@@ -38,7 +38,7 @@ export function useRegisterForm() {
     },
   });
 
-  const onSubmit = async (data: RegisterBodyType) => {
+  const onSubmit = async (data: REQUEST.TRegister) => {
     try {
       mutate(data, {
         onSuccess: async (data) => {

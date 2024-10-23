@@ -1,4 +1,12 @@
 declare namespace REQUEST {
+  type TRegister = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    gender: number;
+  };
   type TAuthVerifyEmail = {
     email: string;
   };

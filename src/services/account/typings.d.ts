@@ -3,6 +3,13 @@ declare namespace REQUEST {
     cropAvatar: File;
     fullAvatar: File;
   };
+
+  type TUpdateInfoProfile = {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    gender: number;
+  };
 }
 
 declare namespace API {
@@ -11,9 +18,10 @@ declare namespace API {
     firstName: string;
     lastName: string;
     email: string;
-    avatarUrl: string;
     phoneNumber: string;
+    gender: number;
     status: boolean;
+    loginType?: number;
   };
 
   type TUpdateAvatar = {

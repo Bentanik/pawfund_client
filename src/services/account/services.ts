@@ -3,9 +3,10 @@ import { getQueryClient } from "@/lib/query";
 import {
   getAccountProfile,
   updateAvatarProfile,
+  updateInfoProfile,
 } from "@/services/account/api-services";
 import { useAppDispatch } from "@/stores/store";
-import { updateImage } from "@/stores/user-slice";
+import { updateImage, updateInformationProfile } from "@/stores/user-slice";
 import { useMutation } from "@tanstack/react-query";
 
 export const useServiceGetProfileAccount = async () => {
@@ -41,6 +42,36 @@ export const useServiceUpdateAvatarProfile = () => {
           fullAvatarLink: data.value.data.fullAvatarLink,
         })
       );
+      addToast(
+        {
+          type: "success",
+          description: data.value.message,
+          duration: 5000,
+        },
+        false
+      );
+    },
+    onError: () => {
+      addToast({
+        type: "error",
+        description: "Please try again!",
+        duration: 5000,
+      });
+    },
+  });
+};
+
+export const useServiceUpdateInfoProfile = () => {
+  const dispatch = useAppDispatch();
+  const { addToast } = useToast();
+  return useMutation<
+    TResponseData<API.TProfileAccount>,
+    TMeta,
+    REQUEST.TUpdateInfoProfile
+  >({
+    mutationFn: updateInfoProfile,
+    onSuccess: (data) => {
+      dispatch(updateInformationProfile(data.value.data));
       addToast({
         type: "success",
         description: data.value.message,

@@ -4,7 +4,6 @@ import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { getAccountProfile } from "@/services/account/api-services";
 
 export default function HomePage() {
   const sectionVariants = {

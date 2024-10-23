@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useAppSelector } from "@/stores/store";
-import { convertBase64ToFile } from "@/utils/Convert/ConvertBase64ToFile";
+import { convertBase64ToFile } from "@/utils/convert/ConvertBase64ToFile";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -189,8 +189,8 @@ export default function UpdateAvatarProfilePopup({
             </div>
           )}
         </div>
+        <Backdrop open={isPending} />
       </DialogContent>
-      <Backdrop open={isPending} />
     </Dialog>
   );
 }

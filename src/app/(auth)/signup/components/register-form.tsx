@@ -2,8 +2,19 @@
 import { useRegisterForm } from "@/app/(auth)/signup/hooks/useRegisterForm";
 import { Backdrop } from "@/components/backdrop";
 import InputAuth from "@/components/input-auth";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Genders } from "@/const/user";
 import useLoginGoogle from "@/hooks/use-login-google";
+import { RegisterBodyType } from "@/utils/schemaValidations/auth.schema";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function RegisterForm() {
   const {
@@ -20,7 +31,22 @@ export default function RegisterForm() {
     isPending,
   } = useRegisterForm();
 
+  const [gender, setGender] = useState<string>(Genders[0].value);
+
   const { handleLoginGoogle, isPendingGoogle } = useLoginGoogle();
+
+  const handleSubmitForm = (data: RegisterBodyType) => {
+    try {
+      onSubmit({
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        gender: gender === Genders[0].value ? 1 : 2,
+      });
+    } catch (err) {}
+  };
 
   return (
     <div>
@@ -32,7 +58,7 @@ export default function RegisterForm() {
         </span>
         <form
           className="pt-5 flex flex-col gap-y-4"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(handleSubmitForm)}
         >
           <div className="flex items-center gap-x-2">
             <div className="w-1/2 flex flex-col gap-y-2">
@@ -65,6 +91,25 @@ export default function RegisterForm() {
               register={register("email")}
               error={errors?.email?.message}
             />
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <label htmlFor="gender" className="text-gray-600 mt-2">
+              Gender
+            </label>
+            <Select value={gender} onValueChange={(value) => setGender(value)}>
+              <SelectTrigger className="relative flex px-2 py-5 border-2 border-gray-300 rounded-md focus-visible::border-gray-600">
+                <SelectValue placeholder="Choose Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {Genders?.map((item, index) => (
+                    <SelectItem key={index} value={item.value}>
+                      {item.value}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex flex-col gap-y-2">
             <div className="flex gap-x-4 items-end">

@@ -24,3 +24,14 @@ export const updateAvatarProfile = async (body: FormData) => {
   );
   return response.data;
 };
+
+export const updateInfoProfile = async (body: REQUEST.TUpdateInfoProfile) => {
+  const response = await request<TResponseData<API.TProfileAccount>>(
+    API_ENDPOINTS.UPDATE_INFO_PROFILE,
+    {
+      method: "PUT",
+      data: body,
+    }
+  );
+  return response.data;
+};
