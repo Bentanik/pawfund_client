@@ -103,9 +103,11 @@ const Event = () => {
                                 volunteers, please click the button below.
                             </p>
 
-                            <Button className="mt-[20px] rounded-[50px] p-7 min-w-[200px]  hover:bg-[#4DD2BF] transition-colors duration-300">
-                                Volunteer page
-                            </Button>
+                            <Link href={"/volunteer"}>
+                                <Button className="mt-[20px] rounded-[50px] p-7 min-w-[200px]  hover:bg-[#4DD2BF] transition-colors duration-300">
+                                    Volunteer page
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </motion.div>
