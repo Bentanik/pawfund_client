@@ -21,7 +21,7 @@ const Event = () => {
     const [name, setName] = useState<string>("all");
     const [status, setStatus] = useState<REQUEST.EventStatus | undefined>();
     const [isAscCreatedDate, setIsAscCreatedDate] = useState<boolean>(true);
-    const [data, setData] = useState<API.Event[]>([]);
+    const [data, setData] = useState<API.Events[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPage, setTotalPage] = useState<number>(1);
 
@@ -42,8 +42,6 @@ const Event = () => {
             setData([]);
         }
     };
-
-    console.log(data);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);

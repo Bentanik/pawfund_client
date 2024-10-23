@@ -15,7 +15,6 @@ import {
   RegisterBodyType,
 } from "@/utils/schemaValidations/auth.schema";
 import { useMutation } from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/query";
 import { ForgotPasswordEmailBodyType } from "@/utils/schemaValidations/forgotPassword.schema";
 import { store } from "@/stores/store";
 import useToast from "@/hooks/use-toast";
@@ -31,6 +30,7 @@ export const useServiceLogin = () => {
       setStorageItem("accessToken", `${token.tokenType} ${token.accessToken}`);
       // Save auth profile in redux storage
       dispatch(loginUser(authProfile));
+      return data;
     },
   });
 };

@@ -55,3 +55,16 @@ export const getAllApplicationByStaff = async ({
 
   return response.data;
 };
+
+export const updateMeetingTime = async (
+  body: REQUEST.GetMeetingResponse
+) => {
+  const response = await request<TResponse>(
+    API_ENDPOINTS.PUT_UPDATE_MEETING_TIME,
+    {
+      method: "PUT",
+      data: body,
+    }
+  );
+  return response.data;
+};

@@ -28,7 +28,8 @@ const EventDetail = ({ eventId }: EventDetail) => {
     const [eventActivities, setEventActivities] = useState<API.ActivityEvent[]>(
         []
     );
-    const [event, setEvent] = useState<API.Event>();
+    const [event, setEvent] = useState<API.TGetEvent>();
+
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
         visible: { opacity: 1, y: 0 },
@@ -60,8 +61,6 @@ const EventDetail = ({ eventId }: EventDetail) => {
     const getEvent = async (id: string) => {
         const res = await getEventApi({ eventId: id }); // Ensure correct function usage
         setEvent(res?.value.data); // Set to null if data is undefined
-        console.log("123");
-        console.log(res?.value.data);
     };
 
     useEffect(() => {
@@ -95,9 +94,9 @@ const EventDetail = ({ eventId }: EventDetail) => {
     const {
         formattedDate: formattedStartDate,
         formattedTime: formattedStartTime,
-    } = formatDateTime(event?.eventDTO?.startDate?.toString());
+    } = formatDateTime(event?.eventDTO.startDate.toString());
     const { formattedDate: formattedEndDate, formattedTime: formattedEndTime } =
-        formatDateTime(event?.eventDTO?.endDate?.toString());
+        formatDateTime(event?.eventDTO.endDate.toString());
 
     const renderListEvent = () => {
         return eventActivities?.map((item, index) => {
@@ -174,7 +173,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                         className="absolute top-20 transform left-[27%] text-center"
                     >
                         <div className=" text-white text-[3rem] w-[70%] min-w-[700px] font-semibold leading-[50px]">
-                            {event?.eventDTO.name}
+                            {/* {event?.event.name} */}
                         </div>
                     </motion.h1>
 

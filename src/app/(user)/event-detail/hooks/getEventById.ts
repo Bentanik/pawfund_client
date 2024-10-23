@@ -13,7 +13,7 @@ export default function useCurrentEvent() {
             const res = await getEvents(params);
             if (isTResponseData(res)) {
                 console.log(res);
-                return res as TResponseData<API.Event>;
+                return res as TResponseData<API.TGetEvent>;
             } else {
                 addToast({
                     type: "error",

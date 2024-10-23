@@ -2,10 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { useAppSelector } from "@/stores/store";
 
-import getAllEvents from "@/app/(user)/event/hooks/getEvents";
 const ListEvent = [
     {
         thumb: "/images/meo2.jpg",
@@ -40,7 +37,7 @@ const ListEvent = [
 ];
 
 type BlockEventProps = {
-    events: API.Event[];
+    events?: API.Events[];
 };
 const BlockEvent: React.FC<BlockEventProps> = ({ events }) => {
     const formatDate = (stringDate: any) => {
