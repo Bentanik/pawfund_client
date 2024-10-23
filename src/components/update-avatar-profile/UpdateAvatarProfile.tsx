@@ -188,10 +188,9 @@ export default function UpdateAvatarProfilePopup({
               </form>
             </div>
           )}
-
-          <Backdrop open={isPending} />
         </div>
       </DialogContent>
+      <Backdrop open={isPending} />
     </Dialog>
   );
 }
