@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import EditPersonal from "@/app/(user)/profile/components/edit-personal";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import EditEmail from "@/app/(user)/profile/components/edit-email";
 
 const DONATE = [
@@ -94,21 +94,23 @@ export default function Profile() {
             <header className="flex items-center justify-between gap-x-3">
               <h2 className="text-xl font-semibold">Personal information</h2>
               <div className="flex items-center gap-x-3">
-                <Button
-                  type="button"
-                  onClick={handleOpenEditEmail}
-                  className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
-                >
-                  <span className="text-gray-700">Change Email</span>
-                </Button>
                 {profileInfo?.loginType === 1 && (
-                  <Button
-                    type="button"
-                    onClick={handleOpenEditInfo}
-                    className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
-                  >
-                    <span className="text-gray-700">Change password</span>
-                  </Button>
+                  <Fragment>
+                    <Button
+                      type="button"
+                      onClick={handleOpenEditEmail}
+                      className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                    >
+                      <span className="text-gray-700">Change Email</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleOpenEditInfo}
+                      className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                    >
+                      <span className="text-gray-700">Change password</span>
+                    </Button>
+                  </Fragment>
                 )}
 
                 <Button

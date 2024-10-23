@@ -14,6 +14,10 @@ declare namespace REQUEST {
   type TUpdateEmail = {
     email: string;
   };
+
+  type TVerifyChangeEmail = {
+    userId: string;
+  };
 }
 
 declare namespace API {

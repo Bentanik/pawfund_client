@@ -34,8 +34,12 @@ export default function useUpdateEmail({
           onClose();
         },
         onError: (error) => {
-          console.log(error);
           if (error.errorCode === "account_email_01") {
+            setError("email", {
+              message: error.detail,
+            });
+          }
+          if (error.errorCode === "account_email_02") {
             setError("email", {
               message: error.detail,
             });

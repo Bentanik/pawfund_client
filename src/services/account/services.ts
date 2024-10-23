@@ -5,6 +5,7 @@ import {
   updateAvatarProfile,
   updateEmailProfile,
   updateInfoProfile,
+  verifyChangeEmail,
 } from "@/services/account/api-services";
 import { useAppDispatch } from "@/stores/store";
 import { updateImage, updateInformationProfile } from "@/stores/user-slice";
@@ -83,19 +84,35 @@ export const useServiceUpdateInfoProfile = () => {
 };
 
 export const useServiceUpdateEmailProfile = () => {
-  const dispatch = useAppDispatch();
   const { addToast } = useToast();
-  return useMutation<
-    TResponse,
-    TMeta,
-    REQUEST.TUpdateEmail
-  >({
+  return useMutation<TResponse, TMeta, REQUEST.TUpdateEmail>({
     mutationFn: updateEmailProfile,
     onSuccess: (data) => {
       addToast({
         type: "success",
         description: data.value.message,
         duration: 5000,
+      });
+    },
+  });
+};
+
+export const useServiceVerifyChangeEmail = () => {
+  const { addToast } = useToast();
+  return useMutation<TResponse, TMeta, REQUEST.TVerifyChangeEmail>({
+    mutationFn: verifyChangeEmail,
+    onSuccess: (data) => {
+      addToast({
+        type: "success",
+        description: data.value.message,
+        duration: 5000,
+      });
+    },
+    onError: (error) => {
+      addToast({
+        type: "error",
+        description: error?.detail,
+        duration: 3000,
       });
     },
   });

@@ -46,3 +46,15 @@ export const updateEmailProfile = async (body: REQUEST.TUpdateEmail) => {
   );
   return response.data;
 };
+
+export const verifyChangeEmail = async ({
+  userId,
+}: REQUEST.TVerifyChangeEmail) => {
+  const response = await request<TResponse>(API_ENDPOINTS.VERIFY_UPDATE_EMAIL, {
+    method: "PUT",
+    params: {
+      userId: userId,
+    },
+  });
+  return response.data;
+};

@@ -43,6 +43,16 @@ const errorHandler = async (error: AxiosError) => {
           duration: 5000,
         });
         break;
+      case "account_noti_08":
+        addToast(
+          {
+            type: "error",
+            description: responseMeta.detail,
+            duration: 5000,
+          },
+          false
+        );
+        break;
       default:
         break;
     }
