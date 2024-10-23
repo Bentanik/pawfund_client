@@ -7,8 +7,8 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { isPending } from "@reduxjs/toolkit";
 import { motion } from "framer-motion";
 import { useState } from "react";
 export default function Donation() {
