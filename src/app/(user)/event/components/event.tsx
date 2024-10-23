@@ -4,16 +4,11 @@ import { usePathname } from "next/navigation";
 import BlockEvent from "@/components/block-event";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import PaginatedComponent from "@/components/paginated";
+import useGetDataEvent from "@/app/(user)/event/hooks/getEvents";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import {
     Select,
     SelectContent,
@@ -22,7 +17,48 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-export default function UserProfilePage() {
+const Event = () => {
+    const [name, setName] = useState<string>("all");
+    const [status, setStatus] = useState<REQUEST.EventStatus | undefined>();
+    const [isAscCreatedDate, setIsAscCreatedDate] = useState<boolean>(true);
+    const [data, setData] = useState<API.Events[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(1);
+
+    const { getEventsApi } = useGetDataEvent();
+
+    const handleGetData = async (pageIndex: number) => {
+        try {
+            const res = await getEventsApi({
+                pageIndex: pageIndex,
+                pageSize: 3,
+                name: name,
+                status: status,
+                isAscCreatedDate: isAscCreatedDate,
+            });
+            setTotalPage(res?.value.data.totalPages || 1);
+            setData(res?.value.data.items || []);
+        } catch (err) {
+            setData([]);
+        }
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        handleGetData(page);
+    };
+
+    const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+
+    useEffect(() => {
+        if (currentPage !== 1) {
+            handleGetData(1);
+            setCurrentPage(1);
+        } else handleGetData(currentPage);
+    }, [name, status, isAscCreatedDate]);
+
     return (
         <div className="min-h-screen px-[7%]">
             <div className="flex  py-[20px]">
@@ -65,64 +101,65 @@ export default function UserProfilePage() {
                                 volunteers, please click the button below.
                             </p>
 
-                            <Button className="mt-[20px] rounded-[50px] p-7 min-w-[200px]  hover:bg-[#4DD2BF] transition-colors duration-300">
-                                Volunteer page
-                            </Button>
+                            <Link href={"/volunteer"}>
+                                <Button className="mt-[20px] rounded-[50px] p-7 min-w-[200px]  hover:bg-[#4DD2BF] transition-colors duration-300">
+                                    Volunteer page
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </motion.div>
             </div>
 
             <div className="mt-[20px]">
-                <div className="flex flex-col gap-y-2 w-[30%]">
-                    <Select>
-                        <SelectTrigger className="w-[50%] border-2 border-[#00000065]">
-                            <SelectValue placeholder="Newest & Upcoming" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Newest & Upcoming">
-                                Newest & Upcoming
-                            </SelectItem>
-                            <SelectItem value="In progress">
-                                In progress
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+                <div className="flex gap-[40px] justify-between">
+                    <div>
+                        <Select
+                            value={status}
+                            onValueChange={(value) =>
+                                setStatus(value as REQUEST.EventStatus)
+                            }
+                        >
+                            <SelectTrigger className="min-w-[200px] border-2 border-[#00000065]">
+                                <SelectValue placeholder="All" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={"NotStarted"}>
+                                    Not Started
+                                </SelectItem>
+                                <SelectItem value={"Ongoing"}>
+                                    On going
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="flex gap-10 items-center w-[30%]">
+                        <label className="text-base text-[#6f6f6f]">Name</label>
+                        <Input
+                            type="text"
+                            className="w-full border-2 border-gray-500 focus-visible:ring-0"
+                            value={name}
+                            onChange={handleChangeName}
+                        />
+                    </div>
                 </div>
-                <div className="mt-[30px] flex gap-[10px]">
-                    <BlockEvent />
+
+                <div className="mt-[30px]">
+                    <BlockEvent events={data} />
                 </div>
             </div>
-            <div className="my-[50px]">
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                href="#"
-                                className="bg-blue-500 text-white hover:bg-blue-500 hover:text-white"
-                            ></PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">2</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">3</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">4</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext href="#" />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+            <div className="my-10">
+                <div className="mt-5">
+                    <PaginatedComponent
+                        totalPages={totalPage}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </div>
     );
-}
+};
+
+export default Event;

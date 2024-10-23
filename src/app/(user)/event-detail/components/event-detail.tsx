@@ -10,73 +10,25 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useAppSelector } from "@/stores/store";
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
+import VolunteerForm from "./volunteer-form";
+import getCurrentEvent from "../hooks/getCurrentEvent";
+import getEventById from "../hooks/getEventById";
 
-const ListEventActivity = [
-    {
-        item: "item-1",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "July 11, 2021, 02:58:03",
-        progress: "50%",
-    },
-    {
-        item: "item-2",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "June 9, 2015, 00:20:48",
-        progress: "10%",
-    },
-    {
-        item: "item-3",
-        name: "light bulb decoration activities",
-        desc: "Light bulb decoration is a creative activity where old or unused light bulbs are transformed into decorative items. It can be a fun project for both adults and kids, involving painting, crafting, and assembling unique designs",
-        numOfVolunteer: "3",
-        dateTime: "July 24, 2017, 13:57:42",
-        progress: "90%",
-    },
-];
+interface EventDetail {
+    eventId: string;
+}
 
-const ListEventOption = [
-    {
-        name: "Sua bong den cho nha ba hang xom ",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-    {
-        name: "Sua bong den cho nha ba hang xom",
-    },
-];
-
-export default function EventDetail() {
-    const [isVisible, setIsVisible] = useState(false);
+const EventDetail = ({ eventId }: EventDetail) => {
     const [progress, setProgress] = useState(13);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(true);
-        }, 200);
-        const progress = setTimeout(() => setProgress(66), 500);
-        return () => clearTimeout(timer);
-    }, []);
+    const [popupEvent, setPopupEvent] = useState<boolean>(false);
+    const [eventActivities, setEventActivities] = useState<API.ActivityEvent[]>(
+        []
+    );
+    const [event, setEvent] = useState<API.TGetEvent>();
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
@@ -89,24 +41,87 @@ export default function EventDetail() {
 
     const userState = useAppSelector((state) => state.userSlice);
 
+    const handleOpenPopup = () => {
+        setPopupEvent(true);
+    };
+
+    const handleClosePopup = () => {
+        setPopupEvent(false);
+    };
+
+    const { isPendingEventActivity, getApprovedEventsActivityApi } =
+        getCurrentEvent();
+    const { isPendingEvent, getEventApi } = getEventById();
+
+    const getListApprovedEventsActivity = async (id: string) => {
+        const res = await getApprovedEventsActivityApi({ eventId: id });
+        setEventActivities(res?.value.data || []); // Set to empty array if data is undefined
+    };
+
+    const getEvent = async (id: string) => {
+        const res = await getEventApi({ eventId: id }); // Ensure correct function usage
+        setEvent(res?.value.data); // Set to null if data is undefined
+    };
+
+    useEffect(() => {
+        if (eventId) {
+            getListApprovedEventsActivity(eventId);
+            getEvent(eventId);
+        }
+    }, [eventId]); // Added eventId to dependency array
+
+    useEffect(() => {
+        if (popupEvent) {
+            getListApprovedEventsActivity(eventId);
+            getEvent(eventId);
+        }
+    }, [popupEvent, eventId]); // No need for nested condition, use popupEvent directly
+
+    const formatDateTime = (dateTimeString?: string) => {
+        if (!dateTimeString) return { formattedDate: "", formattedTime: "" };
+
+        // Tách chuỗi bằng ký tự "T"
+        const [datePart, timePart] = dateTimeString.split("T");
+
+        // Format lại ngày từ yyyy-mm-dd thành dd/mm/yyyy
+        const [year, month, day] = datePart.split("-");
+        const formattedDate = `${day}/${month}/${year}`;
+
+        // Trả về ngày và giờ
+        return { formattedDate, formattedTime: timePart };
+    };
+
+    const {
+        formattedDate: formattedStartDate,
+        formattedTime: formattedStartTime,
+    } = formatDateTime(event?.eventDTO.startDate.toString());
+    const { formattedDate: formattedEndDate, formattedTime: formattedEndTime } =
+        formatDateTime(event?.eventDTO.endDate.toString());
+
     const renderListEvent = () => {
-        return ListEventActivity.map((item) => {
+        return eventActivities?.map((item, index) => {
+            const numberOfVolunteer = Math.round(
+                (item?.activityDTO.numberOfVolunteer /
+                    item?.activityDTO.quantity) *
+                    100
+            );
+
             return (
-                <div>
-                    <AccordionItem value={item.item}>
+                <div key={index}>
+                    <AccordionItem value={`item-${index + 1}`}>
                         <AccordionTrigger className="mt-[20px] text-[1.1rem] ">
-                            {item.name}
+                            {item?.activityDTO.name}
                         </AccordionTrigger>
                         <AccordionContent className="">
                             <div className="border rounded-xl">
                                 <div className="p-[20px]">
                                     <div className="flex gap-2">
                                         <div>Date time: </div>
-                                        <div>{item.dateTime}</div>
+                                        <div>{item.activityDTO.startDate}</div>
                                     </div>
                                     <div className="flex gap-2 mt-4">
                                         <div>Number of volunteer: </div>
-                                        <div>{item.numOfVolunteer}</div>
+                                        <div>{item.activityDTO.quantity}</div>
                                         {/* <div className="w-[40%] bg-gray-200 rounded">
                                             <div
                                                 className="bg-green-500 text-xs font-medium text-white text-center p-[10px] leading-none rounded-l "
@@ -116,31 +131,21 @@ export default function EventDetail() {
                                             ></div>
                                         </div> */}
                                         <Progress
-                                            value={progress}
+                                            value={numberOfVolunteer}
                                             className="w-[50%] h-[10px] mt-[5px]"
                                         />
                                     </div>
 
                                     <div className="flex gap-2 mt-4">
                                         <div>Description: </div>
-                                        <div>{item.desc}</div>
+                                        <div>
+                                            {item?.activityDTO.description}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
-                </div>
-            );
-        });
-    };
-    const renderListOption = () => {
-        return ListEventOption.map((item) => {
-            return (
-                <div>
-                    <div className="flex items-center space-x-2 mt-[10px]">
-                        <Checkbox />
-                        <Label className="text-[#0000008b]">{item.name}</Label>
-                    </div>
                 </div>
             );
         });
@@ -168,7 +173,7 @@ export default function EventDetail() {
                         className="absolute top-20 transform left-[27%] text-center"
                     >
                         <div className=" text-white text-[3rem] w-[70%] min-w-[700px] font-semibold leading-[50px]">
-                            Donate to theDonate to theDonate
+                            {/* {event?.event.name} */}
                         </div>
                     </motion.h1>
 
@@ -182,12 +187,8 @@ export default function EventDetail() {
                         }}
                         className="absolute top-[210px] transform left-[27%] text-center"
                     >
-                        <div className="text-lg text-white text-[1.6rem] w-[60%] min-w-[600px]  leading-[25px] line-clamp-5 overflow-hidden">
-                            Donate to theDonate to theDonate Donate to theDonate
-                            to theDonateDonate to theDonate to theDonateDonate
-                            to theDonate to theDonateDonate to theDonate to
-                            Donate to theDonate to theDonate Donate to theDonate
-                            to theDonateDonate to theDonate to theDonateDonate
+                        <div className="text-lg text-white text-[1.6rem] w-[60%] min-w-[600px] leading-[25px] line-clamp-5 overflow-hidden">
+                            {event?.eventDTO.description}
                         </div>
                     </motion.h1>
                 </div>
@@ -244,11 +245,11 @@ export default function EventDetail() {
                                                 </h3>
                                                 <div>
                                                     <div className="text-[1.2rem]">
-                                                        Jan 13th - Jan 14th
+                                                        {`${formattedStartDate} - ${formattedEndDate}`}
                                                     </div>
 
                                                     <div className="text-[1.2rem]">
-                                                        8AM - 3PM
+                                                        {`${formattedStartTime} - ${formattedEndTime}`}
                                                     </div>
                                                 </div>
                                             </div>
@@ -257,7 +258,10 @@ export default function EventDetail() {
                                                     Max Attend
                                                 </h3>
                                                 <div className="text-center text-[3rem] text-[#0000005a] font-semibold leading-[45px]">
-                                                    100
+                                                    {
+                                                        event?.eventDTO
+                                                            .maxAttendees
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -288,7 +292,9 @@ export default function EventDetail() {
                                                 >
                                                     <path d="M0 32C0 14.3 14.3 0 32 0L480 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l0 384c17.7 0 32 14.3 32 32s-14.3 32-32 32l-176 0 0-48c0-26.5-21.5-48-48-48s-48 21.5-48 48l0 48L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64C14.3 64 0 49.7 0 32zm96 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zM240 96c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zM112 192c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM328 384c13.3 0 24.3-10.9 21-23.8c-10.6-41.5-48.2-72.2-93-72.2s-82.5 30.7-93 72.2c-3.3 12.8 7.8 23.8 21 23.8l144 0z" />
                                                 </svg>
-                                                <div>Adopt center </div>
+                                                <div>
+                                                    {event?.branchDTO.name}
+                                                </div>
                                             </div>
                                             <div className="flex mt-4 gap-3 ">
                                                 <svg
@@ -298,7 +304,12 @@ export default function EventDetail() {
                                                 >
                                                     <path d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64L80 64l0 320 224 0 0-320z" />
                                                 </svg>
-                                                <div>+84 838 922 554 </div>
+                                                <div>
+                                                    {
+                                                        event?.branchDTO
+                                                            .phoneNumberOfBranch
+                                                    }
+                                                </div>
                                             </div>{" "}
                                             <div className="flex mt-4 gap-3 ">
                                                 <svg
@@ -308,7 +319,12 @@ export default function EventDetail() {
                                                 >
                                                     <path d="M64 112c-8.8 0-16 7.2-16 16l0 22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1l0-22.1c0-8.8-7.2-16-16-16L64 112zM48 212.2L48 384c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-171.8L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64l384 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128z" />
                                                 </svg>
-                                                <div>tphatt22@gmail.com </div>
+                                                <div>
+                                                    {
+                                                        event?.branchDTO
+                                                            .emailOfBranch
+                                                    }
+                                                </div>
                                             </div>{" "}
                                             <div className="flex mt-4 gap-3 ">
                                                 <svg
@@ -319,9 +335,7 @@ export default function EventDetail() {
                                                     <path d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152l0 270.8c0 9.8-6 18.6-15.1 22.3L416 503l0-302.6zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6l0 251.4L32.9 502.7C17.1 509 0 497.4 0 480.4L0 209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77l0 249.3L192 449.4 192 255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
                                                 </svg>
                                                 <div className="w-[50%]">
-                                                    123 Nguyễn Văn Trỗi, Phường
-                                                    10, Quận Phú Nhuận, TP. Hồ
-                                                    Chí Minh.{" "}
+                                                    {`${event?.branchDTO.numberHome}, ${event?.branchDTO.streetName}, ${event?.branchDTO.ward}, ${event?.branchDTO.district}, ${event?.branchDTO.province}`}
                                                 </div>
                                             </div>
                                         </div>
@@ -344,51 +358,12 @@ export default function EventDetail() {
                             <h1 className="text-[2rem]">
                                 Activities for volunteers
                             </h1>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="hover:bg-[#2DD4BF]">
-                                        Be come volunteer
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px] bg-white">
-                                    <DialogHeader>
-                                        <DialogTitle>
-                                            Volunteer Application Form
-                                        </DialogTitle>
-                                        <DialogDescription></DialogDescription>
-                                    </DialogHeader>
-                                    <div className="grid gap-4 py-4">
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label
-                                                htmlFor="username"
-                                                className="text-right"
-                                            >
-                                                Description
-                                            </Label>
-                                            <Input
-                                                id="username"
-                                                className="col-span-3"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div className="text-[1rem] text-[#2DD4BF] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-[20px]">
-                                            Choose your activity you want to
-                                            join
-                                        </div>
-                                        {renderListOption()}
-                                    </div>
-                                    <DialogFooter className="!justify-center mt-[30px]">
-                                        <Button
-                                            type="submit"
-                                            className="hover:bg-[#2DD4BF] !justify-center"
-                                        >
-                                            Apply Now
-                                        </Button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                            <Button
+                                className="hover:bg-[#2DD4BF]"
+                                onClick={handleOpenPopup}
+                            >
+                                Be come volunteer
+                            </Button>
                         </div>
 
                         <div>
@@ -403,6 +378,14 @@ export default function EventDetail() {
                     </div>
                 </div>
             </div>
+            <VolunteerForm
+                eventId={eventId}
+                open={popupEvent}
+                onClose={handleClosePopup}
+                eventActivities={eventActivities ?? []}
+            />
         </div>
     );
-}
+};
+
+export default EventDetail;

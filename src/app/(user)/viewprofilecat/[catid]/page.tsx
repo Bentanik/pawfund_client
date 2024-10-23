@@ -11,5 +11,5 @@ export default function ViewProfileCatPage({ params }: any) {
         <div className="w-full">
             <ViewProfileCat catId={params?.catid} />
         </div>
-    )
+    );
 }

@@ -1,25 +1,18 @@
 import useToast from "@/hooks/use-toast";
-import {
-    getAllApplicationByAdopter,
-    getAllApplicationByStaff,
-} from "@/services/adopt/api-services";
-import { useServiceGetApplicationAdopt } from "@/services/adopt/services";
+import { getAllEvents } from "@/services/event/api-services";
 import { isTResponseData } from "@/utils/compare";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function useGetApplicationByStaff() {
+export default function useGetDataEvent() {
     const { addToast } = useToast();
     const [isPending, setPending] = useState(false);
 
-    const getAllApplicationByStaffApi = async (
-        params: REQUEST.GetApplications
-    ) => {
+    const getEventsApi = async (params: REQUEST.TGetEvents) => {
         setPending(true);
         try {
-            const res = await getAllApplicationByStaff(params);
+            const res = await getAllEvents(params);
             if (isTResponseData(res)) {
-                return res as TResponseData<API.ResponseData>;
+                return res as TResponseData<API.TGetEvents>;
             } else {
                 addToast({
                     type: "error",
@@ -37,6 +30,5 @@ export default function useGetApplicationByStaff() {
             setPending(false);
         }
     };
-
-    return { isPending, getAllApplicationByStaffApi };
+    return { getEventsApi };
 }

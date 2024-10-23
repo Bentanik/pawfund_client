@@ -1,4 +1,4 @@
-import Event from "./event";
+import Event from "./components/event";
 
 export default function EventPage() {
     return (
