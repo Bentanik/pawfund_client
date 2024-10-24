@@ -18,6 +18,14 @@ declare namespace REQUEST {
   type TVerifyChangeEmail = {
     userId: string;
   };
+
+  type TChangePassword = {
+    password: string;
+  };
+
+  type TVerifyChangePassword = {
+    userId: string;
+  };
 }
 
 declare namespace API {

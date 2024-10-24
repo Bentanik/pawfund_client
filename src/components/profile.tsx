@@ -13,6 +13,7 @@ import {
 import EditPersonal from "@/app/(user)/profile/components/edit-personal";
 import { Fragment, useEffect, useState } from "react";
 import EditEmail from "@/app/(user)/profile/components/edit-email";
+import ChangePassword from "@/app/(user)/profile/components/change-password";
 
 const DONATE = [
   {
@@ -35,6 +36,8 @@ const DONATE = [
 export default function Profile() {
   const [editInfoPopup, setEditInfoPopup] = useState<boolean>(false);
   const [editEmailPopup, setEditEmailPopup] = useState<boolean>(false);
+  const [editPasswordPopup, setEditPasswordPopup] = useState<boolean>(false);
+
   const { getInfoProfileApi, isPending } = useGetProfile();
 
   const handleCloseEditInfo = () => {
@@ -51,6 +54,14 @@ export default function Profile() {
 
   const handleOpenEditEmail = () => {
     setEditEmailPopup(true);
+  };
+
+  const handleCloseEditPassword = () => {
+    setEditPasswordPopup(false);
+  };
+
+  const handleOpenEditPassword = () => {
+    setEditPasswordPopup(true);
   };
 
   const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
@@ -105,7 +116,7 @@ export default function Profile() {
                     </Button>
                     <Button
                       type="button"
-                      onClick={handleOpenEditInfo}
+                      onClick={handleOpenEditPassword}
                       className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
                     >
                       <span className="text-gray-700">Change password</span>
@@ -220,6 +231,13 @@ export default function Profile() {
             onClose={handleCloseEditEmail}
             information={profileInfo}
             fetchProfileApi={handleFetchProfile}
+          />
+        )}
+
+        {profileInfo?.email !== "" && editPasswordPopup && (
+          <ChangePassword
+            open={editPasswordPopup}
+            onClose={handleCloseEditPassword}
           />
         )}
       </div>

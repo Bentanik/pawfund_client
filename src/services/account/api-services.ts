@@ -58,3 +58,23 @@ export const verifyChangeEmail = async ({
   });
   return response.data;
 };
+
+export const changePassword = async (body: REQUEST.TChangePassword) => {
+  const response = await request<TResponse>(API_ENDPOINTS.CHANGE_PASSWORD, {
+    method: "PUT",
+    data: body,
+  });
+  return response.data;
+};
+
+export const verifyChangePassword = async ({
+  userId,
+}: REQUEST.TVerifyChangePassword) => {
+  const response = await request<TResponse>(API_ENDPOINTS.VERIFY_CHANGE_PASSWORD, {
+    method: "PUT",
+    params: {
+      userId: userId,
+    },
+  });
+  return response.data;
+};
