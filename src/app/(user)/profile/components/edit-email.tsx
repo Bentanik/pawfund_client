@@ -57,16 +57,17 @@ export default function EditEmail({
                     Email
                   </label>
                   <Input
+                    type="text"
                     className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                      errors.email && "border-red-500"
+                      errors?.email && "border-red-500"
                     }`}
                     autoComplete="off"
                     placeholder="e.g. hehe@gmail.com"
                     {...register("email")}
                   />
-                  {errors.email && (
+                  {errors?.email && (
                     <p className="text-base text-red-400">
-                      {errors.email.message}
+                      {errors?.email?.message}
                     </p>
                   )}
                 </div>

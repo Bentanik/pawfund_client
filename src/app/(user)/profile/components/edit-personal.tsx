@@ -81,16 +81,17 @@ export default function EditPersonal({
                       First Name
                     </label>
                     <Input
+                      type="text"
                       className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                        errors.firstName && "border-red-500"
+                        errors?.firstName && "border-red-500"
                       }`}
                       autoComplete="off"
                       placeholder="e.g. Hehe"
                       {...register("firstName")}
                     />
-                    {errors.firstName && (
+                    {errors?.firstName && (
                       <p className="text-base text-red-400">
-                        {errors.firstName.message}
+                        {errors?.firstName.message}
                       </p>
                     )}
                   </div>
@@ -100,16 +101,17 @@ export default function EditPersonal({
                       Last Name
                     </label>
                     <Input
+                      type="text"
                       className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                        errors.lastName && "border-red-500"
+                        errors?.lastName && "border-red-500"
                       }`}
                       autoComplete="off"
                       placeholder="e.g. Hehe"
                       {...register("lastName")}
                     />
-                    {errors.lastName && (
+                    {errors?.lastName && (
                       <p className="text-base text-red-400">
-                        {errors.lastName.message}
+                        {errors?.lastName.message}
                       </p>
                     )}
                   </div>
@@ -131,7 +133,7 @@ export default function EditPersonal({
                       <Input
                         type="number"
                         className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                          errors.firstName && "border-red-500"
+                          errors?.phoneNumber && "border-red-500"
                         }`}
                         autoComplete="off"
                         placeholder="e.g. Hehe"
@@ -139,9 +141,9 @@ export default function EditPersonal({
                       />
                     </div>
                   </div>
-                  {errors.phoneNumber && (
+                  {errors?.phoneNumber && (
                     <p className="text-base text-red-400">
-                      {errors.phoneNumber.message}
+                      {errors?.phoneNumber?.message}
                     </p>
                   )}
                 </div>

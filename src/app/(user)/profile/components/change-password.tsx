@@ -34,7 +34,9 @@ export default function ChangePassword({ open, onClose }: ChangePasswordProps) {
       <DialogContent className="bg-white select-none" hideClose>
         <div className="font-sans select-none">
           <div className="border-b-2 py-3 px-4 flex items-center justify-between">
-            <h3 className="text-xl font-semibold select-text">Change password</h3>
+            <h3 className="text-xl font-semibold select-text">
+              Change password
+            </h3>
             <button type="button" onClick={handleCloseChangePassword}>
               <div className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 cursor-pointer">
                 <X className="w-4 h-4" />
@@ -49,16 +51,17 @@ export default function ChangePassword({ open, onClose }: ChangePasswordProps) {
                     New password
                   </label>
                   <Input
+                    type="password"
                     className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                      errors.password && "border-red-500"
+                      errors?.password && "border-red-500"
                     }`}
                     autoComplete="off"
                     placeholder="e.g. 123456789"
                     {...register("password")}
                   />
-                  {errors.password && (
+                  {errors?.password && (
                     <p className="text-base text-red-400">
-                      {errors.password.message}
+                      {errors?.password.message}
                     </p>
                   )}
                 </div>
@@ -67,16 +70,17 @@ export default function ChangePassword({ open, onClose }: ChangePasswordProps) {
                     Confirm new password
                   </label>
                   <Input
+                    type="password"
                     className={`border bg-[#f2f4f7] focus-visible:ring-0 focus-visible:none ${
-                      errors.confirmPassword && "border-red-500"
+                      errors?.confirmPassword && "border-red-500"
                     }`}
                     autoComplete="off"
                     placeholder="e.g. 123456789"
                     {...register("confirmPassword")}
                   />
-                  {errors.confirmPassword && (
+                  {errors?.confirmPassword && (
                     <p className="text-base text-red-400">
-                      {errors.confirmPassword.message}
+                      {errors?.confirmPassword.message}
                     </p>
                   )}
                 </div>

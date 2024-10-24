@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
-import { getCroppedImg } from "@/utils/cropImage/CropImage";
+import { getCroppedImg } from "@/utils/CropImage";
 
 interface CropImageAvatarProfileProps {
   image?: string | null;
