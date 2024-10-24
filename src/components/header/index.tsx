@@ -13,16 +13,14 @@ import { LuLogOut } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
 import useLogout from "@/hooks/use-logout";
 import { Backdrop } from "../backdrop";
-// import { BiArrowBack } from "react-icons/bi";
+import AvatarMenu from "../avatar-menu";
 
 const Header: React.FC = () => {
   const userState = useAppSelector((state) => state.userSlice);
 
   const currentPath = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { handleLogout, isPending } = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -31,7 +29,6 @@ const Header: React.FC = () => {
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setDropdownOpen(false);
-        // setSettingsDropdownOpen(false);
       }
     };
 
@@ -97,7 +94,7 @@ const Header: React.FC = () => {
         >
           News and Events
         </Link>
-        
+
         {userState.user === null ? (
           <Link
             href="/login"
@@ -111,7 +108,7 @@ const Header: React.FC = () => {
           </Link>
         ) : (
           <div className="relative" ref={dropdownRef}>
-            <figure className="rounded-full border border-zinc-300 overflow-hidden w-12 h-12 flex items-center justify-center hover:bg-teal-400">
+            <figure className="rounded-full border border-zinc-300 overflow-hidden w-12 h-12 flex items-center justify-center hover:bg-teal-400 shadow-avatar">
               <img
                 id="avatarButton"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -120,178 +117,10 @@ const Header: React.FC = () => {
                 alt="User dropdown"
               />
             </figure>
-            {/* {dropdownOpen && !settingsDropdownOpen && ( */}
-            {dropdownOpen && (
-              <div
-                id="userDropdown"
-                className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-72"
-              >
-                <div className="px-4 py-3 text-lg text-gray-900">
-                  <div className="font-bold">Hello</div>
-                  <div className="text-xs text-gray-500 truncate">
-                    {userState.user?.firstName} {userState.user?.lastName}
-                  </div>
-                </div>
-
-                <ul
-                  className="py-2 text-sm text-gray-700"
-                  aria-labelledby="avatarButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-                    >
-                      <div className="flex items-center">
-                        <IoSettingsSharp
-                          className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                          size={30}
-                        />
-                        <span className="text-black">
-                          Cài đặt & quyền riêng tư
-                        </span>
-                      </div>
-                      <FiChevronRight
-                        className="text-gray-500"
-                        size={24}
-                        // onClick={() => {
-                        //     setSettingsDropdownOpen(true);
-                        //     setDropdownOpen(false);
-                        // }}
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-                    >
-                      <div className="flex items-center">
-                        <FaQuestionCircle
-                          className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                          size={30}
-                        />
-                        <span className="text-black">Trợ giúp & hỗ trợ</span>
-                      </div>
-                      <FiChevronRight className="text-gray-500" size={24} />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-                    >
-                      <div className="flex items-center">
-                        <FaMoon
-                          className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                          size={30}
-                        />
-                        <span className="text-black">Màn hình & trợ năng</span>
-                      </div>
-                      <FiChevronRight className="text-gray-500" size={24} />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-                    >
-                      <div className="flex items-center">
-                        <TbMessageReportFilled
-                          className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                          size={30}
-                        />
-                        <span className="text-black">Đóng góp ý kiến</span>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-                <div className="py-1">
-                  <div
-                    onClick={handleLogout}
-                    className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-                  >
-                    <div className="flex items-center">
-                      <LuLogOut
-                        className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                        size={30}
-                      />
-                      <span className="text-black">Đăng xuất</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* {settingsDropdownOpen && (
-                        <div className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-72">
-                            <div className="flex items-center justify-between px-4 py-2">
-                                <button onClick={() => {
-                                    setSettingsDropdownOpen(false);
-                                    setDropdownOpen(true);
-                                }} className="flex items-center text-gray-600 hover:bg-gray-200 rounded p-1">
-                                    <BiArrowBack />
-                                </button>
-                                <span className="font-semibold">Cài đặt & Quyền riêng tư</span>
-                            </div>
-                            <ul className="py-2 text-sm text-gray-700" aria-labelledby="avatarButton">
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <IoSettingsSharp className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Cài đặt & quyền riêng tư</span>
-                                        </div>
-                                    
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <FaQuestionCircle className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Ngôn ngữ</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <FaMoon className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Kiểm tra quyền riêng tư</span>
-                                        </div>
-                                       
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <TbMessageReportFilled className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Trung tâm quyền riêng tư</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <TbMessageReportFilled className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Nhật ký hoạt động</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200">
-                                        <div className="flex items-center">
-                                            <TbMessageReportFilled className="p-1 bg-gray-300 text-black rounded-full mr-2" size={30} />
-                                            <span className="text-black">Tùy chọn nội dung</span>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    )} */}
+            {dropdownOpen && <AvatarMenu />}
           </div>
         )}
       </nav>
-      <Backdrop open={isPending} />
     </header>
   );
 };

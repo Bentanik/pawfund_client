@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useGetApplicationByAdopter from "@/app/(user)/profile-user/hooks/useGetApplicationByAdopter";
+import useGetApplicationByAdopter from "@/app/(user)/profile/hooks/useGetApplicationByAdopter";
 import {
     Pagination,
     PaginationContent,
