@@ -34,7 +34,7 @@ export default function ChangePassword({ open, onClose }: ChangePasswordProps) {
       <DialogContent className="bg-white select-none" hideClose>
         <div className="font-sans select-none">
           <div className="border-b-2 py-3 px-4 flex items-center justify-between">
-            <h3 className="text-xl font-semibold select-text">Edit email</h3>
+            <h3 className="text-xl font-semibold select-text">Change password</h3>
             <button type="button" onClick={handleCloseChangePassword}>
               <div className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 cursor-pointer">
                 <X className="w-4 h-4" />
