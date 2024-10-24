@@ -4,16 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiChevronRight } from "react-icons/fi";
-import { IoSettingsSharp } from "react-icons/io5";
-import { FaQuestionCircle } from "react-icons/fa";
-import { FaMoon } from "react-icons/fa";
-import { TbMessageReportFilled } from "react-icons/tb";
-import { LuLogOut } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
-import useLogout from "@/hooks/use-logout";
-import { Backdrop } from "../backdrop";
-import AvatarMenu from "../avatar-menu";
+import AvatarMenu from "@/components/avatar-menu";
 
 const Header: React.FC = () => {
   const userState = useAppSelector((state) => state.userSlice);
@@ -108,12 +100,12 @@ const Header: React.FC = () => {
           </Link>
         ) : (
           <div className="relative" ref={dropdownRef}>
-            <figure className="rounded-full border border-zinc-300 overflow-hidden w-12 h-12 flex items-center justify-center hover:bg-teal-400 shadow-avatar">
+            <figure className="rounded-full border border-zinc-300 overflow-hidden w-14 h-14 flex items-center justify-center hover:bg-teal-400 shadow-avatar">
               <img
                 id="avatarButton"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-10 h-10 rounded-full cursor-pointer"
-                src={userState?.user?.avatarLink}
+                className="w-12 h-12 rounded-full cursor-pointer"
+                src={userState?.user?.cropAvatarLink}
                 alt="User dropdown"
               />
             </figure>
