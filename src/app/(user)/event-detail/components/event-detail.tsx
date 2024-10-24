@@ -173,7 +173,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                         className="absolute top-20 transform left-[27%] text-center"
                     >
                         <div className=" text-white text-[3rem] w-[70%] min-w-[700px] font-semibold leading-[50px]">
-                            {/* {event?.event.name} */}
+                            {event?.eventDTO.name}
                         </div>
                     </motion.h1>
 
