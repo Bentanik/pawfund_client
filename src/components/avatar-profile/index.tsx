@@ -1,15 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-// import UpdateAvatarProfilePopup from "@/components/UpdateAvatarProfilePopup/UpdateAvatarProfilePopup";
 import { useAppSelector } from "@/stores/store";
 import TippyHeadless from "@tippyjs/react/headless";
 import { Images, SquareUser } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import UpdateAvatarProfilePopup from "../update-avatar-profile/UpdateAvatarProfile";
-
-interface AvatarProfileProps {}
+import UpdateAvatarProfilePopup from "@/components/update-avatar-profile/UpdateAvatarProfile";
 
 export default function AvatarProfile() {
   const userState = useAppSelector((state) => state.userSlice);
@@ -19,7 +15,7 @@ export default function AvatarProfile() {
   const [avatar, setAvatar] = useState<string>("");
 
   useEffect(() => {
-    if (userState.user?.avatarLink) setAvatar(userState.user?.avatarLink);
+    if (userState.user?.cropAvatarLink) setAvatar(userState.user?.cropAvatarLink);
   }, [userState]);
 
   const handleToggleAvatarTooltip = () => {
@@ -43,8 +39,8 @@ export default function AvatarProfile() {
     <div>
       <TippyHeadless
         interactive
-        placement="left-end"
-        offset={[-10, 5]}
+        placement="bottom-end"
+        offset={[-5, 2]}
         visible={avatarTooltip}
         render={(attrs) => (
           <div
@@ -53,7 +49,7 @@ export default function AvatarProfile() {
           >
             <div className="py-1 px-2 flex flex-col gap-y-1">
               <Link
-                href={`${userState?.user?.avatarLink}`}
+                href={`${userState?.user?.fullAvatarLink}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -98,7 +94,7 @@ export default function AvatarProfile() {
           }`}
           onClick={handleToggleAvatarTooltip}
         >
-          {userState.user?.avatarLink ? (
+          {userState.user?.cropAvatarLink ? (
             <div
               style={{
                 borderRadius: "50%",
@@ -107,7 +103,7 @@ export default function AvatarProfile() {
               className="flex items-center justify-between"
             >
               <img
-                src={userState.user?.avatarLink}
+                src={userState.user?.cropAvatarLink}
                 className="w-full h-full"
                 alt="avatar"
               />

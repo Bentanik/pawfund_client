@@ -64,7 +64,7 @@ export default function ProfileUser() {
     return (
         <div className="min-h-screen">
             {/* Thanh điều hướng */}
-            <div className="tabs mt-[100px] border-y-[1px] flex justify-center">
+            <div className="tabs mt-[100px] border-y-[1px] flex justify-center ">
                 <TabButton
                     tabName="profile"
                     activeTab={activeTab}
@@ -98,7 +98,7 @@ export default function ProfileUser() {
             </div>
 
             {/* Nội dung thay đổi */}
-            <div className="p-4">{renderContent()}</div>
+            <div className="py-4 px-20">{renderContent()}</div>
         </div>
     );
 }

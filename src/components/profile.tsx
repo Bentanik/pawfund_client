@@ -1,171 +1,301 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useGetProfile from "@/app/(user)/profile/hooks/useGetProfileAccount";
-import { Backdrop } from "@/components/backdrop";
-import { useAppSelector } from "@/stores/store";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import EditPersonal from "@/app/(user)/profile/components/edit-personal";
+import EditEmail from "@/app/(user)/profile/components/edit-email";
+import ChangePassword from "@/app/(user)/profile/components/change-password";
+import { Skeleton } from "./ui/skeleton";
+
+const DONATE = [
+  {
+    id: "1",
+    FullName: "Nguyen Mai Viet Vy",
+    Amount: 2000,
+  },
+  {
+    id: "2",
+    FullName: "Nguyen Mai Viet Vy",
+    Amount: 2000,
+  },
+  {
+    id: "3",
+    FullName: "Nguyen Mai Viet Vy",
+    Amount: 2000,
+  },
+];
 
 export default function Profile() {
-  const { getProfileAccount, isPending } = useGetProfile();
-  const accountState = useAppSelector((state) => state.accountSlice);
+  const [editInfoPopup, setEditInfoPopup] = useState<boolean>(false);
+  const [editEmailPopup, setEditEmailPopup] = useState<boolean>(false);
+  const [editPasswordPopup, setEditPasswordPopup] = useState<boolean>(false);
+
+  const getProfile = useGetProfile();
+
+  const handleCloseEditInfo = () => {
+    setEditInfoPopup(false);
+  };
+
+  const handleOpenEditInfo = () => {
+    setEditInfoPopup(true);
+  };
+
+  const handleCloseEditEmail = () => {
+    setEditEmailPopup(false);
+  };
+
+  const handleOpenEditEmail = () => {
+    setEditEmailPopup(true);
+  };
+
+  const handleCloseEditPassword = () => {
+    setEditPasswordPopup(false);
+  };
+
+  const handleOpenEditPassword = () => {
+    setEditPasswordPopup(true);
+  };
+
+  const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    gender: 1,
+    phoneNumber: "",
+    status: false,
+  });
+
+  const handleFetchProfile = async () => {
+    const initialData = {
+      id: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      gender: 1,
+      phoneNumber: "",
+      status: false,
+    };
+    try {
+      const res = await getProfile.getInfoProfileApi();
+      setProfileInfo(res?.value.data || initialData);
+    } catch (err) {
+      setProfileInfo(initialData);
+    }
+  };
 
   useEffect(() => {
-    getProfileAccount();
+    handleFetchProfile();
   }, []);
 
   return (
-    <div className="px-[10%]">
-      {/* Nội dung cho Settings */}
-      <div className="min-h-screen flex gap-[3%]">
+    <div>
+      <div className="flex gap-x-3">
         {/* Profile Form */}
-        <div className="w-[70%] p-8 border-2 rounded-[5px]">
-          <h2 className="text-3xl font-semibold mb-8">User profile</h2>
+        <div className="basis-[60%] py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
+          {getProfile.isPending ? (
+            <div>
+              <div className="flex flex-col gap-y-6 px-8">
+                <header className="flex items-center justify-between gap-x-3">
+                  <h2 className="text-xl font-semibold">
+                    Personal information
+                  </h2>
+                  <div className="flex items-center gap-x-3"></div>
+                </header>
+                <form>
+                  <div className="flex flex-col gap-y-5">
+                    <div className="flex items-center justify-between gap-x-3">
+                      <div className="basis-1/2 flex flex-col gap-y-2">
+                        <label className="text-[15px] font-medium text-gray-400">
+                          First Name
+                        </label>
+                        <Skeleton className="w-1/2 h-[20px] rounded-full" />
+                      </div>
 
-          <form>
-            <div className="flex flex-col gap-y-3">
-              <div className="flex items-center justify-between gap-x-3">
-                {/* First Name */}
-                <div className="basis-1/2">
-                  <label className="block ">First Name</label>
-                  <input
-                    type="text"
-                    defaultValue={accountState.profile?.firstName}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+                      <div className="basis-1/2 flex flex-col gap-y-2">
+                        <label className="text-[15px] font-medium text-gray-400">
+                          Last Name
+                        </label>
+                        <Skeleton className="w-1/2 h-[20px] rounded-full" />
+                      </div>
+                    </div>
 
-                {/* First Name */}
-                <div className="basis-1/2">
-                  <label className="block ">First Name</label>
-                  <input
-                    type="text"
-                    defaultValue={accountState.profile?.firstName}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-              </div>
-              {/* Email */}
-              <div>
-                <label className="block text-gray-700">Email</label>
-                <input
-                  type="email"
-                  defaultValue={accountState.profile?.email}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                />
-              </div>
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                      <label className="text-[15px] font-medium text-gray-400">
+                        Email address
+                      </label>
+                      <Skeleton className="w-1/2 h-[20px] rounded-full" />
+                    </div>
 
-              {/* Gender */}
-              <div>
-                <label className="block text-gray-700">Gender</label>
-                <select className="w-full mt-1 p-2 border border-gray-300 rounded-md">
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-              </div>
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                      <label className="text-[15px] font-medium text-gray-400">
+                        Phone number
+                      </label>
+                      <h5 className="text-base text-gray-650">
+                        <Skeleton className="w-1/2 h-[20px] rounded-full" />
+                      </h5>
+                    </div>
 
-              {/* Birthday */}
-              <div>
-                <label className="block text-gray-700">Birthday</label>
-                <div className="flex space-x-2">
-                  <select className="w-1/3 p-2 border border-gray-300 rounded-md">
-                    <option>July</option>
-                    {/* Thêm các tháng khác nếu cần */}
-                  </select>
-                  <select className="w-1/3 p-2 border border-gray-300 rounded-md">
-                    <option>30</option>
-                    {/* Thêm các ngày khác nếu cần */}
-                  </select>
-                  <select className="w-1/3 p-2 border border-gray-300 rounded-md">
-                    <option>1999</option>
-                    {/* Thêm các năm khác nếu cần */}
-                  </select>
-                </div>
-              </div>
-
-              {/* Country */}
-              <div>
-                <label className="block text-gray-700">Country</label>
-                <select className="w-full mt-1 p-2 border border-gray-300 rounded-md">
-                  <option>United States</option>
-                  <option>Vietnam</option>
-                  {/* Thêm các quốc gia khác nếu cần */}
-                </select>
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                      <label className="text-[15px] font-medium text-gray-400">
+                        Gender
+                      </label>
+                      <Skeleton className="w-1/2 h-[20px] rounded-full" />
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
+          ) : (
+            <div className="flex flex-col gap-y-6 px-8">
+              <header className="flex items-center justify-between gap-x-3">
+                <h2 className="text-xl font-semibold">Personal information</h2>
+                <div className="flex items-center gap-x-3">
+                  {profileInfo?.loginType === 1 && (
+                    <Fragment>
+                      <Button
+                        type="button"
+                        onClick={handleOpenEditEmail}
+                        className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                      >
+                        <span className="text-gray-700">Change Email</span>
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={handleOpenEditPassword}
+                        className="px-3 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                      >
+                        <span className="text-gray-700">Change password</span>
+                      </Button>
+                    </Fragment>
+                  )}
 
-            {/* Save Changes Button */}
-            <div className="flex justify-center">
-              <Button className="bg-[#2dd4bf] mt-[20px]">Save Changes</Button>
+                  <Button
+                    type="button"
+                    onClick={handleOpenEditInfo}
+                    className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300"
+                  >
+                    <span className="text-gray-700">Edit information</span>
+                  </Button>
+                </div>
+              </header>
+              <form>
+                <div className="flex flex-col gap-y-5">
+                  <div className="flex items-center justify-between gap-x-3">
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                      <label className="text-[15px] font-medium text-gray-400">
+                        First Name
+                      </label>
+                      <h5 className="text-base text-gray-650">
+                        {profileInfo?.firstName}
+                      </h5>
+                    </div>
+
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                      <label className="text-[15px] font-medium text-gray-400">
+                        Last Name
+                      </label>
+                      <h5 className="text-base text-gray-650">
+                        {profileInfo?.lastName}
+                      </h5>
+                    </div>
+                  </div>
+
+                  <div className="basis-1/2 flex flex-col gap-y-2">
+                    <label className="text-[15px] font-medium text-gray-400">
+                      Email address
+                    </label>
+                    <h5 className="text-base text-gray-650">
+                      {profileInfo.email}
+                    </h5>
+                  </div>
+
+                  <div className="basis-1/2 flex flex-col gap-y-2">
+                    <label className="text-[15px] font-medium text-gray-400">
+                      Phone number
+                    </label>
+                    <h5 className="text-base text-gray-650">
+                      {profileInfo.phoneNumber?.length > 0
+                        ? `+84 ${profileInfo.phoneNumber}`
+                        : "Unknown"}
+                    </h5>
+                  </div>
+
+                  <div className="basis-1/2 flex flex-col gap-y-2">
+                    <label className="text-[15px] font-medium text-gray-400">
+                      Gender
+                    </label>
+                    <h5 className="text-base text-gray-650">
+                      {profileInfo.gender === 1 ? "Male" : "Female"}
+                    </h5>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          )}
         </div>
-        {/* Right Info */}
-        <div className="w-[30%] ">
-          <div className="w-[100%] border-2 rounded-[2px] ">
-            <div className="p-5">
-              <h2 className="text-[1.3rem] font-semibold">Care about</h2>
-              <div className="w-[100%] rounded-[10px]  bg-[#135cee12] mt-5 hover:cursor-pointer">
-                <div className="p-[10px] flex justify-between">
-                  <p className="font-semibold text-[0.8rem] text-[#135bee] text-center">
-                    Campaign concerned
-                  </p>
-                  <p className="text-[0.8rem] text-center text-[#135bee] font-semibold">
-                    12
-                  </p>
-                </div>
-              </div>
-              <div className="w-[100%] rounded-[10px]  bg-[#7222220f] mt-5 hover:cursor-pointer">
-                <div className="p-[10px] flex justify-between">
-                  <p className="text-[0.8rem] text-center text-[#c22424] font-semibold">
-                    Favorite pets
-                  </p>
-                  <p className="text-[0.8rem] text-center text-[#c22424] font-semibold">
-                    12
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-[100%] border-2 mt-10 rounded-[5px]">
-            <div className="p-5">
-              <h2 className="text-[1.3rem] font-semibold">Community active</h2>
-
-              <div className="w-[100%] rounded-[10px]  bg-[#077e310d] mt-5 hover:cursor-pointer">
-                <div className="p-[10px] flex justify-between">
-                  <p className="text-[0.8rem] text-center text-[#077e31] font-semibold">
-                    Participated events
-                  </p>
-                  <p className="text-[0.8rem] text-center text-[#077e31] font-semibold">
-                    12
-                  </p>
-                </div>
-              </div>
-              <div className="w-[100%] rounded-[10px]  bg-[#0e87b011] mt-5 hover:cursor-pointer">
-                <div className="p-[10px] flex justify-between">
-                  <p className="text-[0.8rem] text-center text-[#0e88b0] font-semibold">
-                    Events notification
-                  </p>
-                  <p className="text-[0.8rem] text-center text-[#0e88b0] font-semibold">
-                    12
-                  </p>
-                </div>
-              </div>
-              <div className="w-[100%] rounded-[10px]  bg-[#cfa24911] mt-5 hover:cursor-pointer">
-                <div className="p-[10px] flex justify-between">
-                  <p className="text-[0.8rem] text-center text-[#cfa249] font-semibold">
-                    Donated event
-                  </p>
-                  <p className="text-[0.8rem] text-center text-[#cfa249] font-semibold">
-                    12
-                  </p>
-                </div>
-              </div>
-            </div>
+        <div className="flex-1 py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-profile-box">
+          <div className="flex flex-col gap-y-6 px-8">
+            <header className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Donate</h2>
+              <Button className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300">
+                <span className="text-gray-700">View all</span>
+              </Button>
+            </header>
+            <form>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Id</TableHead>
+                    <TableHead>Full Name</TableHead>
+                    <TableHead>Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {DONATE?.map((donate, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{donate.id}</TableCell>
+                      <TableCell>{donate.FullName}</TableCell>
+                      <TableCell>{donate.Amount}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </form>
           </div>
         </div>
+        {profileInfo?.email !== "" && editInfoPopup && (
+          <EditPersonal
+            open={editInfoPopup}
+            onClose={handleCloseEditInfo}
+            information={profileInfo}
+            fetchProfileApi={handleFetchProfile}
+          />
+        )}
+        {profileInfo?.email !== "" && editEmailPopup && (
+          <EditEmail
+            open={editEmailPopup}
+            onClose={handleCloseEditEmail}
+            information={profileInfo}
+            fetchProfileApi={handleFetchProfile}
+          />
+        )}
+
+        {profileInfo?.email !== "" && editPasswordPopup && (
+          <ChangePassword
+            open={editPasswordPopup}
+            onClose={handleCloseEditPassword}
+          />
+        )}
       </div>
-      <Backdrop open={isPending} />
     </div>
   );
 }

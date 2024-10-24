@@ -1,20 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-// import CropImageAvatarProfile from "@/components/CropImageAvatarProfile/CropImageAvatarProfile";
-import { useAppDispatch, useAppSelector } from "@/stores/store";
+import { useAppSelector } from "@/stores/store";
 import { convertBase64ToFile } from "@/utils/Convert/ConvertBase64ToFile";
-// import { Backdrop, CircularProgress, Dialog, Skeleton } from "@mui/material";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import React, { useRef, useState } from "react";
-import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import CropImageAvatarProfile from "@/components/crop-image-avatar-profile";
+import { Backdrop } from "@/components/backdrop";
+import useToast from "@/hooks/use-toast";
+import useUpdateAvatar from "@/app/(user)/profile/hooks/useUpdateAvatar";
 
 interface UpdateAvatarProfilePopupProps {
   open: boolean;
@@ -25,7 +19,8 @@ export default function UpdateAvatarProfilePopup({
   open,
   onClose,
 }: UpdateAvatarProfilePopupProps) {
-  const dispatch = useAppDispatch();
+  const { addToast } = useToast();
+  const { onSubmit, isPending } = useUpdateAvatar();
   const userState = useAppSelector((state) => state.userSlice);
 
   const [avatarSrc, setAvatarSrc] = useState<any>(null);
@@ -34,6 +29,15 @@ export default function UpdateAvatarProfilePopup({
   const handleUploadImage = (e: any) => {
     const newFile = e.target.files[0];
     const allowedTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+    if (!allowedTypes.includes(newFile.type)) {
+      addToast({
+        type: "warning",
+        description: "Please upload a valid image file (jpg, jpeg, png).",
+        duration: 4000,
+      });
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -63,17 +67,20 @@ export default function UpdateAvatarProfilePopup({
     );
 
     try {
-      handleCloseUpdateAvatar();
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Xóa phần tử input
-      }
+      onSubmit(
+        {
+          cropAvatar: cropAvatarFile,
+          fullAvatar: fullFileAvatar,
+        },
+        handleCloseUpdateAvatar
+      );
     } catch (err) {}
   };
 
   return (
     <Dialog open={open} onOpenChange={handleCloseUpdateAvatar}>
-      <DialogContent className="bg-white" hideClose>
-        <div className="px-2 pt-5 pb-6 font-sans">
+      <DialogContent className="bg-white select-none" hideClose>
+        <div className="px-2 pt-5 pb-6 font-sans select-none">
           {avatarSrc === null ? (
             <div>
               <div className="flex justify-end">
@@ -91,8 +98,10 @@ export default function UpdateAvatarProfilePopup({
               </div>
               <form className="px-6">
                 <div>
-                  <h2 className="text-2xl font-bold">Update avatar</h2>
-                  <p className="mt-2 text-base opacity-90">
+                  <h2 className="text-2xl font-bold select-text">
+                    Update avatar
+                  </h2>
+                  <p className="mt-2 text-base opacity-90 select-text">
                     Keep Your Profile Fresh, Keep Making a Difference!
                   </p>
                 </div>
@@ -108,9 +117,8 @@ export default function UpdateAvatarProfilePopup({
                     className="border"
                   >
                     <img
-                      src={userState?.user?.avatarLink}
-                      width={170}
-                      height={170}
+                      src={userState?.user?.cropAvatarLink}
+                      className="w-full h-full object-cover"
                       alt="avatar"
                     />
                   </figure>
@@ -172,25 +180,16 @@ export default function UpdateAvatarProfilePopup({
               <form className="mt-2 px-6 flex flex-col gap-y-2">
                 <h2 className="text-2xl font-bold">Preview</h2>
                 <div className="py-3">
-                  {/* <CropImageAvatarProfile
-              image={avatarSrc}
-              onSubmit={handleSubmit}
-            /> */}
+                  <CropImageAvatarProfile
+                    image={avatarSrc}
+                    onSubmit={handleSubmit}
+                  />
                 </div>
               </form>
             </div>
           )}
-
-          {/* <Backdrop
-      sx={{
-        color: "#fff",
-        zIndex: (theme: any) => theme.zIndex.drawer + 1,
-      }}
-      open={userProfile.profilePrivate.statusUpdateAvatar === "loading"}
-    >
-      <CircularProgress color="inherit" />
-    </Backdrop> */}
         </div>
+        <Backdrop open={isPending} />
       </DialogContent>
     </Dialog>
   );
