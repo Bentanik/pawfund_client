@@ -11,3 +11,23 @@ export const donateBanking = async (body: REQUEST.TDonateBanking) => {
   );
   return response.data;
 };
+
+export const getUserDonates = async ({
+  pageIndex = 1,
+  pageSize = 10,
+}: REQUEST.TGetDonates) => {
+  const params: Record<string, any> = {};
+
+  if (pageIndex) params.pageIndex = pageIndex;
+  if (pageSize) params.pageSize = pageSize;
+
+  const response = await request<TResponseData<API.TGetDonates>>(
+    API_ENDPOINTS.GET_USER_DONATES,
+    {
+      method: "GET",
+      params: Object.keys(params).length > 0 ? params : undefined,
+    }
+  );
+
+  return response.data;
+};

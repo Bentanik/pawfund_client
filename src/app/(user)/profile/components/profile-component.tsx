@@ -15,6 +15,8 @@ import EditPersonal from "@/app/(user)/profile/components/edit-personal";
 import EditEmail from "@/app/(user)/profile/components/edit-email";
 import ChangePassword from "@/app/(user)/profile/components/change-password";
 import { Skeleton } from "@/components/ui/skeleton";
+import useGetUserDonates from "@/hooks/use-get-user-donates";
+import { parseDateTimeString } from "@/utils/date";
 
 const DONATE = [
   {
@@ -34,7 +36,7 @@ const DONATE = [
   },
   {
     id: "4",
-    FullName: "Nguyen Mai Viet Vy", 
+    FullName: "Nguyen Mai Viet Vy",
     Amount: 2000,
   },
   {
@@ -54,7 +56,20 @@ export default function ProfileComponent() {
   const [editEmailPopup, setEditEmailPopup] = useState<boolean>(false);
   const [editPasswordPopup, setEditPasswordPopup] = useState<boolean>(false);
 
+  const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    gender: 1,
+    phoneNumber: "",
+    status: false,
+  });
+
+  const [donates, setDonates] = useState<API.Donate[]>([]);
+
   const getProfile = useGetProfile();
+  const getDonates = useGetUserDonates();
 
   const handleCloseEditInfo = () => {
     setEditInfoPopup(false);
@@ -80,16 +95,6 @@ export default function ProfileComponent() {
     setEditPasswordPopup(true);
   };
 
-  const [profileInfo, setProfileInfo] = useState<API.TProfileAccount>({
-    id: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    gender: 1,
-    phoneNumber: "",
-    status: false,
-  });
-
   const handleFetchProfile = async () => {
     const initialData = {
       id: "",
@@ -108,8 +113,22 @@ export default function ProfileComponent() {
     }
   };
 
+  const handleGetDonates = async () => {
+    try {
+      const form: REQUEST.TGetDonates = {
+        pageIndex: 1,
+        pageSize: 6,
+      };
+      const res = await getDonates.getUserDonatesApi(form);
+      setDonates(res?.value.data?.items || []);
+    } catch (err) {
+      setDonates([]);
+    }
+  };
+
   useEffect(() => {
     handleFetchProfile();
+    handleGetDonates();
   }, []);
 
   return (
@@ -259,42 +278,76 @@ export default function ProfileComponent() {
           )}
         </div>
         <div className="flex-1 py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-box-shadown">
-          <div className="flex flex-col gap-y-6 px-8">
-            <header className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Donate</h2>
-              <Button className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300">
-                <span className="text-gray-700">View all</span>
-              </Button>
-            </header>
-            <form>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-center">Id</TableHead>
-                    <TableHead className="text-center">Full Name</TableHead>
-                    <TableHead className="text-center">Amount</TableHead>
-                    <TableHead className="text-center">Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {DONATE?.map((donate, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium text-center">
-                        {donate.id}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {donate.FullName}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {donate.Amount}
-                      </TableCell>
-                      <TableCell className="text-center">10-10-2003</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </form>
-          </div>
+          {getDonates.isPending ? (
+            <div className="flex flex-col gap-y-6 px-8">
+              <header className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Donate</h2>
+              </header>
+              <form>
+                <Skeleton className="w-full h-[280px]" />
+              </form>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-y-6 px-8">
+              <header className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Donate</h2>
+                {donates?.length > 0 && (
+                  <Button className="px-5 rounded-2xl bg-transparent border-2 border-gray-300 hover:bg-gray-300">
+                    <span className="text-gray-700">View all</span>
+                  </Button>
+                )}
+              </header>
+              <form>
+                {donates?.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-center">NO</TableHead>
+                        <TableHead className="text-center">Full Name</TableHead>
+                        <TableHead className="text-center">Amount</TableHead>
+                        <TableHead className="text-center">Date</TableHead>
+                        <TableHead className="text-center">Time</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {donates?.map((donate, index) => {
+                        const { day, month, year, hours, minutes } =
+                          parseDateTimeString(donate.createdDate);
+
+                        return (
+                          <TableRow key={index}>
+                            <TableCell className="font-medium text-center">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {donate.account.firstName +
+                                " " +
+                                donate.account.lastName}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {donate.amount}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {`${day}/${month}/${year}`}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {`${String(hours).padStart(2, "0")}:${String(
+                                minutes
+                              ).padStart(2, "0")}`}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div>
+                    <h3>You haven't made any donations yet</h3>
+                  </div>
+                )}
+              </form>
+            </div>
+          )}
         </div>
         {profileInfo?.email !== "" && editInfoPopup && (
           <EditPersonal
