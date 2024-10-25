@@ -9,7 +9,7 @@ import AvatarMenu from "@/components/avatar-menu";
 
 const Header: React.FC = () => {
   const userState = useAppSelector((state) => state.userSlice);
-
+ 
   const currentPath = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);

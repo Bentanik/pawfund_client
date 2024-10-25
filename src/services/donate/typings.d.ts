@@ -4,6 +4,11 @@ declare namespace REQUEST {
     amount: number;
     description: string;
   };
+
+  type TGetDonates = {
+    pageIndex: number;
+    pageSize: number;
+  };
 }
 
 declare namespace API {
@@ -11,5 +16,24 @@ declare namespace API {
     success: boolean;
     paymentUrl: string;
     message: string;
+  };
+
+  type Donate = {
+    id: string;
+    amount: number;
+    description: string;
+    paymentMethodId: number;
+    createdDate: string;
+    account: API.Account;
+  };
+
+  type TGetDonates = {
+    items: Donate[];
+    pageIndex: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
 }

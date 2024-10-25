@@ -1,20 +1,18 @@
 import useToast from "@/hooks/use-toast";
-import { getAllApplicationByAdopter } from "@/services/adopt/api-services";
+import { getUserDonates } from "@/services/donate/api-services";
 import { isTResponseData } from "@/utils/compare";
 import { useState } from "react";
 
-export default function useGetApplicationByAdopter() {
+export default function useGetUserDonates() {
   const { addToast } = useToast();
   const [isPending, setPending] = useState(false);
 
-  const getAllApplicationByAdopterApi = async (
-    params: REQUEST.GetApplications
-  ) => {
+  const getUserDonatesApi = async (params: REQUEST.TGetDonates) => {
     setPending(true);
     try {
-      const res = await getAllApplicationByAdopter(params);
+      const res = await getUserDonates(params);
       if (isTResponseData(res)) {
-        return res as TResponseData<API.ResponseData>;
+        return res as TResponseData<API.TGetDonates>;
       } else {
         addToast({
           type: "error",
@@ -23,15 +21,11 @@ export default function useGetApplicationByAdopter() {
         return null;
       }
     } catch (error) {
-      addToast({
-        type: "error",
-        description: "An error occurred while fetching applications",
-      });
       return null;
     } finally {
       setPending(false);
     }
   };
 
-  return { isPending, getAllApplicationByAdopterApi };
+  return { isPending, getUserDonatesApi };
 }
