@@ -9,24 +9,31 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import useGetApplicationByStaff from "./hooks/useGetApplicationByStaff";
+import useApplyAdoptApplication from "./hooks/useApplyAdoptApplication";
+import useRejectAdoptApplication from "./hooks/useRejectAdoptApplication";
+import RejectModal from "@/components/reject-application-modal";
 
 export default function StaffApplication() {
     const { isPending, getAllApplicationByStaffApi } = useGetApplicationByStaff();
+    const { isPending: isApplying, applyAdoptApplicationApi } = useApplyAdoptApplication();
+    const { isPending: isRejecting, rejectAdoptApplicationApi } = useRejectAdoptApplication();
     const [applications, setApplications] = useState<API.ResponseData>();
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedStatus, setSelectedStatus] = useState<number | null>(null); // Trạng thái đã chọn là số
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [applicationId, setApplicationId] = useState('');
 
-    const pageSize = 10; 
-    const isAscCreatedDate = false; 
+    const pageSize = 10;
+    const isAscCreatedDate = false;
 
     const fetchApplications = async (pageNumber: number) => {
         const res = await getAllApplicationByStaffApi({
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            status: selectedStatus ?? undefined, 
+            status: selectedStatus ?? undefined,
         });
 
         if (res && res.value) {
@@ -52,6 +59,38 @@ export default function StaffApplication() {
         setCurrentPage(1); // Reset về trang 1 khi thay đổi trạng thái
     };
 
+    const handleOpenRejectModal = (id: string) => {
+        setApplicationId(id); // Lưu ID vào state
+        setIsRejectModalOpen(true); // Mở modal từ chối
+    };
+
+    const handleRequestClose = () => {
+        setIsRejectModalOpen(false);
+        setApplicationId(''); // Reset ID khi đóng modal
+    };
+
+    const handleReject = async (data: { adoptId: string; reasonReject: string }) => {
+        const res = await rejectAdoptApplicationApi({
+            adoptId: data.adoptId,
+            reasonReject: data.reasonReject
+        });
+
+        if (res && res.isSuccess) {
+            fetchApplications(currentPage); // Lấy lại danh sách đơn sau khi từ chối thành công
+        } else {
+            console.error("Từ chối không thành công:", res?.error || "Không có thông tin");
+        }
+    };
+
+    const handleApprove = async (applicationId: string) => {
+        const res = await applyAdoptApplicationApi({ Id: applicationId });
+        if (res && res.isSuccess) {
+            fetchApplications(currentPage);
+        } else {
+            console.error("Phê duyệt không thành công:", res?.error || "Không có thông tin");
+        }
+    };
+
     const renderApplications = () => {
         if (isPending) {
             return <p>Loading...</p>;
@@ -64,25 +103,53 @@ export default function StaffApplication() {
         return applications.items.map((app) => (
             <div
                 key={app.application.id}
-                className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+                className="flex flex-col justify-between h-full w-full bg-white p-6 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
             >
+                {/* Thông tin chính */}
                 <div className="flex-grow">
                     <a href="#">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <h5 className="mb-3 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                             {app.application.description}
                         </h5>
                     </a>
-                    <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
-                        Sex: {app.application.cat.sex}
-                    </p>
-                    <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
-                        Name: {app.application.cat.name}
-                    </p>
-                    <p className="font-normal text-gray-700 dark:text-gray-400">
-                        Status: {app.application.status ?? "N/A"} {/* Hiển thị trạng thái trả về từ BE */}
-                    </p>
+                    <div className="space-y-2">
+                        <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                            <span className="font-medium">Sex:</span> {app.application.cat.sex}
+                        </p>
+                        <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                            <span className="font-medium">Name:</span> {app.application.cat.name}
+                        </p>
+                        <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                            <span className="font-medium">Status:</span> {app.application.status ?? "N/A"}
+                        </p>
+                    </div>
                 </div>
+
+                {app.application.status === "Pending" && (
+                    <div className="mt-4 flex justify-center space-x-3">
+                        <button
+                            onClick={() => handleApprove(app.application.id)}
+                            className="flex-1 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg shadow hover:bg-green-700 focus:outline-none"
+                        >
+                            Approve
+                        </button>
+                        <button
+                            className="flex-1 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg shadow hover:bg-red-700 focus:outline-none"
+                            onClick={() => handleOpenRejectModal(app.application.id)} // Sử dụng applicationId từ prop
+                        >
+                            Reject
+                        </button>
+
+                        <RejectModal
+                            isOpen={isRejectModalOpen} 
+                            onRequestClose={handleRequestClose}
+                            onSubmit={handleReject} 
+                            adoptId={applicationId} 
+                        />
+                    </div>
+                )}
             </div>
+
         ));
     };
 
@@ -92,40 +159,59 @@ export default function StaffApplication() {
             <div className="mb-4 flex space-x-2">
                 <button
                     onClick={() => handleStatusChange(null)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === null ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === null
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     All
                 </button>
                 <button
                     onClick={() => handleStatusChange(0)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 0
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     Pending
                 </button>
                 <button
                     onClick={() => handleStatusChange(1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     Approved
                 </button>
                 <button
                     onClick={() => handleStatusChange(2)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 2 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 2
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     Approved Outside
                 </button>
                 <button
                     onClick={() => handleStatusChange(3)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 3 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === 3
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     Rejected Outside
                 </button>
                 <button
                     onClick={() => handleStatusChange(-1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === -1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === -1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                 >
                     Rejected
                 </button>
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -137,16 +223,28 @@ export default function StaffApplication() {
                     <PaginationItem>
                         <PaginationPrevious
                             href="#"
-                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}
-                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handlePageChange(currentPage - 1);
+                            }}
+                            className={
+                                currentPage === 1
+                                    ? "pointer-events-none opacity-50"
+                                    : ""
+                            }
                         />
                     </PaginationItem>
                     {[...Array(totalPages)].map((_, index) => (
                         <PaginationItem key={index}>
                             <PaginationLink
                                 href="#"
-                                onClick={(e) => { e.preventDefault(); handlePageChange(index + 1); }}
-                                className={index + 1 === currentPage ? "active" : ""}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handlePageChange(index + 1);
+                                }}
+                                className={
+                                    index + 1 === currentPage ? "active" : ""
+                                }
                             >
                                 {index + 1}
                             </PaginationLink>
@@ -155,8 +253,15 @@ export default function StaffApplication() {
                     <PaginationItem>
                         <PaginationNext
                             href="#"
-                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}
-                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handlePageChange(currentPage + 1);
+                            }}
+                            className={
+                                currentPage === totalPages
+                                    ? "pointer-events-none opacity-50"
+                                    : ""
+                            }
                         />
                     </PaginationItem>
                 </PaginationContent>

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import React, { useEffect, useState } from "react";
+
 const ListEvent = [
     {
         thumb: "/images/meo2.jpg",
@@ -35,9 +35,34 @@ const ListEvent = [
         desc: "A family-friendly walkathon where participants walk with their dogs to raise funds for local dog and cat centers. The event includes pet-themed booths, food stalls, and games for pets and their owners.",
     },
 ];
-export default function BlockEvent() {
+
+type BlockEventProps = {
+    events?: API.Events[];
+};
+const BlockEvent: React.FC<BlockEventProps> = ({ events }) => {
+    const formatDate = (stringDate: any) => {
+        const date = new Date(stringDate);
+        const day = date.getDate();
+        const months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ];
+        const month = months[date.getMonth()]; // Lấy tên tháng viết tắt
+
+        return `${month} ${day}`; // Ví dụ: "Nov 10"
+    };
     const renderListEvent = () => {
-        return ListEvent.map((item) => {
+        return events?.map((item) => {
             return (
                 <div>
                     <Link
@@ -46,9 +71,9 @@ export default function BlockEvent() {
                     >
                         <div className="relative w-full max-w-sm">
                             <img
-                                src={item.thumb}
+                                src="/images/meo1.jpg"
                                 alt="Event"
-                                className="w-[430px] h-[300px] object-cover"
+                                className="w-full h-[300px] object-cover"
                             />
                             {/* Nội dung chỉ xuất hiện khi hover vào thẻ Link */}
                             <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#00000095] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-2">
@@ -60,17 +85,19 @@ export default function BlockEvent() {
                             </div>
                         </div>
                     </Link>
-                    <div className="w-[380px]">
+                    <div className="w-full">
                         <div className="py-[20px]">
                             <div className="mb-[10px] font-semibold">
-                                {item.title}
+                                {item?.name}
                             </div>
                             <div className=" line-clamp-2 overflow-hidden text-[0.9rem]">
-                                {item.desc}
+                                {item?.description}
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <p>Nov21 - Nov23</p>
+                            <p>{`${formatDate(item?.startDate)} - ${formatDate(
+                                item?.endDate
+                            )}`}</p>
                             <label className="inline-flex items-center mb-5 cursor-pointer">
                                 <input
                                     type="checkbox"
@@ -93,10 +120,12 @@ export default function BlockEvent() {
     return (
         <div>
             <div>
-                <div className="flex gap-[5%] flex-wrap">
+                <div className="grid grid-cols-3 gap-[5%] w-full">
                     {renderListEvent()}
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default BlockEvent;

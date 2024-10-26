@@ -16,7 +16,7 @@ const request = axios.create({
   withCredentials: true,
 });
 
-let refreshTokenPromise: Promise<any> | null = null;
+let refreshTokenPromise: any = null;
 
 const errorHandler = async (error: AxiosError) => {
   const responseMeta: TMeta = error.response?.data as TMeta;
@@ -81,11 +81,12 @@ const errorHandler = async (error: AxiosError) => {
         .finally(() => {
           refreshTokenPromise = null;
         });
-
-      return refreshTokenPromise?.then(() => {
-        return request(originalRequest);
-      });
     }
+
+    return refreshTokenPromise.then(() => {
+      originalRequest.headers.Authorization = getStorageItem("accessToken");
+      return request(originalRequest);
+    });
   }
 
   return Promise.reject(responseMeta);

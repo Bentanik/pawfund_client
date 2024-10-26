@@ -16,6 +16,15 @@ declare namespace REQUEST {
   };
 
   type GetMeetingResponse = MeetingData[];
+
+  type ApplyAdoptApplication = {
+    Id: string;
+  }
+
+  type RejectAdoptionRequest = {
+    adoptId: string;          
+    reasonReject: string;     
+};
 }
 
 declare namespace API {
@@ -89,5 +98,23 @@ declare namespace API {
     isFailure: boolean;
     error: Error;
   };
-  
+}
+
+declare namespace APIResponse {
+  type ValueResponse = {
+    code: string;
+    message: string;
+  };
+
+  type ErrorResponse = {
+    code: string;
+    message: string;
+  };
+
+  type ApiResponse = {
+    value: ValueResponse;
+    isSuccess: boolean;
+    isFailure: boolean;
+    error: ErrorResponse;
+  };
 }

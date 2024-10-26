@@ -22,9 +22,25 @@ const userSlice = createSlice({
     resetUser: (state) => {
       state.user = null;
     },
+    updateImage: (state, action: PayloadAction<API.TUpdateAvatar>) => {
+      if (state.user) {
+        state.user.cropAvatarLink = action.payload.cropAvatarLink;
+        state.user.fullAvatarLink = action.payload.fullAvatarLink;
+      }
+    },
+    updateInformationProfile: (
+      state,
+      action: PayloadAction<API.TProfileAccount>
+    ) => {
+      if (state.user) {
+        state.user.firstName = action.payload.firstName;
+        state.user.lastName = action.payload.lastName;
+      }
+    },
   },
 });
 
-export const { loginUser, resetUser } = userSlice.actions;
+export const { loginUser, resetUser, updateImage, updateInformationProfile } =
+  userSlice.actions;
 
 export default userSlice.reducer;

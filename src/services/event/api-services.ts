@@ -1,97 +1,41 @@
-import API_ENDPOINTS from "@/services/auth/api-path";
+import API_ENDPOINTS from "@/services/event/api-path";
 import request from "@/services/interceptor";
-import {
-  LoginBodyType,
-  RegisterBodyType,
-} from "@/utils/schemaValidations/auth.schema";
 
-export const login = async (body: LoginBodyType) => {
-  const response = await request<API.TAuthResponse>(API_ENDPOINTS.LOGIN, {
-    method: "POST",
-    data: body,
-  });
-  return response.data;
+export const getEvents = async ({ eventId }: REQUEST.TGetEventById) => {
+    const response = await request<TResponseData<API.TGetEvent>>(
+        API_ENDPOINTS.GET_EVENT_BY_ID,
+        {
+            method: "GET",
+            params: {
+                id: eventId,
+            },
+        }
+    );
+    return response.data;
 };
 
-export const register = async (body: RegisterBodyType) => {
-  const response = await request<TResponse>(API_ENDPOINTS.REGISTER, {
-    method: "POST",
-    data: body,
-  });
-  return response.data;
-};
+export const getAllEvents = async ({
+    name = "",
+    status,
+    isAscCreatedDate = true,
+    pageIndex = 1,
+    pageSize = 10,
+}: REQUEST.TGetEvents) => {
+    const params: Record<string, any> = {};
 
-export const verifyEmail = async ({ email }: API.TAuthVerifyEmail) => {
-  const response = await request<TResponse>(API_ENDPOINTS.VERIFY_EMAIL, {
-    method: "GET",
-    params: {
-      email: email,
-    },
-  });
-  return response.data;
-};
+    if (pageIndex) params.pageIndex = pageIndex;
+    if (pageSize) params.pageSize = pageSize;
+    if (name !== "all") params.Name = name;
+    if (status) params.Status = status;
+    if (isAscCreatedDate !== undefined)
+        params.IsAscCreatedDate = isAscCreatedDate;
 
-export const forgotPasswordEmail = async (
-  body: API.TAuthForgotPasswordEmail
-) => {
-  const response = await request<TResponseData>(
-    API_ENDPOINTS.FORGOT_PASSWORD_EMAIL,
-    {
-      method: "POST",
-      data: body,
-    }
-  );
-  return response.data;
-};
-
-export const forgotPasswordOtp = async (body: API.TAuthForgotPasswordOtp) => {
-  const response = await request<TResponseData>(
-    API_ENDPOINTS.FORGOT_PASSWORD_OTP,
-    {
-      method: "POST",
-      data: body,
-    }
-  );
-  return response.data;
-};
-
-export const forgotPasswordChange = async (
-  body: API.TAuthForgotPasswordChange
-) => {
-  const response = await request<TResponseData>(
-    API_ENDPOINTS.FORGOT_PASSWORD_CHANGE,
-    {
-      method: "POST",
-      data: body,
-    }
-  );
-  return response.data;
-};
-
-export const logout = async () => {
-  const response = await request<TResponseData>(API_ENDPOINTS.LOGOUT, {
-    method: "POST",
-  });
-  return response.data;
-};
-
-export const refreshToken = async () => {
-  const response = await request<API.TAuthResponse>(
-    API_ENDPOINTS.REFRESH_TOKEN,
-    {
-      method: "GET",
-    }
-  );
-  return response.data;
-};
-
-export const loginGoogle = async (body: API.TAuthLoginGoogle) => {
-  const response = await request<API.TAuthResponse>(
-    API_ENDPOINTS.LOGIN_GOOGLE,
-    {
-      method: "POST",
-      data: body,
-    }
-  );
-  return response.data;
+    const response = await request<TResponseData<API.TGetEvents>>(
+        API_ENDPOINTS.GET_ALL_EVENT,
+        {
+            method: "GET",
+            params: Object.keys(params).length > 0 ? params : undefined,
+        }
+    );
+    return response.data;
 };

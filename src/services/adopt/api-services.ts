@@ -38,7 +38,7 @@ export const getAllApplicationByStaff = async ({
   pageIndex,
   pageSize,
   isAscCreatedDate,
-  status
+  status,
 }: REQUEST.GetApplications): Promise<TResponseData<API.ResponseData>> => {
   const response = await request<TResponseData<API.ResponseData>>(
     API_ENDPOINTS.GET_ALL_APPLICATION_BY_STAFF,
@@ -56,9 +56,7 @@ export const getAllApplicationByStaff = async ({
   return response.data;
 };
 
-export const updateMeetingTime = async (
-  body: REQUEST.GetMeetingResponse
-) => {
+export const updateMeetingTime = async (body: REQUEST.GetMeetingResponse) => {
   const response = await request<TResponse>(
     API_ENDPOINTS.PUT_UPDATE_MEETING_TIME,
     {
@@ -74,6 +72,34 @@ export const getMeetingTimeByStaff = async () => {
     API_ENDPOINTS.GET_MEETING_TIME_BY_STAFF,
     {
       method: "GET",
+    }
+  );
+  return response.data;
+};
+
+
+export const applyAdoptApplication = async ({
+  Id
+}: REQUEST.ApplyAdoptApplication): Promise<TResponseData<APIResponse.ApiResponse>> => {
+  const response = await request<TResponseData<APIResponse.ApiResponse>>(
+    API_ENDPOINTS.PUT_APPLY_ADOPT_APPLICATION,
+    {
+      method: "PUT",
+      params: {
+        Id
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const rejectAdoptApplication = async (body: REQUEST.RejectAdoptionRequest) => {
+  const response = await request<TResponse>(
+    API_ENDPOINTS.PUT_REJECT_ADOPT_APPLICATION,
+    {
+      method: "PUT",
+      data: body,
     }
   );
   return response.data;

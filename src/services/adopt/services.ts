@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import {
+  applyAdoptApplication,
   createAdoptApplication,
   getAllApplicationByAdopter,
+  rejectAdoptApplication,
   updateMeetingTime,
 } from "@/services/adopt/api-services";
 import { getQueryClient } from "@/lib/query";
@@ -29,6 +31,25 @@ export const useServiceGetApplicationAdopt = async (
 export const useServiceUpdateMeetingTime = () => {
   return useMutation<TResponse, TMeta, REQUEST.GetMeetingResponse>({
     mutationFn: updateMeetingTime,
+    onSuccess: (data) => {
+      console.log("Đã update", data);
+    },
+  });
+};
+
+export const useServiceApplyAdoptApplication = async (
+  params: REQUEST.ApplyAdoptApplication
+) => {
+  const queryClient = getQueryClient();
+  return await queryClient.fetchQuery<TResponseData<APIResponse.ApiResponse>, TMeta>({
+    queryKey: ["adopt_noti_success_09", params],
+    queryFn: () => applyAdoptApplication(params),
+  });
+};
+
+export const useServiceRejectAdoptApplication = () => {
+  return useMutation<TResponse, TMeta, REQUEST.RejectAdoptionRequest>({
+    mutationFn: rejectAdoptApplication,
     onSuccess: (data) => {
       console.log("Đã update", data);
     },

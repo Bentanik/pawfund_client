@@ -1,4 +1,12 @@
 declare namespace REQUEST {
+  type TRegister = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    gender: number;
+  };
   type TAuthVerifyEmail = {
     email: string;
   };
@@ -38,7 +46,8 @@ declare namespace API {
     userId: string;
     firstName: string;
     lastName: string;
-    avatarLink: string;
+    cropAvatarLink: string;
+    fullAvatarLink: string;
     roleId: AuthRole;
   };
 
