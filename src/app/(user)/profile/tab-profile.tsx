@@ -1,7 +1,7 @@
 "use client";
 
-import Profile from "@/app/(user)/profile/components/profile-component";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const TABS = [
   {
@@ -10,7 +10,7 @@ const TABS = [
   },
   {
     id: 2,
-    value: "Profile",
+    value: "Donate",
   },
   {
     id: 3,
@@ -23,6 +23,7 @@ const TABS = [
 ];
 
 export default function TabProfile() {
+  const router = useRouter();
   const [tab, setTab] = useState<number>(1);
 
   const handleChangeTab = (id: number) => {
@@ -30,8 +31,8 @@ export default function TabProfile() {
   };
 
   useEffect(() => {
-    if (tab === 1) {
-    }
+    if (tab === 1) router.push("/profile/information");
+    if (tab === 2) router.push("/profile/donate");
   }, [tab]);
 
   const renderTabs = () => {
@@ -45,9 +46,6 @@ export default function TabProfile() {
           } cursor-pointer select-none`}
           onClick={() => handleChangeTab(item.id)}
         >
-          {/* <span className="text-xl font-semibold text-[#1d1d1d]">
-            {item.value}
-          </span> */}
           <span
             className={`text-base font-light text-[#00000080] ${
               item.id === tab && "text-[#000]"
@@ -66,9 +64,6 @@ export default function TabProfile() {
         <div className="flex justify-center gap-x-20 overflow-hidden">
           {renderTabs()}
         </div>
-      </div>
-      <div className="px-20 mb-5">
-        <Profile />
       </div>
     </div>
   );

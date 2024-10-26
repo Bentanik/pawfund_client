@@ -13,7 +13,7 @@ import { Genders } from "@/const/user";
 import { X } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
-import useUpdateInformation from "@/app/(user)/profile/hooks/useUpdateInformation";
+import useUpdateInformation from "@/app/(user)/profile/information/hooks/useUpdateInformation";
 import { UpdateInfoProfileBodyType } from "@/utils/schemaValidations/update-info-profile.schema";
 
 interface EditPersonalProps {
