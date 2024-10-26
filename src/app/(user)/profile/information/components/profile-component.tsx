@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import useGetProfile from "@/app/(user)/profile/hooks/useGetProfileAccount";
+import useGetProfile from "@/app/(user)/profile/information/hooks/useGetProfileAccount";
 import {
   Table,
   TableBody,
@@ -11,12 +11,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EditPersonal from "@/app/(user)/profile/components/edit-personal";
-import EditEmail from "@/app/(user)/profile/components/edit-email";
-import ChangePassword from "@/app/(user)/profile/components/change-password";
+import EditPersonal from "@/app/(user)/profile/information/components/edit-personal";
+import EditEmail from "@/app/(user)/profile/information/components/edit-email";
+import ChangePassword from "@/app/(user)/profile/information/components/change-password";
 import { Skeleton } from "@/components/ui/skeleton";
 import useGetUserDonates from "@/hooks/use-get-user-donates";
 import { parseDateTimeString } from "@/utils/date";
+import { formatCurrencyVND } from "@/utils/format-currency";
+import { Dates } from "@/const/donate";
 
 const DONATE = [
   {
@@ -118,6 +120,8 @@ export default function ProfileComponent() {
       const form: REQUEST.TGetDonates = {
         pageIndex: 1,
         pageSize: 6,
+        paymentMethodType: "all",
+        isDateDesc: Dates[0].value,
       };
       const res = await getDonates.getUserDonatesApi(form);
       setDonates(res?.value.data?.items || []);
@@ -325,7 +329,7 @@ export default function ProfileComponent() {
                                 donate.account.lastName}
                             </TableCell>
                             <TableCell className="text-center">
-                              {donate.amount}
+                              {formatCurrencyVND(donate.amount)}
                             </TableCell>
                             <TableCell className="text-center">
                               {`${day}/${month}/${year}`}

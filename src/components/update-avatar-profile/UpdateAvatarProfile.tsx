@@ -8,7 +8,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import CropImageAvatarProfile from "@/components/crop-image-avatar-profile";
 import { Backdrop } from "@/components/backdrop";
 import useToast from "@/hooks/use-toast";
-import useUpdateAvatar from "@/app/(user)/profile/hooks/useUpdateAvatar";
+import useUpdateAvatar from "@/app/(user)/profile/information/hooks/useUpdateAvatar";
 
 interface UpdateAvatarProfilePopupProps {
   open: boolean;

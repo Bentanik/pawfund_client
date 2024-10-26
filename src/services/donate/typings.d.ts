@@ -8,6 +8,10 @@ declare namespace REQUEST {
   type TGetDonates = {
     pageIndex: number;
     pageSize: number;
+    paymentMethodType?: string;
+    minAmount?: string;
+    maxAmount?: string;
+    isDateDesc?: string;
   };
 }
 
