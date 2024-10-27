@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { SendHorizontal, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 const messages = [
   { index: 0 },
@@ -46,15 +47,37 @@ export default function Message({
   const [connection, setConnection] = useState<any>(null);
   const [textMessage, setTextMessage] = useState<string>("");
 
-  useEffect(() => {
-    const signalRService = SignalRService;
-    setConnection(signalRService);
+  const createConnection = async () => {
+    const hubUrl = `${process.env.NEXT_PUBLIC_HUB_SERVER}/hub/message-hub?userId=${userState.user?.userId}&role=${userState.user?.roleId}`;
+    const newConnection = new HubConnectionBuilder()
+      .withUrl(hubUrl)
+      .withAutomaticReconnect()
+      .build();
 
-    // Cleanup function to stop the connection when component unmounts
-    return () => {
-      signalRService.stopConnection();
-    };
+    setConnection(newConnection);
+  };
+
+  useEffect(() => {
+    createConnection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          connection.on("onError", (message: string) => {
+            console.log(message);
+          });
+
+          connection.on("onSuccess", (message: string) => {
+            console.log(message);
+          });
+        })
+        .catch();
+    }
+  }, [connection]);
 
   const handleCloseMessage = () => {
     dispatch(closeMessageUser());
@@ -64,12 +87,16 @@ export default function Message({
     if (!connection) return;
 
     try {
-      const message = "Hello from client!";
-      await connection.sendMessageWithStaff(
-        userState.user?.userId || "",
-        message
-      );
-      console.log("Message sent:", message);
+      // const message = "Hello from client!";
+      // await connection.sendMessageWithChatBotAsync(
+      //   userState.user?.userId || "",
+      //   textMessage
+      // );
+      await connection.send("SendMessageWithChatBotAsync", {
+        userId: userState.user?.userId || "",
+        content: textMessage,
+      });
+      console.log("Message sent:", textMessage);
     } catch (err) {
       console.log("Error sending message:", err);
     }
@@ -102,7 +129,11 @@ export default function Message({
           </figure>
         )}
         <div className="w-max flex items-center px-2 py-1 min-h-8 rounded-xl bg-slate-200 max-w-[80%]">
-          <p className="text-[14px] font-sans">{"What the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuck"}</p>
+          <p className="text-[14px] font-sans">
+            {
+              "What the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuckWhat the fuck"
+            }
+          </p>
         </div>
       </div>
     );

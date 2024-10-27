@@ -50,9 +50,20 @@ class SignalRService {
     }
   }
 
-  public async sendMessageWithStaff(userId: string, content: string) {
+  public async sendMessageWithStaffAsync(userId: string, content: string) {
     if (this.connection?.state === HubConnectionState.Connected) {
       await this.connection.invoke("SendMessageWithStaffAsync", {
+        userId: userId,
+        content: content,
+      });
+    } else {
+      console.error("Connection not established. Cannot send message.");
+    }
+  }
+
+  public async sendMessageWithChatBotAsync(userId: string, content: string) {
+    if (this.connection?.state === HubConnectionState.Connected) {
+      await this.connection.invoke("SendMessageWithChatBotAsync", {
         userId: userId,
         content: content,
       });
