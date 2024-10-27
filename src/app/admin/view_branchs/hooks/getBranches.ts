@@ -1,18 +1,18 @@
 import useToast from "@/hooks/use-toast";
-import { getAllEvents } from "@/services/event/api-services";
+import { getBranches } from "@/services/branch/api-services";
 import { isTResponseData } from "@/utils/compare";
 import { useState } from "react";
 
-export default function useGetDataEvent() {
+export default function useGetDataBranches() {
     const { addToast } = useToast();
     const [isPending, setPending] = useState(false);
 
-    const getEventsApi = async (params: REQUEST.TGetEvents) => {
+    const getBranchesApi = async (params: REQUEST.TGetBranches) => {
         setPending(true);
         try {
-            const res = await getAllEvents(params);
+            const res = await getBranches(params);
             if (isTResponseData(res)) {
-                return res as TResponseData<API.TGetEvents>;
+                return res as TResponseData<API.TGetBranches>;
             } else {
                 addToast({
                     type: "error",
@@ -30,5 +30,5 @@ export default function useGetDataEvent() {
             setPending(false);
         }
     };
-    return { getEventsApi };
+    return { getBranchesApi };
 }

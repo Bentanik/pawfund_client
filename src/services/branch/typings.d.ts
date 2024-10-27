@@ -11,6 +11,23 @@ declare namespace REQUEST {
         province: string;
         postalCode: string;
     };
+
+    type TGetBranches = {
+        pageIndex: number;
+        pageSize?: number;
+        id?: Guid;
+        name?: string;
+        phoneNumberOfBranch?: string;
+        emailOfBranch?: string;
+        description?: string;
+        numberHome?: string;
+        streetName?: string;
+        ward?: string;
+        district?: string;
+        province?: string;
+        postalCode?: string;
+        accountId?: Guid;
+    };
 }
 
 declare namespace API {

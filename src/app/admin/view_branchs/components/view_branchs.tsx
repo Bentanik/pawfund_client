@@ -1,54 +1,85 @@
 "use client";
 
-import React from "react";
-
-// Dữ liệu mẫu
-const data: Payment[] = [
-    {
-        id: "m5gr84i9",
-        amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
-    },
-];
-
-// Kiểu dữ liệu Payment
-export type Payment = {
-    id: string;
-    amount: number;
-    status: "pending" | "processing" | "success" | "failed";
-    email: string;
-};
+import { useState, useEffect } from "react";
+import PaginatedComponent from "@/components/paginated";
+import useGetDataBranches from "@/app/admin/view_branchs/hooks/getBranches";
 
 export default function PaymentTable() {
+    const [id, setId] = useState<string | undefined>();
+    const [name, setName] = useState<string>("");
+    const [phoneNumberOfBranch, setPhoneNumberOfBranch] = useState<string>("");
+    const [emailOfBranch, setEmailOfBranch] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [numberHome, setNumberHome] = useState<string>("");
+    const [streetName, setStreetName] = useState<string>("");
+    const [ward, setWard] = useState<string>("");
+    const [district, setDistrict] = useState<string>("");
+    const [province, setProvince] = useState<string>("");
+    const [postalCode, setPostalCode] = useState<string>("");
+    const [accountId, setAccountId] = useState<string | undefined>();
+    const [data, setData] = useState<API.Branches[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(1);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        handleGetData(page);
+    };
+
+    const { getBranchesApi } = useGetDataBranches();
+
+    const handleGetData = async (pageIndex: number) => {
+        try {
+            const res = await getBranchesApi({
+                pageIndex: pageIndex,
+                pageSize: 3,
+                id: id,
+                name: name,
+                phoneNumberOfBranch: phoneNumberOfBranch,
+                emailOfBranch: emailOfBranch,
+                description: description,
+                numberHome: numberHome,
+                streetName: streetName,
+                ward: ward,
+                district: district,
+                province: province,
+                postalCode: postalCode,
+                accountId: accountId,
+            });
+            setTotalPage(res?.value.data.totalPages || 1);
+            setData(res?.value.data.items || []);
+            console.log(res?.value.data.items);
+        } catch (err) {
+            setData([]);
+        }
+    };
+
+    useEffect(() => {
+        if (currentPage !== 1) {
+            handleGetData(1);
+            setCurrentPage(1);
+        } else {
+            handleGetData(currentPage);
+        }
+    }, [
+        id,
+        name,
+        phoneNumberOfBranch,
+        emailOfBranch,
+        description,
+        numberHome,
+        streetName,
+        ward,
+        district,
+        province,
+        postalCode,
+        accountId,
+    ]);
+
     return (
         <div className="w-full p-4">
             {/* Header */}
-            <div className="grid grid-cols-5 bg-blue-100 text-gray-800 font-semibold rounded-t-lg">
+            <div className="grid grid-cols-5 bg-[#4B5563] text-white font-semibold rounded-t-lg">
                 <div className="p-4">Name</div>
                 <div className="p-4">Email</div>
                 <div className="p-4 ">Number Home</div>
@@ -59,28 +90,37 @@ export default function PaymentTable() {
             {/* Body */}
             <div className="border border-gray-300 rounded-b-lg">
                 {data.length > 0 ? (
-                    data.map((payment) => (
+                    data.map((item, index) => (
                         <div
-                            key={payment.id}
+                            key={index}
                             className="grid grid-cols-5 hover:bg-gray-50 transition-colors"
                         >
-                            <div className="p-4 capitalize">
-                                {payment.status}
+                            <div className="p-4 capitalize">{item?.name}</div>
+                            <div className="p-4 lowercase">
+                                {item?.emailOfBranch}
                             </div>
-                            <div className="p-4 lowercase">{payment.email}</div>
-                            <div className="p-4">
-                                {new Intl.NumberFormat("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                }).format(payment.amount)}
+                            <div className="p-4">{item?.numberHome}</div>
+                            <div className="p-4 lowercase">
+                                {item?.district}
                             </div>
-                            <div className="p-4 lowercase">{payment.email}</div>
-                            <div className="p-4 lowercase">{payment.email}</div>
+                            <div className="p-4 lowercase">
+                                {item?.province}
+                            </div>
                         </div>
                     ))
                 ) : (
                     <div className="p-4 text-center">Không có kết quả nào.</div>
                 )}
+            </div>
+
+            <div className="my-10">
+                <div className="mt-5">
+                    <PaginatedComponent
+                        totalPages={totalPage}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </div>
     );
