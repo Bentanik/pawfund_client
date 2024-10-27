@@ -18,7 +18,7 @@ export default function AvatarMenu() {
       className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-box w-72 overflow-hidden"
     >
       <div className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200">
-        <Link href="/profile">
+        <Link href="/profile/information">
           <div className="font-bold">Hello</div>
           <div className="text-xs text-gray-500 truncate">
             {userState.user?.firstName} {userState.user?.lastName}
@@ -38,14 +38,7 @@ export default function AvatarMenu() {
               />
               <span className="text-black">Cài đặt & quyền riêng tư</span>
             </div>
-            <FiChevronRight
-              className="text-gray-500"
-              size={24}
-              // onClick={() => {
-              //     setSettingsDropdownOpen(true);
-              //     setDropdownOpen(false);
-              // }}
-            />
+            <FiChevronRight className="text-gray-500" size={24} />
           </a>
         </li>
         <li>
