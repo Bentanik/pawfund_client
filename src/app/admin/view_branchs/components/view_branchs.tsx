@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import PaginatedComponent from "@/components/paginated";
 import useGetDataBranches from "@/app/admin/view_branchs/hooks/getBranches";
+import { Input } from "@/components/ui/input";
 
 export default function PaymentTable() {
     const [id, setId] = useState<string | undefined>();
@@ -32,7 +33,7 @@ export default function PaymentTable() {
         try {
             const res = await getBranchesApi({
                 pageIndex: pageIndex,
-                pageSize: 3,
+                pageSize: 5,
                 id: id,
                 name: name,
                 phoneNumberOfBranch: phoneNumberOfBranch,
@@ -48,7 +49,6 @@ export default function PaymentTable() {
             });
             setTotalPage(res?.value.data.totalPages || 1);
             setData(res?.value.data.items || []);
-            console.log(res?.value.data.items);
         } catch (err) {
             setData([]);
         }
@@ -76,13 +76,52 @@ export default function PaymentTable() {
         accountId,
     ]);
 
+    const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+    const handleChangeWard = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setWard(e.target.value);
+    };
+    const handleChangeDistrict = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDistrict(e.target.value);
+    };
+
     return (
-        <div className="w-full p-4">
+        <div className="w-full p-4 ">
+            <div className="flex mb-5 gap-10">
+                <div className="flex gap-7 items-center w-[30%]">
+                    <label className="text-base text-[#6f6f6f]">Name</label>
+                    <Input
+                        type="text"
+                        className="w-full border-2 border-gray-500 focus-visible:ring-0"
+                        value={name}
+                        onChange={handleChangeName}
+                    />
+                </div>
+                <div className="flex gap-7 items-center w-[30%]">
+                    <label className="text-base text-[#6f6f6f]">Ward</label>
+                    <Input
+                        type="text"
+                        className="w-full border-2 border-gray-500 focus-visible:ring-0"
+                        value={ward}
+                        onChange={handleChangeWard}
+                    />
+                </div>
+                <div className="flex gap-7 items-center w-[30%]">
+                    <label className="text-base text-[#6f6f6f]">District</label>
+                    <Input
+                        type="text"
+                        className="w-full border-2 border-gray-500 focus-visible:ring-0"
+                        value={district}
+                        onChange={handleChangeDistrict}
+                    />
+                </div>
+            </div>
             {/* Header */}
             <div className="grid grid-cols-5 bg-[#4B5563] text-white font-semibold rounded-t-lg">
                 <div className="p-4">Name</div>
                 <div className="p-4">Email</div>
-                <div className="p-4 ">Number Home</div>
+                <div className="p-4 ">Ward</div>
                 <div className="p-4 ">District</div>
                 <div className="p-4 ">Province</div>
             </div>
@@ -99,7 +138,7 @@ export default function PaymentTable() {
                             <div className="p-4 lowercase">
                                 {item?.emailOfBranch}
                             </div>
-                            <div className="p-4">{item?.numberHome}</div>
+                            <div className="p-4">{item?.ward}</div>
                             <div className="p-4 lowercase">
                                 {item?.district}
                             </div>
