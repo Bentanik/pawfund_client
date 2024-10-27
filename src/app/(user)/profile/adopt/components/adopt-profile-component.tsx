@@ -1,229 +1,193 @@
 "use client";
+import React, { useEffect, useState } from "react";
 
-import PaginatedComponent from "@/components/paginated";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Dates, PaymentMethods } from "@/const/donate";
-import useGetUserDonates from "@/hooks/use-get-user-donates";
-import { parseDateTimeString } from "@/utils/date";
-import { formatCurrencyVND } from "@/utils/format-currency";
-import { useEffect, useState } from "react";
+import useUpdateAdoptApplication from "@/app/(user)/profile/adopt/hooks/useUpdateAdoptApplication";
+import useGetApplicationByAdopter from "@/app/(user)/profile/adopt/hooks/useGetApplicationByAdopter";
 
-export default function AdoptProfileComponent() {
-  const [paymentMethod, setPaymentMethod] = useState<string>("all");
-  const [date, setDate] = useState<string>(Dates[0].value);
 
-  const [minAmount, setMinAmount] = useState<string>("");
-  const [maxAmount, setMaxAmount] = useState<string>("");
+export default function AdoptApplication() {
+    const { isPending: isFetching, getAllApplicationByAdopterApi } = useGetApplicationByAdopter();
+    const { isPending, updateAdoptApplicationApi } = useUpdateAdoptApplication(); // Khởi tạo hook cập nhật
+    const [applications, setApplications] = useState<API.ResponseData>();
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedStatus, setSelectedStatus] = useState("all");
+    const [editingAppId, setEditingAppId] = useState<string | null>(null);
+    const [newDescription, setNewDescription] = useState("");
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(1);
+    const pageSize = 10;
+    const isAscCreatedDate = false;
 
-  const [donates, setDonates] = useState<API.Donate[]>([]);
+    const fetchApplications = async (pageNumber: number) => {
+        const res = await getAllApplicationByAdopterApi({
+            pageIndex: pageNumber,
+            pageSize,
+            isAscCreatedDate,
+            status: selectedStatus,
+        });
 
-  const handleChangeMinAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMinAmount(e.target.value);
-  };
+        if (res && res.value) {
+            setApplications(res.value.data);
+            const totalCount = res.value.data.totalCount || 0;
+            setTotalItems(totalCount);
+            setTotalPages(Math.ceil(totalCount / pageSize));
+        }
+    };
 
-  const handleChangeMaxAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxAmount(e.target.value);
-  };
+    useEffect(() => {
+        fetchApplications(currentPage);
+    }, [currentPage, selectedStatus]);
 
-  const getDonates = useGetUserDonates();
+    const handlePageChange = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
 
-  const handleGetData = async (pageIndex: number) => {
-    try {
-      const form: REQUEST.TGetDonates = {
-        pageIndex: pageIndex,
-        pageSize: 10,
-        paymentMethodType: paymentMethod,
-        minAmount: minAmount,
-        maxAmount: maxAmount,
-        isDateDesc: date,
-      };
-      const res = await getDonates.getUserDonatesApi(form);
-      setDonates(res?.value.data?.items || []);
-      setTotalPage(res?.value?.data?.totalPages || 1);
-    } catch (err) {
-      setDonates([]);
-      setTotalPage(1);
-    }
-  };
+    const handleUpdateClick = (appId: string, currentDescription: string) => {
+        setEditingAppId(appId);
+        setNewDescription(currentDescription);
+    };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    handleGetData(page);
-  };
+    const handleDescriptionChange = async (appId: string) => {
+        // Gọi API để cập nhật mô tả
+        const updateData = { adoptId: appId, description: newDescription }; // Tạo dữ liệu cần cập nhật
+        const result = await updateAdoptApplicationApi(updateData); // Gọi hàm từ hook
 
-  useEffect(() => {
-    if (currentPage !== 1) {
-      handleGetData(1);
-      setCurrentPage(1);
-    } else handleGetData(currentPage);
-  }, [paymentMethod, minAmount, maxAmount, date]);
+        if (result) {
+            // Nếu cập nhật thành công
+            setEditingAppId(null);
+            setNewDescription("");
+            fetchApplications(currentPage); // Tải lại danh sách ứng dụng
+        }
+    };
 
-  return (
-    <div>
-      <div className="basis-[58%] py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-box-shadown">
-        <div className="flex flex-col gap-y-6 px-8">
-          <header className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Adopt</h2>
-          </header>
-          <div>
-            <div>
-              <div className="grid grid-cols-4 gap-x-10 gap-y-3">
-                <div className="flex flex-col gap-y-2 w-full">
-                  <label className="text-base text-[#6f6f6f]">
-                    Status
-                  </label>
-                  <Select
-                    value={paymentMethod}
-                    onValueChange={(value) => setPaymentMethod(value)}
-                  >
-                    <SelectTrigger className="w-full border-2 border-gray-500">
-                      <SelectValue placeholder="PaymentMethod" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={"all"}>All</SelectItem>
-                      {PaymentMethods?.map((item, index) => {
-                        return (
-                          <SelectItem key={index} value={item.value}>
-                            {item.value}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-y-2 w-full">
-                  <label className="text-base text-[#6f6f6f]">Min amount</label>
-                  <Input
-                    type="number"
-                    className="w-full border-2 border-gray-500 focus-visible:ring-0"
-                    value={minAmount}
-                    onChange={handleChangeMinAmount}
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2 w-full">
-                  <label className="text-base text-[#6f6f6f]">Max amount</label>
-                  <Input
-                    type="number"
-                    className="w-full border-2 border-gray-500 focus-visible:ring-0"
-                    value={maxAmount}
-                    onChange={handleChangeMaxAmount}
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2 w-full">
-                  <label className="text-base text-[#6f6f6f]">Sort date</label>
-                  <Select
-                    value={date}
-                    onValueChange={(value) => setDate(value)}
-                  >
-                    <SelectTrigger className="w-full border-2 border-gray-500">
-                      <SelectValue placeholder="Date" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Dates?.map((item, index) => {
-                        return (
-                          <SelectItem key={index} value={item.value}>
-                            {item.value}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="mt-10">
+    const renderApplications = () => {
+        if (isFetching || isPending) {
+            return <p>Loading...</p>;
+        }
+
+        if (!applications || applications.items.length === 0) {
+            return <p>No applications found.</p>;
+        }
+
+        return applications.items.map((app) => (
+            <div
+                key={app.application.id}
+                className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+            >
                 <div>
-                  {donates?.length > 0 ? (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="text-center">NO</TableHead>
-                          <TableHead className="text-center">
-                            First Name
-                          </TableHead>
-                          <TableHead className="text-center">
-                            Last Name
-                          </TableHead>
-                          <TableHead className="text-center">Amount</TableHead>
-                          <TableHead className="text-center">
-                            Payment method
-                          </TableHead>
-                          <TableHead className="text-center">Date</TableHead>
-                          <TableHead className="text-center">Time</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {donates?.map((donate, index) => {
-                          const { day, month, year, hours, minutes } =
-                            parseDateTimeString(donate.createdDate);
-
-                          return (
-                            <TableRow key={index}>
-                              <TableCell className="font-medium text-center">
-                                {index + 1}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {donate.account.firstName}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {donate.account.lastName}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {formatCurrencyVND(donate.amount)}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {donate.paymentMethodId === 1
-                                  ? PaymentMethods[0].value
-                                  : PaymentMethods[1].value}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {`${day}/${month}/${year}`}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {`${String(hours).padStart(2, "0")}:${String(
-                                  minutes
-                                ).padStart(2, "0")}`}
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  ) : (
-                    <h3>There are no results available for your search.</h3>
-                  )}
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        {app.application.description}
+                    </h5>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        Sex: {app.application.cat.sex}
+                    </p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        Name: {app.application.cat.name}
+                    </p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        Status: {app.application.status}
+                    </p>
                 </div>
-                <div className="mt-5">
-                  {donates?.length > 0 && (
-                    <PaginatedComponent
-                      totalPages={totalPage}
-                      currentPage={currentPage}
-                      onPageChange={handlePageChange}
-                    />
-                  )}
-                </div>
-              </div>
+                {editingAppId === app.application.id ? (
+                    <div className="flex flex-col">
+                        <input
+                            type="text"
+                            value={newDescription}
+                            onChange={(e) => setNewDescription(e.target.value)}
+                            className="border p-2 rounded mb-2"
+                            placeholder="Edit description"
+                        />
+                        <button
+                            onClick={() => handleDescriptionChange(app.application.id)}
+                            className="w-16 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                        >
+                            Save
+                        </button>
+                    </div>
+                ) : (
+                    <a
+                        
+                        onClick={() => handleUpdateClick(app.application.id, app.application.description)}
+                        className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                    >
+                        Update
+                    </a>
+                )}
             </div>
-          </div>
+        ));
+    };
+
+    return (
+        <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            {/* Bộ lọc trạng thái */}
+            <div className="flex flex-col gap-y-2 w-full mb-4">
+                <label className="text-base text-[#6f6f6f]">Status</label>
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                    <SelectTrigger className="w-full border-2 border-gray-500">
+                        <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="0">Pending</SelectItem>
+                        <SelectItem value="-1">Rejected</SelectItem>
+                        <SelectItem value="1">Approved</SelectItem>
+                        <SelectItem value="2">ApprovedAndCompleted</SelectItem>
+                        <SelectItem value="3">ApprovedAndNotCompleted</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {renderApplications()}
+            </div>
+            {/* Phân trang */}
+            <Pagination className="mt-5">
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}
+                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+                    {[...Array(totalPages)].map((_, index) => (
+                        <PaginationItem key={index}>
+                            <PaginationLink
+                                href="#"
+                                onClick={(e) => { e.preventDefault(); handlePageChange(index + 1); }}
+                                className={index + 1 === currentPage ? "active" : ""}
+                            >
+                                {index + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                        <PaginationNext
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}
+                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

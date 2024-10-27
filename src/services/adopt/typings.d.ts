@@ -8,7 +8,7 @@ declare namespace REQUEST {
     pageIndex: number;
     pageSize: number;
     isAscCreatedDate: boolean;
-    status?: number;
+    status?: string;
   };
   type MeetingData = {
     meetingTime: string; 
@@ -24,6 +24,11 @@ declare namespace REQUEST {
   type RejectAdoptionRequest = {
     adoptId: string;          
     reasonReject: string;     
+};
+
+type AdoptApplicationRequest = {
+  adoptId: string;    
+  description: string; 
 };
 }
 
@@ -81,12 +86,24 @@ declare namespace API {
     listMeetingTime: MeetingTime[];
   };
   
+  type MeetingTimeAdopter = string; 
+  
+  type DataAdopter = {
+    listMeetingTime: MeetingTimeAdopter[]; 
+  };
+
   type Value = {
     code: string;
     message: string;
     data: Data;
   };
   
+  type ValueAdopter = {
+    code: string;
+    message: string;
+    data: DataAdopter;
+  };
+
   type Error = {
     code: string;
     message: string;
@@ -94,6 +111,13 @@ declare namespace API {
   
   type ApiResponse = {
     value: Value;
+    isSuccess: boolean;
+    isFailure: boolean;
+    error: Error;
+  };
+
+  type ApiResponseAdopter = {
+    value: ValueAdopter;
     isSuccess: boolean;
     isFailure: boolean;
     error: Error;

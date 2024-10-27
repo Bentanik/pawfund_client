@@ -15,19 +15,22 @@ export const createAdoptApplication = async (
 };
 
 export const getAllApplicationByAdopter = async ({
+  status = "",
   pageIndex,
   pageSize,
   isAscCreatedDate,
 }: REQUEST.GetApplications): Promise<TResponseData<API.ResponseData>> => {
+  const params: Record<string, any> = {};
+
+  if (status) params.status = status !== "all" ? status : "";
+  if (pageIndex) params.pageIndex = pageIndex;
+  if (pageSize) params.pageSize = pageSize;
+  if (isAscCreatedDate) params.isAscCreatedDate = isAscCreatedDate;
   const response = await request<TResponseData<API.ResponseData>>(
     API_ENDPOINTS.GET_ALL_APPLICATION_BY_ADOPTER,
     {
       method: "GET",
-      params: {
-        pageSize,
-        pageIndex,
-        isAscCreatedDate,
-      },
+      params: params,
     }
   );
 
@@ -100,6 +103,28 @@ export const rejectAdoptApplication = async (body: REQUEST.RejectAdoptionRequest
     {
       method: "PUT",
       data: body,
+    }
+  );
+  return response.data;
+};
+
+export const updateAdoptApplication = async (body: REQUEST.AdoptApplicationRequest) => {
+  const response = await request<TResponse>(
+    API_ENDPOINTS.UPDATE_ADOPT_APPLICATION,
+    {
+      method: "PUT",
+      data: body,
+    }
+  );
+  return response.data;
+};
+
+
+export const getMeetingTimeByAdopter = async () => {
+  const response = await request<API.ApiResponseAdopter>(
+    API_ENDPOINTS.GET_MEETING_TIME_BY_ADOPTER,
+    {
+      method: "GET",
     }
   );
   return response.data;

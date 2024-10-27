@@ -22,9 +22,8 @@ export default function ManageData() {
 
   const [data, setData] = useState<MeetingData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newDateTime, setNewDateTime] = useState<Date | null>(null);
   const [newQuantity, setNewQuantity] = useState<number>(1);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export default function ManageData() {
   const handleAddTime = () => {
     if (selectedDate) {
       // Chuyển đổi selectedDate sang chuỗi UTC
-      const meetingTimeString = selectedDate.toISOString(); // Chuyển sang ISO string (UTC)
+      const meetingTimeString = selectedDate; // Chuyển sang ISO string (UTC)
       console.log("Selected Date: ", meetingTimeString);
 
       // Thêm mục mới vào data
@@ -339,15 +338,21 @@ export default function ManageData() {
                   <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
                     Date and time
                   </label>
-                  <DateTimePicker
+                  {/* <DateTimePicker
                     value={selectedDate === null ? undefined : selectedDate}
                     onChange={(date) => {
                       setSelectedDate(date);
                     }}
-                  />
+                  /> */}
+                  <input type="datetime-local"
+                    value={selectedDate === null ? "" : selectedDate.toLocaleString().slice(0, 16)}
+                    onChange={(e) => {
+                      const newMeetingTime = e.target.value;
+                      setSelectedDate(newMeetingTime);
+                    }} />
                   {selectedDate && (
                     <p className="mt-2 text-sm text-gray-600">
-                      Đã chọn: {selectedDate.toLocaleString()}
+                      Đã chọn: {selectedDate}
                     </p>
                   )}
                 </div>

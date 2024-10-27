@@ -4,6 +4,7 @@ import {
   createAdoptApplication,
   getAllApplicationByAdopter,
   rejectAdoptApplication,
+  updateAdoptApplication,
   updateMeetingTime,
 } from "@/services/adopt/api-services";
 import { getQueryClient } from "@/lib/query";
@@ -52,6 +53,15 @@ export const useServiceRejectAdoptApplication = () => {
     mutationFn: rejectAdoptApplication,
     onSuccess: (data) => {
       console.log("Đã update", data);
+    },
+  });
+};
+
+export const useServiceUpdateAdoptApplication = () => {
+  return useMutation<TResponse, TMeta, REQUEST.AdoptApplicationRequest>({
+    mutationFn: updateAdoptApplication,
+    onSuccess: (data) => {
+      console.log("Đã update1", data);
     },
   });
 };

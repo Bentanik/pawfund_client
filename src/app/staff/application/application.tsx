@@ -33,7 +33,7 @@ export default function StaffApplication() {
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            status: selectedStatus ?? undefined,
+            status: selectedStatus?.toString() ?? "all",
         });
 
         if (res && res.value) {
