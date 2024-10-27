@@ -47,6 +47,23 @@ textarea::-webkit-scrollbar-track {
   background: #f2f4f7; /* Background color of the scrollbar track */
 }
 
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền cho track */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #bcbcbc; /* Màu cho thumb */
+  border-radius: 0; /* Bo góc cho thumb */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Màu cho thumb khi hover */
+}
+
 body {
   color: var(--foreground);
   background: var(--background);

@@ -1,5 +1,5 @@
 import useLogout from "@/hooks/use-logout";
-import { useAppSelector } from "@/stores/store";
+import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { FaMoon, FaQuestionCircle } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -7,23 +7,50 @@ import { LuLogOut } from "react-icons/lu";
 import { TbMessageReportFilled } from "react-icons/tb";
 import { Backdrop } from "@/components/backdrop";
 import Link from "next/link";
+import { openMessageUser } from "@/stores/difference-slice";
+import { useRouter } from "next/navigation";
 
-export default function AvatarMenu() {
+interface AvatarMenuProps {
+  onCloseTooltip: () => void;
+}
+
+export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const userState = useAppSelector((state) => state.userSlice);
   const { handleLogout, isPending } = useLogout();
 
+  const handleOpenTabMessage = () => {
+    dispatch(openMessageUser());
+  };
+
+  const handleNavigate = (index: number) => {
+    switch (index) {
+      case 1: {
+        router.push("/profile/information");
+        onCloseTooltip();
+        break;
+      }
+      case 3: {
+        onCloseTooltip();
+        handleOpenTabMessage();
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   return (
-    <div
-      id="userDropdown"
-      className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-box w-72 overflow-hidden"
-    >
-      <div className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200">
-        <Link href="/profile/information">
-          <div className="font-bold">Hello</div>
-          <div className="text-xs text-gray-500 truncate">
-            {userState.user?.firstName} {userState.user?.lastName}
-          </div>
-        </Link>
+    <div className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-box w-72 overflow-hidden">
+      <div
+        className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200"
+        onClick={() => handleNavigate(1)}
+      >
+        <div className="font-bold">Hello</div>
+        <div className="text-xs text-gray-500 truncate">
+          {userState.user?.firstName} {userState.user?.lastName}
+        </div>
       </div>
       <ul className="py-2 text-sm text-gray-700" aria-labelledby="avatarButton">
         <li>
@@ -46,7 +73,10 @@ export default function AvatarMenu() {
             href="#"
             className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
           >
-            <div className="flex items-center">
+            <div
+              className="flex items-center"
+              onClick={() => handleNavigate(3)}
+            >
               <FaQuestionCircle
                 className="p-1 bg-gray-300 text-black rounded-full mr-2"
                 size={30}

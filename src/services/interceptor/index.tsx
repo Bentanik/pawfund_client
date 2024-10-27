@@ -4,7 +4,7 @@ import {
   setStorageItem,
 } from "@/utils/local-storage";
 import axios, { AxiosError } from "axios";
-import { refreshToken } from "../auth/api-services";
+import { refreshToken } from "@/services/auth/api-services";
 import useToast from "@/hooks/use-toast";
 
 const request = axios.create({

@@ -1,3 +1,4 @@
+import Message from "@/components/message/message";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import dynamic from "next/dynamic";
 
@@ -22,7 +23,7 @@ export default function Provider({
     <StoreProvider>
       <ReactQueryProvider>
         <GoogleOAuthProvider clientId="215549219184-dj1tggel62f370kcrlsk1pmbivc6l0ke.apps.googleusercontent.com">
-          {children}
+          <Message>{children}</Message>
         </GoogleOAuthProvider>
       </ReactQueryProvider>
     </StoreProvider>
