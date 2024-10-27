@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Backdrop } from "@/components/backdrop";
 import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import useChangePassword from "@/app/(user)/profile/hooks/useChangePassword";
+import useChangePassword from "@/app/(user)/profile/information/hooks/useChangePassword";
 import { ChangePasswordBodyType } from "@/utils/schemaValidations/change-password.schema";
 
 interface ChangePasswordProps {

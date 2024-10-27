@@ -71,6 +71,8 @@ const config: Config = {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       boxShadow: {
+        "box-shadown":
+          "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
         box: "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
         avatar: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
         "profile-hero":

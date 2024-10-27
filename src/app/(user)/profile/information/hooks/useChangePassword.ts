@@ -1,6 +1,5 @@
 import {
   useServiceChangePassword,
-  useServiceUpdateEmailProfile,
 } from "@/services/account/services";
 import {
   ChangePasswordBody,

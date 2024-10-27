@@ -1,8 +1,6 @@
 import useToast from "@/hooks/use-toast";
 import { getAllApplicationByAdopter } from "@/services/adopt/api-services";
-import { useServiceGetApplicationAdopt } from "@/services/adopt/services";
 import { isTResponseData } from "@/utils/compare";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function useGetApplicationByAdopter() {

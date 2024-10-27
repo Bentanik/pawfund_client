@@ -16,7 +16,6 @@ import {
 } from "@/utils/schemaValidations/auth.schema";
 import { useMutation } from "@tanstack/react-query";
 import { ForgotPasswordEmailBodyType } from "@/utils/schemaValidations/forgotPassword.schema";
-import { store } from "@/stores/store";
 import useToast from "@/hooks/use-toast";
 
 export const useServiceLogin = () => {
@@ -75,15 +74,16 @@ export const useServiceForgotPasswordChange = () => {
 };
 
 export const useServiceLogout = () => {
+  const dispatch = useAppDispatch();
   return useMutation<TResponseData, TMeta>({
     mutationFn: logout,
     onSuccess: (data) => {
       removeStorageItem("accessToken");
-      store.dispatch(resetUser());
+      dispatch(resetUser());
     },
     onError: (error) => {
       removeStorageItem("accessToken");
-      store.dispatch(resetUser());
+      dispatch(resetUser());
     },
   });
 };

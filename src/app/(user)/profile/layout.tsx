@@ -1,17 +1,22 @@
 "use client";
 import AvatarProfile from "@/components/avatar-profile";
 import { useAppSelector } from "@/stores/store";
+import dynamic from "next/dynamic";
 import { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
+const TabProfile = dynamic(() => import("@/app/(user)/profile/tab-profile"), {
+  ssr: false,
+});
+
 export default function UserProfileLayout({ children }: LayoutProps) {
   const userState = useAppSelector((state) => state.userSlice);
 
   return (
-    <div className="min-h-screen flex flex-col gap-y-10 bg-zinc-100">
+    <div className="min-h-screen flex flex-col">
       <div className="relative bg-[url('/images/profile.jpg')] bg-cover bg-center w-full h-[34vh] shadow-md flex flex-col items-start justify-center p-4">
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div>
@@ -33,10 +38,10 @@ export default function UserProfileLayout({ children }: LayoutProps) {
           </h2>
         </div>
       </div>
-
-      {/* Nội dung */}
-      <main className="flex-grow">{children}</main>
-      {/* <UpdateAvatarProfilePopup open={true} onClose={() => {}} /> */}
+      <div className="mt-5 mb-2">
+        <TabProfile />
+      </div>
+      <main className="px-20 mb-8">{children}</main>
     </div>
   );
 }
