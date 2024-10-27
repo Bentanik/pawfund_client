@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getStorageItem, setStorageItem } from "@/utils/local-storage";
 
 const TABS = [
   {
@@ -14,7 +15,7 @@ const TABS = [
   },
   {
     id: 3,
-    value: "Profile",
+    value: "Adopt",
   },
   {
     id: 4,
@@ -26,6 +27,13 @@ export default function TabProfile() {
   const router = useRouter();
   const [tab, setTab] = useState<number>(1);
 
+  useEffect(() => {
+    const tabNumber = getStorageItem("tab-profile");
+    if (tabNumber) {
+      setTab(JSON.parse(tabNumber));
+    }
+  }, []);
+
   const handleChangeTab = (id: number) => {
     setTab(id);
   };
@@ -33,6 +41,9 @@ export default function TabProfile() {
   useEffect(() => {
     if (tab === 1) router.push("/profile/information");
     if (tab === 2) router.push("/profile/donate");
+    if (tab === 3) router.push("/profile/adopt");
+
+    setStorageItem("tab-profile", JSON.stringify(tab));
   }, [tab]);
 
   const renderTabs = () => {
