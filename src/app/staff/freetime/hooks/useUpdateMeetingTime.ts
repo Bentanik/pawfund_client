@@ -25,7 +25,7 @@ export default function useUpdateMeetingTime() {
     });
 
     // In dữ liệu ra console
-    // console.log("Payload to send:", payload);
+    console.log("Payload to send:", payload);
     setPending(true);
     try {
       const res = await updateMeetingTime(payload); // Gọi API PUT

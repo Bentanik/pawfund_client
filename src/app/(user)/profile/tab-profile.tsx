@@ -15,12 +15,9 @@ const TABS = [
   },
   {
     id: 3,
-    value: "Adopt",
+    value: "Adopt Applications",
   },
-  {
-    id: 4,
-    value: "Profile",
-  },
+  
 ];
 
 export default function TabProfile() {
