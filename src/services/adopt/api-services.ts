@@ -120,11 +120,56 @@ export const updateAdoptApplication = async (body: REQUEST.AdoptApplicationReque
 };
 
 
-export const getMeetingTimeByAdopter = async () => {
-  const response = await request<API.ApiResponseAdopter>(
+export const getMeetingTimeByAdopter = async ({
+  Id
+}: REQUEST.MeetingTimeByAdopter): Promise<TResponseData<API.ApiResponseAdopter>> => {
+  const response = await request<TResponseData<API.ApiResponseAdopter>>(
     API_ENDPOINTS.GET_MEETING_TIME_BY_ADOPTER,
     {
       method: "GET",
+      params: {
+        Id
+      },
+    }
+  );
+
+  return response.data;
+};
+
+
+export const updateChooseMeetingTime = async (body: REQUEST.ChooseMeetingTime) => {
+  const response = await request<TResponse>(
+    API_ENDPOINTS.PUT_CHOOSE_MEETING_TIME,
+    {
+      method: "PUT",
+      data: body,
+    }
+  );
+  return response.data;
+};
+
+export const completeAdoption = async ({
+  Id
+}: REQUEST.ApplyAdoptApplication): Promise<TResponseData<APIResponse.ApiResponse>> => {
+  const response = await request<TResponseData<APIResponse.ApiResponse>>(
+    API_ENDPOINTS.PUT_COMPLETE_ADOPTION,
+    {
+      method: "PUT",
+      params: {
+        Id
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const rejectOutsideAdoption = async (body: REQUEST.RejectAdoptionRequest) => {
+  const response = await request<TResponse>(
+    API_ENDPOINTS.PUT_REJECT_OUTSIDE,
+    {
+      method: "PUT",
+      data: body,
     }
   );
   return response.data;

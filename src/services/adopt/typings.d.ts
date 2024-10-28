@@ -10,26 +10,36 @@ declare namespace REQUEST {
     isAscCreatedDate: boolean;
     status?: string;
   };
+
   type MeetingData = {
-    meetingTime: string; 
-    numberOfStaffsFree: number; 
+    meetingTime: string;
+    numberOfStaffsFree: number;
   };
 
   type GetMeetingResponse = MeetingData[];
 
   type ApplyAdoptApplication = {
     Id: string;
-  }
+  };
 
   type RejectAdoptionRequest = {
-    adoptId: string;          
-    reasonReject: string;     
-};
+    adoptId: string;
+    reasonReject: string;
+  };
 
-type AdoptApplicationRequest = {
-  adoptId: string;    
-  description: string; 
-};
+  type AdoptApplicationRequest = {
+    adoptId: string;
+    description: string;
+  };
+
+  type MeetingTimeByAdopter = {
+    Id: string;
+  };
+
+  type ChooseMeetingTime = {
+    adoptId: string;
+    meetingTime: string;
+  };
 }
 
 declare namespace API {
@@ -81,15 +91,15 @@ declare namespace API {
     meetingTime: string;
     numberOfStaffsFree: number;
   };
-  
+
   type Data = {
     listMeetingTime: MeetingTime[];
   };
-  
-  type MeetingTimeAdopter = string; 
-  
+
+  type MeetingTimeAdopter = string;
+
   type DataAdopter = {
-    listMeetingTime: MeetingTimeAdopter[]; 
+    listMeetingTime: MeetingTimeAdopter[];
   };
 
   type Value = {
@@ -97,7 +107,7 @@ declare namespace API {
     message: string;
     data: Data;
   };
-  
+
   type ValueAdopter = {
     code: string;
     message: string;
@@ -108,7 +118,7 @@ declare namespace API {
     code: string;
     message: string;
   };
-  
+
   type ApiResponse = {
     value: Value;
     isSuccess: boolean;

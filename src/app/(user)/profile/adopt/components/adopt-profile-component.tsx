@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import useUpdateAdoptApplication from "@/app/(user)/profile/adopt/hooks/useUpdateAdoptApplication";
 import useGetApplicationByAdopter from "@/app/(user)/profile/adopt/hooks/useGetApplicationByAdopter";
+import Link from "next/link";
+
 
 
 export default function AdoptApplication() {
@@ -105,6 +107,9 @@ export default function AdoptApplication() {
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                         Status: {app.application.status}
                     </p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        Meeting Date: {app.application.meetingDate ? new Date(app.application.meetingDate).toLocaleString() : "Not Scheduled"}
+                    </p>
                 </div>
                 {editingAppId === app.application.id ? (
                     <div className="flex flex-col">
@@ -123,17 +128,33 @@ export default function AdoptApplication() {
                         </button>
                     </div>
                 ) : (
-                    <a
-                        
-                        onClick={() => handleUpdateClick(app.application.id, app.application.description)}
-                        className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
-                    >
-                        Update
-                    </a>
+                    <>
+                        <div className="flex justify-between">
+                            {!app.application.meetingDate && app.application.status === 'Pending' && (
+                                <button
+                                    onClick={() => handleUpdateClick(app.application.id, app.application.description)}
+                                    className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                                >
+                                    Update
+                                </button>
+                            )}
+                            {/* Hiển thị nút View Meeting Time nếu status là Approved */}
+                            {app.application.status === "Approved" && !app.application.meetingDate && (
+                                <Link href={`/choosemeetingtime/${app.application.id}`}>
+                                    <button
+                                        className="w-24 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                                    >
+                                        View Time
+                                    </button>
+                                </Link>
+                            )}
+                        </div>
+                    </>
                 )}
             </div>
         ));
     };
+
 
     return (
         <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -155,7 +176,7 @@ export default function AdoptApplication() {
                 </Select>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {renderApplications()}
             </div>
             {/* Phân trang */}

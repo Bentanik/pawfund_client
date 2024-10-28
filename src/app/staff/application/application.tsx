@@ -12,29 +12,40 @@ import useGetApplicationByStaff from "./hooks/useGetApplicationByStaff";
 import useApplyAdoptApplication from "./hooks/useApplyAdoptApplication";
 import useRejectAdoptApplication from "./hooks/useRejectAdoptApplication";
 import RejectModal from "@/components/reject-application-modal";
+import useCompleteAdoption from "./hooks/useCompleteAdoption";
+import useRejectOutsideAdoption from "./hooks/useRejectOutsideAdoption";
 
 export default function StaffApplication() {
     const { isPending, getAllApplicationByStaffApi } = useGetApplicationByStaff();
     const { isPending: isApplying, applyAdoptApplicationApi } = useApplyAdoptApplication();
     const { isPending: isRejecting, rejectAdoptApplicationApi } = useRejectAdoptApplication();
+    const { isPending: isCompleting, completeAdoptionApi } = useCompleteAdoption();
+    const { isPending: isOutsiding, rejectOutsideAdoptionApi } = useRejectOutsideAdoption();
     const [applications, setApplications] = useState<API.ResponseData>();
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedStatus, setSelectedStatus] = useState<number | null>(null); // Trạng thái đã chọn là số
+    const [selectedStatus, setSelectedStatus] = useState("all");
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [isRejectOutsideType, setIsRejectOutsideType] = useState(false);
     const [applicationId, setApplicationId] = useState('');
 
     const pageSize = 10;
     const isAscCreatedDate = false;
 
     const fetchApplications = async (pageNumber: number) => {
-        const res = await getAllApplicationByStaffApi({
+        const params: any = {
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            status: selectedStatus?.toString() ?? "all",
-        });
+        };
+
+
+        if (selectedStatus !== "all") {
+            params.status = selectedStatus;
+        }
+
+        const res = await getAllApplicationByStaffApi(params);
 
         if (res && res.value) {
             setApplications(res.value.data);
@@ -44,9 +55,10 @@ export default function StaffApplication() {
         }
     };
 
+
     useEffect(() => {
         fetchApplications(currentPage);
-    }, [currentPage, selectedStatus]); // Cập nhật khi selectedStatus thay đổi
+    }, [currentPage, selectedStatus]);
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -54,33 +66,38 @@ export default function StaffApplication() {
         }
     };
 
-    const handleStatusChange = (status: number | null) => {
+    const handleStatusChange = (status: string) => {
         setSelectedStatus(status);
-        setCurrentPage(1); // Reset về trang 1 khi thay đổi trạng thái
+        setCurrentPage(1);
     };
 
-    const handleOpenRejectModal = (id: string) => {
-        setApplicationId(id); // Lưu ID vào state
-        setIsRejectModalOpen(true); // Mở modal từ chối
+    const handleOpenRejectModal = (id: string, isOutside = false) => {
+        setApplicationId(id);
+        setIsRejectModalOpen(true);
+        setIsRejectOutsideType(isOutside);
     };
+    
 
     const handleRequestClose = () => {
         setIsRejectModalOpen(false);
-        setApplicationId(''); // Reset ID khi đóng modal
+        setApplicationId('');
     };
 
     const handleReject = async (data: { adoptId: string; reasonReject: string }) => {
-        const res = await rejectAdoptApplicationApi({
+        const api = isRejectOutsideType ? rejectOutsideAdoptionApi : rejectAdoptApplicationApi;
+        const res = await api({
             adoptId: data.adoptId,
             reasonReject: data.reasonReject
         });
-
+    
         if (res && res.isSuccess) {
-            fetchApplications(currentPage); // Lấy lại danh sách đơn sau khi từ chối thành công
+            fetchApplications(currentPage);
         } else {
             console.error("Từ chối không thành công:", res?.error || "Không có thông tin");
         }
+        handleRequestClose();
     };
+    
 
     const handleApprove = async (applicationId: string) => {
         const res = await applyAdoptApplicationApi({ Id: applicationId });
@@ -88,6 +105,28 @@ export default function StaffApplication() {
             fetchApplications(currentPage);
         } else {
             console.error("Phê duyệt không thành công:", res?.error || "Không có thông tin");
+        }
+    };
+
+    const handleComplete = async (applicationId: string) => {
+        const res = await completeAdoptionApi({ Id: applicationId });
+        if (res && res.isSuccess) {
+            fetchApplications(currentPage);
+        } else {
+            console.error("Phê duyệt không thành công:", res?.error || "Không có thông tin");
+        }
+    };
+
+    const handleRejectOutside = async (data: { adoptId: string; reasonReject: string }) => {
+        const res = await rejectOutsideAdoptionApi({
+            adoptId: data.adoptId,
+            reasonReject: data.reasonReject
+        });
+
+        if (res && res.isSuccess) {
+            fetchApplications(currentPage);
+        } else {
+            console.error("Từ chối không thành công:", res?.error || "Không có thông tin");
         }
     };
 
@@ -105,7 +144,6 @@ export default function StaffApplication() {
                 key={app.application.id}
                 className="flex flex-col justify-between h-full w-full bg-white p-6 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
             >
-                {/* Thông tin chính */}
                 <div className="flex-grow">
                     <a href="#">
                         <h5 className="mb-3 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -122,6 +160,14 @@ export default function StaffApplication() {
                         <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
                             <span className="font-medium">Status:</span> {app.application.status ?? "N/A"}
                         </p>
+                        <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                            Meeting Date: {app.application.meetingDate ? new Date(app.application.meetingDate).toLocaleString() : "Not Scheduled"}
+                        </p>
+                        {(app.application.status === "Rejected" || app.application.status === "ApprovedAndNotCompleted") && (
+                            <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
+                                <span className="font-medium">Reason:</span> {app.application.reasonReject}
+                            </p>
+                        )}
                     </div>
                 </div>
 
@@ -135,31 +181,52 @@ export default function StaffApplication() {
                         </button>
                         <button
                             className="flex-1 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg shadow hover:bg-red-700 focus:outline-none"
-                            onClick={() => handleOpenRejectModal(app.application.id)} // Sử dụng applicationId từ prop
+                            onClick={() => handleOpenRejectModal(app.application.id)}
                         >
                             Reject
                         </button>
 
                         <RejectModal
-                            isOpen={isRejectModalOpen} 
+                            isOpen={isRejectModalOpen}
                             onRequestClose={handleRequestClose}
-                            onSubmit={handleReject} 
-                            adoptId={applicationId} 
+                            onSubmit={handleReject}
+                            adoptId={applicationId}
+                        />
+                    </div>
+                )}
+                {app.application.status === "Approved" && app.application.meetingDate && (
+                    <div className="mt-4 flex flex-col justify-center space-y-2">
+                        <button
+                            className="flex-1 h-10 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg shadow hover:bg-green-700 focus:outline-none"
+                            onClick={() => handleComplete(app.application.id)}
+                        >
+                            Completed
+                        </button>
+                        <button
+                            className="flex-1 h-10 px-4 py-2 text-sm font-medium bg-yellow-600 text-white rounded-lg shadow hover:bg-yellow-700 focus:outline-none"
+                            onClick={() => handleOpenRejectModal(app.application.id)} // Hoặc một hàm khác cho Reject Outside
+                        >
+                            Reject Outside
+                        </button>
+
+                        <RejectModal
+                            isOpen={isRejectModalOpen}
+                            onRequestClose={handleRequestClose}
+                            onSubmit={handleRejectOutside}
+                            adoptId={applicationId}
                         />
                     </div>
                 )}
             </div>
-
         ));
     };
 
     return (
         <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            {/* Các tab trạng thái */}
             <div className="mb-4 flex space-x-2">
                 <button
-                    onClick={() => handleStatusChange(null)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === null
+                    onClick={() => handleStatusChange("all")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "all"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
@@ -167,8 +234,8 @@ export default function StaffApplication() {
                     All
                 </button>
                 <button
-                    onClick={() => handleStatusChange(0)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 0
+                    onClick={() => handleStatusChange("0")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "0"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
@@ -176,8 +243,8 @@ export default function StaffApplication() {
                     Pending
                 </button>
                 <button
-                    onClick={() => handleStatusChange(1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 1
+                    onClick={() => handleStatusChange("1")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "1"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
@@ -185,17 +252,17 @@ export default function StaffApplication() {
                     Approved
                 </button>
                 <button
-                    onClick={() => handleStatusChange(2)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 2
+                    onClick={() => handleStatusChange("2")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "2"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
                 >
-                    Approved Outside
+                    Complete
                 </button>
                 <button
-                    onClick={() => handleStatusChange(3)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === 3
+                    onClick={() => handleStatusChange("3")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "3"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
@@ -203,21 +270,20 @@ export default function StaffApplication() {
                     Rejected Outside
                 </button>
                 <button
-                    onClick={() => handleStatusChange(-1)}
-                    className={`px-4 py-2 rounded-md ${selectedStatus === -1
+                    onClick={() => handleStatusChange("-1")}
+                    className={`px-4 py-2 rounded-md ${selectedStatus === "-1"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700"
                         }`}
                 >
                     Rejected
                 </button>
-
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {renderApplications()}
             </div>
-            {/* Phân trang */}
+
             <Pagination className="mt-5">
                 <PaginationContent>
                     <PaginationItem>
