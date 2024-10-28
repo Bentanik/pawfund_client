@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/stores/store";
 import AvatarMenu from "@/components/avatar-menu";
 import TippyHeadless from "@tippyjs/react/headless";
-import { SquareUser } from "lucide-react";
 
 const Header: React.FC = () => {
   const userState = useAppSelector((state) => state.userSlice);

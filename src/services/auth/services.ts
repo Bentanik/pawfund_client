@@ -80,6 +80,7 @@ export const useServiceLogout = () => {
     onSuccess: (data) => {
       removeStorageItem("accessToken");
       dispatch(resetUser());
+      window.location.href = "/";
     },
     onError: (error) => {
       removeStorageItem("accessToken");

@@ -31,3 +31,17 @@ declare type TResponseData<T = object> = {
     message: string;
   };
 };
+
+declare type TResponseDataHub<T = object> = {
+  Value: {
+    Code: string;
+    Message: string;
+    Data: T;
+  };
+  IsSuccess: boolean;
+  IsFailure: boolean;
+  Error: {
+    Code: string;
+    Message: string;
+  };
+};
