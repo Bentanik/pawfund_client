@@ -1,12 +1,12 @@
-import { useServiceCreateCat } from "@/services/cat/services";
+import { useServiceCreateCashDonate } from "@/services/donate/services";
 import {
-    CreatePetBody,
-    CreatePetBodyType,
-} from "@/utils/schemaValidations/create-pet.schema";
+    CreateCashDonate,
+    CreateCashDonateBodyType,
+} from "@/utils/schemaValidations/create-cash-donate.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export default function useCreatePetForm() {
+export default function useCreateBranchForm() {
     const {
         register,
         watch,
@@ -15,23 +15,21 @@ export default function useCreatePetForm() {
         setValue,
         formState: { errors },
         reset,
-    } = useForm<CreatePetBodyType>({
-        resolver: zodResolver(CreatePetBody),
+    } = useForm<CreateCashDonateBodyType>({
+        resolver: zodResolver(CreateCashDonate),
         defaultValues: {
-            catName: "",
-            weight: 0,
-            description: "",
+            email: "",
+            // amount: 0,
         },
     });
 
-    const { mutate, isPending } = useServiceCreateCat();
+    const { mutate, isPending } = useServiceCreateCashDonate();
 
-    const onSubmit = (data: REQUEST.TCreateCat, clearImages: () => void) => {
+    const onSubmit = (data: REQUEST.TDonateCash) => {
         try {
             mutate(data, {
                 onSuccess: () => {
                     reset();
-                    clearImages();
                 },
             });
         } catch (err) {
