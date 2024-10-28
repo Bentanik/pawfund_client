@@ -6,4 +6,5 @@ const GET_ALL_EVENT = EVENT + "/get_all_event";
 export default {
     GET_EVENT_BY_ID,
     GET_ALL_EVENT,
+    CREATE_EVENT,
 };

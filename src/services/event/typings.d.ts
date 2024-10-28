@@ -11,7 +11,7 @@ declare namespace REQUEST {
         isAscCreatedDate?: boolean;
     };
 
-    type EventStatus = "NotStarted" | "Ongoing";
+    type EventStatus = "NotApproved" | "NotStarted" | "Ongoing" | "Completed";
 }
 
 declare namespace API {
@@ -28,6 +28,8 @@ declare namespace API {
         description: string;
         status: string;
         maxAttendees: number;
+        thumbHeroUrl?: string; // Thêm ? để thể hiện rằng trường này có thể null
+        imagesUrl?: string; // Thêm ? tương tự
     };
 
     type Events = {
@@ -38,6 +40,7 @@ declare namespace API {
         description: string;
         status: string;
         maxAttendees: number;
+        imagesUrl?: string; // Add this line for the ImagesUrl field
         branchDto: Branch;
     };
 
