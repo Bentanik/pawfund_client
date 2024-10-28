@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import useUpdateChooseMeetingTime from "@/app/(user)/choosemeetingtime/hooks/usePutChooseMeetingTime";
 import { useRouter } from "next/navigation";
 
+
 interface ChooseMeetingTimeProps {
     AdoptId: string;
 }
@@ -52,7 +53,6 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
 
                 try {
                     const result = await getMeetingTimeByAdopterApi({ Id: AdoptId });
-
                     if (result && result.isSuccess) {
                         if (Array.isArray(meetingTimes)) {
                             const meetingTimes = result.value.data.listMeetingTime;
