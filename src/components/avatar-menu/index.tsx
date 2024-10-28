@@ -44,7 +44,7 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
   return (
     <div className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-box w-72 overflow-hidden">
       <div
-        className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200"
+        className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200 select-none cursor-pointer"
         onClick={() => handleNavigate(1)}
       >
         <div className="font-bold">Hello</div>
@@ -54,19 +54,19 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
       </div>
       <ul className="py-2 text-sm text-gray-700" aria-labelledby="avatarButton">
         <li>
-          <a
-            href="#"
-            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
+          <div
+            onClick={() => handleNavigate(1)}
+            className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
           >
             <div className="flex items-center">
               <IoSettingsSharp
                 className="p-1 bg-gray-300 text-black rounded-full mr-2"
                 size={30}
               />
-              <span className="text-black">Cài đặt & quyền riêng tư</span>
+              <span className="text-black">Setting</span>
             </div>
             <FiChevronRight className="text-gray-500" size={24} />
-          </a>
+          </div>
         </li>
         <li>
           <a
@@ -81,38 +81,9 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
                 className="p-1 bg-gray-300 text-black rounded-full mr-2"
                 size={30}
               />
-              <span className="text-black">Trợ giúp & hỗ trợ</span>
+              <span className="text-black">Support</span>
             </div>
             <FiChevronRight className="text-gray-500" size={24} />
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-          >
-            <div className="flex items-center">
-              <FaMoon
-                className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                size={30}
-              />
-              <span className="text-black">Màn hình & trợ năng</span>
-            </div>
-            <FiChevronRight className="text-gray-500" size={24} />
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-          >
-            <div className="flex items-center">
-              <TbMessageReportFilled
-                className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                size={30}
-              />
-              <span className="text-black">Đóng góp ý kiến</span>
-            </div>
           </a>
         </li>
       </ul>
@@ -126,7 +97,7 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
               className="p-1 bg-gray-300 text-black rounded-full mr-2"
               size={30}
             />
-            <span className="text-black">Đăng xuất</span>
+            <span className="text-black">Log out</span>
           </div>
         </div>
       </div>
