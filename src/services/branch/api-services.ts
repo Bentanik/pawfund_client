@@ -5,6 +5,9 @@ export const createBranch = async (body: FormData) => {
     const response = await request<TResponse>(API_ENDPOINTS.CREATE_BRANCH, {
         method: "POST",
         data: body,
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     });
     return response.data;
 };
