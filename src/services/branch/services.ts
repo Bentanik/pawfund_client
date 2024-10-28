@@ -17,6 +17,7 @@ export const useServiceCreateBranch = () => {
             formData.append("District", data.district);
             formData.append("Province", data.province);
             formData.append("PostalCode", data.postalCode);
+            formData.append("Image", data.image);
 
             return await createBranch(formData);
         },

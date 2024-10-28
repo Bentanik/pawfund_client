@@ -157,7 +157,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                 {/*Thumb hero */}
                 <div className="relative">
                     <img
-                        src={event?.eventDTO.thumbHeroUrl}
+                        src="/images/thumb-event.jpg"
                         alt="thumb hero"
                         className="w-full h-[500px] object-cover "
                     />
@@ -343,7 +343,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                 </div>
                                 <div className="flex-1 bg-slate-700 h-[500px]">
                                     <img
-                                        src="/images/branch-event-bg.jpg"
+                                        src={event?.eventDTO.thumbHeroUrl}
                                         alt="branch-bg"
                                         className="w-full h-full object-cover"
                                     />
