@@ -122,8 +122,8 @@ export const updateAdoptApplication = async (body: REQUEST.AdoptApplicationReque
 
 export const getMeetingTimeByAdopter = async ({
   Id
-}: REQUEST.MeetingTimeByAdopter): Promise<TResponseData<API.ApiResponseAdopter>> => {
-  const response = await request<TResponseData<API.ApiResponseAdopter>>(
+}: REQUEST.MeetingTimeByAdopter): Promise<TResponseData<API.DataAdopter>> => {
+  const response = await request<TResponseData<API.DataAdopter>>(
     API_ENDPOINTS.GET_MEETING_TIME_BY_ADOPTER,
     {
       method: "GET",

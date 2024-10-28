@@ -57,7 +57,7 @@ export default function useGetMeetingTimeByAdopter() {
         try {
             const res = await getMeetingTimeByAdopter(params);
             if (isTResponseData(res)) {
-                return res as TResponseData<API.ApiResponseAdopter>;
+                return res as TResponseData<API.DataAdopter>;
             } else {
                 addToast({
                     type: "error",

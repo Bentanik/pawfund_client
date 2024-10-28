@@ -108,11 +108,7 @@ declare namespace API {
     data: Data;
   };
 
-  type ValueAdopter = {
-    code: string;
-    message: string;
-    data: DataAdopter;
-  };
+
 
   type Error = {
     code: string;
@@ -126,12 +122,7 @@ declare namespace API {
     error: Error;
   };
 
-  type ApiResponseAdopter = {
-    value: ValueAdopter;
-    isSuccess: boolean;
-    isFailure: boolean;
-    error: Error;
-  };
+  
 }
 
 declare namespace APIResponse {

@@ -56,7 +56,6 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
                     if (result && result.isSuccess) {
                         if (Array.isArray(meetingTimes)) {
                             const meetingTimes = result.value.data.listMeetingTime;
-                            console.log("listMeetingTime is not an array:", meetingTimes);
                             setMeetingTimes(meetingTimes);
                         } else {
                             console.error("listMeetingTime is not an array:", meetingTimes);
@@ -85,7 +84,7 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
 
             const result = await updateChooseMeetingTimeApi(payload);
             if (result) {
-                router.push("/profile/adopt"); 
+                router.push("/profile/adopt");
             }
         } else {
             console.log("No meeting time selected");
