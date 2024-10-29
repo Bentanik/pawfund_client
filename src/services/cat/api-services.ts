@@ -43,3 +43,17 @@ export const getCats = async ({
 
   return response.data;
 };
+
+export const getCatByid = async ({ Id }: REQUEST.TGetCat) => {
+  const response = await request<TResponseData<API.TGetCat>>(
+    API_ENDPOINTS.GET_CAT,
+    {
+      method: "GET",
+      params: {
+        Id: Id,
+      },
+    }
+  );
+
+  return response.data;
+};

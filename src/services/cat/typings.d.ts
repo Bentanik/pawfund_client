@@ -21,6 +21,10 @@ declare namespace REQUEST {
     images: File[];
     sterilization: boolean;
   };
+
+  type TGetCat = {
+    Id: string;
+  };
 }
 
 declare namespace API {
@@ -30,9 +34,9 @@ declare namespace API {
   };
 
   type CatAdopt = {
-    id: string; 
-    name: string; 
-    age: string; 
+    id: string;
+    name: string;
+    age: string;
     breed: string;
     color: string;
     description: string;
@@ -40,7 +44,7 @@ declare namespace API {
     sex: number;
     imageCats: CatImage[];
   };
-  
+
   type TGetCats = {
     items: CatAdopt[];
     pageIndex: number;
@@ -49,5 +53,17 @@ declare namespace API {
     totalPages: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+  };
+
+  type TGetCat = {
+    id: string;
+    sex: "Male" | "Female";
+    name: string;
+    age: string;
+    breed: string;
+    weight: number;
+    color: string;
+    description: string;
+    images: string[];
   };
 }

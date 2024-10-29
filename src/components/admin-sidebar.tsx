@@ -75,6 +75,15 @@ export default function AdminSidebar() {
           </li>
           <li>
             <Link
+              href="/admin/create-branch"
+              className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+            >
+              <BsCalendar className="text-lg" />
+              <span>Create branch</span>
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/admin/manageuser"
               className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
             >

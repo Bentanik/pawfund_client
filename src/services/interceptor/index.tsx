@@ -9,7 +9,7 @@ import useToast from "@/hooks/use-toast";
 
 const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER,
-  timeout: 10000,
+  timeout: 50000,
   headers: {
     "Content-Type": "application/json",
   },

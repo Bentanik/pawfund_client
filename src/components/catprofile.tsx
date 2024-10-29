@@ -19,9 +19,8 @@ interface CatProfileProps {
   gender: string;
   age: string;
   breed: string;
-  size: string;
+  weight: string;
   color: string;
-  chipStatus: string;
   description: string;
   catId: string;
 }
@@ -33,9 +32,8 @@ const CatProfile: React.FC<CatProfileProps> = ({
   gender,
   age,
   breed,
-  size,
   color,
-  chipStatus,
+  weight,
   description,
   catId,
 }) => {
@@ -190,7 +188,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
               <div className="flex items-center border rounded-lg p-2 w-40">
                 <input
                   type="text"
-                  value={chipStatus}
+                  value={"Adopted"}
                   className="border-none w-full focus:outline-none text-gray-500"
                   readOnly
                 />
@@ -216,7 +214,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
               <div className="flex items-center border rounded-lg p-2 w-40">
                 <input
                   type="text"
-                  value={size}
+                  value={weight}
                   className="border-none w-full focus:outline-none text-gray-500"
                   readOnly
                 />
@@ -239,21 +237,14 @@ const CatProfile: React.FC<CatProfileProps> = ({
           <div className="flex flex-col mt-4 ml-20">
             <label className="font-semibold w-32 text-xl">Description</label>
             <hr className="my-4 border-gray-600" />
-            <h3 className="text-gray-500">
-              Mèo (Felis catus) là loài động vật có vú phổ biến và được nuôi làm
-              thú cưng. Chúng có nhiều giống với hình dáng và màu sắc đa dạng.
-              Mèo nổi bật với tính cách độc lập, khả năng tự chăm sóc và kỹ năng
-              săn mồi. Chúng giao tiếp qua âm thanh như kêu và cử chỉ thân thiện
-              như cọ mũi. Mèo không chỉ mang lại niềm vui cho con người mà còn
-              giúp giảm căng thẳng.
-            </h3>
+            <h3 className="text-gray-500">{description}</h3>
           </div>
         </div>
         <button
           className="mt-6 bg-teal-400 text-white px-6 py-3 rounded-lg hover:bg-teal-300 transition-transform transform hover:scale-105 ml-20"
           onClick={openAdoptionModal}
         >
-          NHẬN NUÔI
+          Adopt
         </button>
       </div>
       <AdoptionModal

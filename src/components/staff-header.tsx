@@ -170,7 +170,7 @@ export default function StaffHeader() {
         </div>
       </div>
       <div>
-        <div className="flex items-center gap-x-4">
+        {/* <div className="flex items-center gap-x-4">
           <div className="flex gap-x-1">
             <Link href="/staff/dashboard">
               <span className="text-xl font-semibold text-blue-500">Staff</span>
@@ -182,7 +182,7 @@ export default function StaffHeader() {
               </span>
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </header>
   );

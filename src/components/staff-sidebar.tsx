@@ -63,6 +63,24 @@ export default function StaffSidebar() {
               </li>
               <li>
                 <Link
+                  href="/staff/create-pet"
+                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                >
+                  <LuBookMarked className="text-lg" />
+                  <span>Create pet</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/staff/create-cash-donate"
+                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                >
+                  <LuBookMarked className="text-lg" />
+                  <span>Donate cash</span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/staff/freetime"
                   className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
                 >
