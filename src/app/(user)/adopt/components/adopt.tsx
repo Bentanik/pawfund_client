@@ -25,8 +25,8 @@ import {
   sterilizations,
 } from "@/const/propteryCat";
 import { motion } from "framer-motion";
-import { TriangleAlert } from "lucide-react";
-import { useEffect, useState } from "react";
+import { PawPrintIcon, TriangleAlert } from "lucide-react";
+import { Fragment, useEffect, useState } from "react";
 import useGetDataAdopt from "@/app/(user)/adopt/hooks/useGetDataAdopt";
 import PaginatedComponent from "@/components/paginated";
 import useDebounce from "@/hooks/use-debounce";
@@ -229,12 +229,14 @@ export default function Adopt() {
                 family. Let the matchmaking begin!
               </p>
               <div>
-                <Button
-                  variant="default"
-                  className="text-gray-600 bg-teal-400 px-7 py-6 hover:bg-teal-400 hover:opacity-90"
-                >
-                  <span className="text-base text-gray-800">Adopt</span>
-                </Button>
+                <a href="#findyourpet">
+                  <Button
+                    variant="default"
+                    className="text-gray-600 bg-teal-400 px-7 py-6 hover:bg-teal-400 hover:opacity-90"
+                  >
+                    <span className="text-base text-gray-800">Adopt</span>
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
@@ -295,11 +297,7 @@ export default function Adopt() {
               <div className="mt-4 flex flex-col gap-y-3">
                 <div className="flex items-center gap-x-1">
                   <span>
-                    <img
-                      src="/images/catpaw-icon.svg"
-                      alt="CatPaw"
-                      width={30}
-                    />
+                    <PawPrintIcon className="text-blue-700" />
                   </span>
                   <span className="text-base text-gray-800 font-semibold">
                     Stable income
@@ -307,11 +305,7 @@ export default function Adopt() {
                 </div>
                 <div className="flex items-center gap-x-1">
                   <span>
-                    <img
-                      src="/images/catpaw-icon.svg"
-                      alt="CatPaw"
-                      width={30}
-                    />
+                    <PawPrintIcon className="text-blue-700" />
                   </span>
                   <span className="text-base text-gray-800 font-semibold">
                     Take the pet with you when moving
@@ -319,11 +313,7 @@ export default function Adopt() {
                 </div>
                 <div className="flex items-center gap-x-1">
                   <span>
-                    <img
-                      src="/images/catpaw-icon.svg"
-                      alt="CatPaw"
-                      width={30}
-                    />
+                    <PawPrintIcon className="text-blue-700" />
                   </span>
                   <span className="text-base text-gray-800 font-semibold">
                     Provide required vaccination and sterilization
@@ -339,6 +329,7 @@ export default function Adopt() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
         className="col-span-12 px-24 py-12"
+        id="findyourpet"
       >
         <div>
           <div>
@@ -444,16 +435,22 @@ export default function Adopt() {
             </div>
           </div>
           <div className="mt-10">
-            <div className="grid grid-cols-4 gap-y-3">
-              {renderListCardPet()}
-            </div>
-            <div className="mt-5">
-              <PaginatedComponent
-                totalPages={totalPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              />
-            </div>
+            {data?.length > 0 ? (
+              <Fragment>
+                <div className="grid grid-cols-4 gap-y-3">
+                  {renderListCardPet()}
+                </div>
+                <div className="mt-5">
+                  <PaginatedComponent
+                    totalPages={totalPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </Fragment>
+            ) : (
+              <h4 className="text-xl">Not available for adoption</h4>
+            )}
           </div>
         </div>
       </motion.div>
