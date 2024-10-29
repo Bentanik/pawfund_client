@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useGetApplicationByAdopter from "@/app/(user)/profile/information/hooks/useGetApplicationByAdopter";
+
 import {
     Pagination,
     PaginationContent,
@@ -9,23 +9,37 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import useUpdateAdoptApplication from "@/app/(user)/profile/adopt/hooks/useUpdateAdoptApplication";
+import useGetApplicationByAdopter from "@/app/(user)/profile/information/hooks/useGetApplicationByAdopter";
+
 
 export default function AdoptApplication() {
-    const { isPending, getAllApplicationByAdopterApi } = useGetApplicationByAdopter();
+    const { isPending: isFetching, getAllApplicationByAdopterApi } = useGetApplicationByAdopter();
+    const { isPending, updateAdoptApplicationApi } = useUpdateAdoptApplication(); // Khởi tạo hook cập nhật
     const [applications, setApplications] = useState<API.ResponseData>();
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedStatus, setSelectedStatus] = useState("all");
+    const [editingAppId, setEditingAppId] = useState<string | null>(null);
+    const [newDescription, setNewDescription] = useState("");
 
-    const pageSize = 10; 
-    const isAscCreatedDate = false; 
+    const pageSize = 10;
+    const isAscCreatedDate = false;
 
     const fetchApplications = async (pageNumber: number) => {
         const res = await getAllApplicationByAdopterApi({
             pageIndex: pageNumber,
             pageSize,
             isAscCreatedDate,
-            
+            status: selectedStatus,
         });
 
         if (res && res.value) {
@@ -34,12 +48,11 @@ export default function AdoptApplication() {
             setTotalItems(totalCount);
             setTotalPages(Math.ceil(totalCount / pageSize));
         }
-        console.log("data", res);
     };
 
     useEffect(() => {
         fetchApplications(currentPage);
-    }, [currentPage]);
+    }, [currentPage, selectedStatus]);
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -47,8 +60,26 @@ export default function AdoptApplication() {
         }
     };
 
+    const handleUpdateClick = (appId: string, currentDescription: string) => {
+        setEditingAppId(appId);
+        setNewDescription(currentDescription);
+    };
+
+    const handleDescriptionChange = async (appId: string) => {
+        // Gọi API để cập nhật mô tả
+        const updateData = { adoptId: appId, description: newDescription }; // Tạo dữ liệu cần cập nhật
+        const result = await updateAdoptApplicationApi(updateData); // Gọi hàm từ hook
+
+        if (result) {
+            // Nếu cập nhật thành công
+            setEditingAppId(null);
+            setNewDescription("");
+            fetchApplications(currentPage); // Tải lại danh sách ứng dụng
+        }
+    };
+
     const renderApplications = () => {
-        if (isPending) {
+        if (isFetching || isPending) {
             return <p>Loading...</p>;
         }
 
@@ -62,30 +93,68 @@ export default function AdoptApplication() {
                 className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
             >
                 <div>
-                    <a href="#">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            {app.application.description}
-                        </h5>
-                    </a>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        {app.application.description}
+                    </h5>
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                         Sex: {app.application.cat.sex}
                     </p>
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                         Name: {app.application.cat.name}
                     </p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        Status: {app.application.status}
+                    </p>
                 </div>
-                <a
-                    href="#"
-                    className="w-32 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
-                >
-                    Update
-                </a>
+                {editingAppId === app.application.id ? (
+                    <div className="flex flex-col">
+                        <input
+                            type="text"
+                            value={newDescription}
+                            onChange={(e) => setNewDescription(e.target.value)}
+                            className="border p-2 rounded mb-2"
+                            placeholder="Edit description"
+                        />
+                        <button
+                            onClick={() => handleDescriptionChange(app.application.id)}
+                            className="w-16 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                        >
+                            Save
+                        </button>
+                    </div>
+                ) : (
+                    <a
+                        href="#"
+                        onClick={() => handleUpdateClick(app.application.id, app.application.description)}
+                        className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                    >
+                        Update
+                    </a>
+                )}
             </div>
         ));
     };
 
     return (
         <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            {/* Bộ lọc trạng thái */}
+            <div className="flex flex-col gap-y-2 w-full mb-4">
+                <label className="text-base text-[#6f6f6f]">Status</label>
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                    <SelectTrigger className="w-full border-2 border-gray-500">
+                        <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="0">Pending</SelectItem>
+                        <SelectItem value="-1">Rejected</SelectItem>
+                        <SelectItem value="1">Approved</SelectItem>
+                        <SelectItem value="2">ApprovedAndCompleted</SelectItem>
+                        <SelectItem value="3">ApprovedAndNotCompleted</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {renderApplications()}
             </div>
