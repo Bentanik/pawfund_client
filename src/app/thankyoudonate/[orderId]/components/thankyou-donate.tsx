@@ -1,13 +1,30 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import getThankiuOrder from "@/app/thankyoudonate/[orderId]/hooks/getThankiuOrder";
+import { Backdrop } from "@/components/backdrop";
 
 export default function ThankyouDonate({
   orderId,
 }: Readonly<{
   orderId: string;
 }>) {
+  const { getThankyouOrderApi, isPending } = getThankiuOrder();
+
+  const [data, setData] = useState<API.TGetDonate | null>(null);
+
+  const handleGetData = async () => {
+    const res = await getThankyouOrderApi({
+      orderId: Number.parseFloat(orderId),
+    });
+    if (res) setData(res?.value?.data);
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, [orderId]);
+
   return (
     <div className="w-full h-screen object-cover overflow-hidden relative">
       <div className="relative w-full h-full">
@@ -57,9 +74,10 @@ export default function ThankyouDonate({
             </div>
 
             <div className="mt-5 text-center px-10">
-              "Thank you, Nguyễn Tomorrow Ziết Dỹ, for your generous donation!
-              Your support will help provide care and love to abandoned cats in
-              need."
+              "Thank you,{" "}
+              {data?.account?.lastName + " " + data?.account?.firstName}, for
+              your generous donation! Your support will help provide care and
+              love to abandoned cats in need."
             </div>
 
             <div className="flex justify-center mt-10">
@@ -72,6 +90,7 @@ export default function ThankyouDonate({
           </div>
         </div>
       </div>
+      <Backdrop open={isPending} />
     </div>
   );
 }
