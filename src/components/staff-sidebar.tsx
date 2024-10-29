@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BsPerson, BsTable, BsGear, BsChevronDown } from "react-icons/bs";
 import { AiOutlineForm } from "react-icons/ai";
-import { LuBookMarked } from "react-icons/lu";
+import { LuBookMarked, LuMessageSquarePlus } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
 export default function StaffSidebar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -15,8 +15,9 @@ export default function StaffSidebar() {
 
   return (
     <aside
-      className={`${staffState.openSidebar === false ? "w-72" : "w-0"
-        } bg-gray-900 text-white h-screen transition-all`}
+      className={`${
+        staffState.openSidebar === false ? "w-72" : "w-0"
+      } bg-gray-900 text-white h-screen transition-all`}
     >
       {staffState.openSidebar === false && (
         <div className="p-4 ml-4">
@@ -33,8 +34,9 @@ export default function StaffSidebar() {
                     <span>Dashboard</span>
                   </div>
                   <BsChevronDown
-                    className={`transform transition-transform ${openDropdown === "dashboard" ? "rotate-180" : ""
-                      } text-gray-400`}
+                    className={`transform transition-transform ${
+                      openDropdown === "dashboard" ? "rotate-180" : ""
+                    } text-gray-400`}
                   />
                 </button>
                 {openDropdown === "dashboard" && (
@@ -60,9 +62,21 @@ export default function StaffSidebar() {
                 </Link>
               </li>
               <li>
-                <Link href="/staff/freetime" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+                <Link
+                  href="/staff/freetime"
+                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                >
                   <BsPerson className="text-lg" />
                   <span>Free Time</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/staff/message"
+                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                >
+                  <LuMessageSquarePlus className="text-lg" />
+                  <span>Message</span>
                 </Link>
               </li>
               <li>
@@ -75,8 +89,9 @@ export default function StaffSidebar() {
                     <span>Forms</span>
                   </div>
                   <BsChevronDown
-                    className={`transform transition-transform ${openDropdown === "forms" ? "rotate-180" : ""
-                      } text-gray-400`}
+                    className={`transform transition-transform ${
+                      openDropdown === "forms" ? "rotate-180" : ""
+                    } text-gray-400`}
                   />
                 </button>
                 {openDropdown === "forms" && (
