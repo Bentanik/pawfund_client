@@ -111,13 +111,15 @@ const Header: React.FC = () => {
               onClickOutside={handleCloseAvatarTooltip}
             >
               <figure className="rounded-full border border-zinc-300 overflow-hidden w-14 h-14 flex items-center justify-center hover:bg-teal-400">
-                <img
-                  id="avatarButton"
-                  onClick={handleToggleAvatarTooltip}
-                  className="w-12 h-12 rounded-full cursor-pointer"
-                  src={userState?.user?.cropAvatarLink}
-                  alt="User dropdown"
-                />
+                {userState?.user?.cropAvatarLink !== "" && (
+                  <img
+                    id="avatarButton"
+                    onClick={handleToggleAvatarTooltip}
+                    className="w-12 h-12 rounded-full cursor-pointer"
+                    src={userState?.user?.cropAvatarLink}
+                    alt="User dropdown"
+                  />
+                )}
               </figure>
             </TippyHeadless>
           </div>
