@@ -69,14 +69,11 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
           </div>
         </li>
         <li>
-          <a
-            href="#"
-            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
+          <div
+            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200 cursor-pointer"
+            onClick={() => handleNavigate(3)}
           >
-            <div
-              className="flex items-center"
-              onClick={() => handleNavigate(3)}
-            >
+            <div className="flex items-center">
               <FaQuestionCircle
                 className="p-1 bg-gray-300 text-black rounded-full mr-2"
                 size={30}
@@ -84,7 +81,7 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
               <span className="text-black">Support</span>
             </div>
             <FiChevronRight className="text-gray-500" size={24} />
-          </a>
+          </div>
         </li>
       </ul>
       <div className="py-1">
