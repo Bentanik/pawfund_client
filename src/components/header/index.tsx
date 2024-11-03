@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -65,7 +65,10 @@ const Header: React.FC = () => {
           Volunteer
         </Link>
         <Link href="/donation">
-          <Button variant="outline" className="text-gray-600 bg-teal-400">
+          <Button
+            variant="outline"
+            className="text-gray-600 bg-teal-400 hover:bg-teal-400 hover:text-white"
+          >
             Donate
           </Button>
         </Link>
@@ -79,7 +82,6 @@ const Header: React.FC = () => {
         >
           News and Events
         </Link>
-
         {userState.user === null ? (
           <Link
             href="/login"

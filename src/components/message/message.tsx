@@ -7,6 +7,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import TippyHeadless from "@tippyjs/react/headless";
+import { ListMessages } from "@/const/user";
 
 export default function Message({
   children,
@@ -43,43 +44,45 @@ export default function Message({
   }, [userState]);
 
   useEffect(() => {
-    if (connection && userState.user !== null) {
-      connection
-        .start()
-        .then(() => {
-          handleFetchMessagesStaff(userState.user?.userId || "");
-          connection.on("onError", (message: string) => {
-            console.log(message);
-          });
+    try {
+      if (connection && userState.user !== null) {
+        connection
+          .start()
+          .then(() => {
+            handleFetchMessagesStaff(userState.user?.userId || "");
+            connection.on("onError", (message: string) => {
+              console.log(message);
+            });
 
-          connection.on("onSuccess", (message: string) => {
-            console.log(message);
-          });
+            connection.on("onSuccess", (message: string) => {
+              console.log(message);
+            });
 
-          connection.on(
-            "onReceiveMessageBot",
-            (message: TResponseDataHub<API.TMessage>) => {
-              setMessagesBot((prev) => [...prev, message.Value.Data]);
-            }
-          );
+            connection.on(
+              "onReceiveMessageBot",
+              (message: TResponseDataHub<API.TMessage>) => {
+                setMessagesBot((prev) => [...prev, message.Value.Data]);
+              }
+            );
 
-          connection.on(
-            "onReceiveMessageUser",
-            (message: TResponseDataHub<API.TMessage>) => {
-              // setMessages((prev) => [...prev, message.Value.Data]);
-              setMessagesStaff((prev) => [...prev, message.Value.Data]);
-            }
-          );
+            connection.on(
+              "onReceiveMessageUser",
+              (message: TResponseDataHub<API.TMessage>) => {
+                // setMessages((prev) => [...prev, message.Value.Data]);
+                setMessagesStaff((prev) => [...prev, message.Value.Data]);
+              }
+            );
 
-          connection.on(
-            "onGetMessagesSenderAsync",
-            (message: TResponseDataHub<API.TMessage[]>) => {
-              setMessagesStaff(message.Value.Data);
-            }
-          );
-        })
-        .catch();
-    }
+            connection.on(
+              "onGetMessagesSenderAsync",
+              (message: TResponseDataHub<API.TMessage[]>) => {
+                setMessagesStaff(message.Value.Data);
+              }
+            );
+          })
+          .catch();
+      }
+    } catch (err) {}
   }, [connection]);
 
   const handleFetchMessagesStaff = async (senderId: string) => {
@@ -99,19 +102,19 @@ export default function Message({
     setTextMessage("");
   };
 
-  const handleSendMessageChatBot = async () => {
+  const handleSendMessageChatBot = async (message: string) => {
     if (!connection) return;
 
     try {
       await connection.send("SendMessageWithChatBotAsync", {
         userId: userState.user?.userId || "",
-        content: textMessage,
+        content: message,
       });
       setMessagesBot((prev) => [
         ...prev,
         {
           SenderId: userState.user?.userId,
-          Content: textMessage,
+          Content: message,
           ReceiverId: "",
         },
       ]);
@@ -144,7 +147,7 @@ export default function Message({
   };
 
   const handleSendMessage = async () => {
-    if (receive === false) await handleSendMessageChatBot();
+    if (receive === false) await handleSendMessageChatBot(textMessage);
     if (receive === true) await handleSendMessageChatStaff();
   };
 
@@ -227,6 +230,32 @@ export default function Message({
     handleCloseSwitchat();
   };
 
+  const handleClickFirstMessageBot = (message: string) => {
+    handleSendMessageChatBot(message);
+  };
+
+  const renderListFirstMessageBot = () => {
+    return (
+      <div className="py-2">
+        <div className="inline-block min-w-1/2 min-h-[100px] shadow-box-shadown rounded-lg overflow-hidden">
+          {ListMessages?.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="py-2 px-4 border-b-2 hover:bg-[#0000001a] cursor-pointer"
+                onClick={() => handleClickFirstMessageBot(item.value)}
+              >
+                <span className="text-base font-sans font-normal">
+                  {item.value}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       {differenceState.message.openMessageUser && (
@@ -295,7 +324,7 @@ export default function Message({
                     </div>
                   </div>
                 )}
-                onClickOutside={handleCloseSwitchat}
+                onClickOutside={handleCloseMessage}
               >
                 <div
                   className="select-none flex items-center px-2 py-1 rounded-lg cursor-pointer hover:bg-[#0000001a]"
@@ -368,6 +397,9 @@ export default function Message({
             </header>
             <main className="h-[80%] px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
               {renderMessages(receive === false ? messagesBot : messagesStaff)}
+              {receive === false &&
+                messagesBot?.length === 0 &&
+                renderListFirstMessageBot()}
             </main>
             <footer className="h-[20%] px-2 py-6 flex flex-col gap-y-2 border">
               <div className="relative">
