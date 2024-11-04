@@ -170,19 +170,6 @@ export default function StaffHeader() {
         </div>
       </div>
       <div>
-        {/* <div className="flex items-center gap-x-4">
-          <div className="flex gap-x-1">
-            <Link href="/staff/dashboard">
-              <span className="text-xl font-semibold text-blue-500">Staff</span>
-            </Link>
-            <span className="text-black">/</span>
-            <Link href="/staff/create-pet">
-              <span className="text-[18px] font-semibold text-black">
-                Create pet
-              </span>
-            </Link>
-          </div>
-        </div> */}
       </div>
     </header>
   );

@@ -12,50 +12,23 @@ import {
 } from "react-icons/bs";
 import { AiOutlineForm, AiOutlinePieChart } from "react-icons/ai";
 import { RiHome2Line } from "react-icons/ri";
+import { useAppSelector } from "@/stores/store";
 
 export default function AdminSidebar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const staffState = useAppSelector((state) => state.differenceSlice.staff);
 
   const toggleDropdown = (dropdown: string) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
   return (
-    <aside className="w-72 bg-gray-900 text-white h-screen flex items-center">
+    <aside className={`${staffState.openSidebar === false ? "w-72" : "w-0"
+      } bg-gray-900 text-white h-screen transition-all`} >
       <div className="p-4 ml-4 w-full">
-        {/* <h1 className="text-2xl font-bold text-white mb-8 flex items-center space-x-2">
-                    <span className="bg-indigo-500 w-8 h-8 flex items-center justify-center rounded-md">
-                        <img src="/tailadmin-logo.svg" alt="TailAdmin Logo" className="w-5 h-5" />
-                    </span>
-                    <span>TailAdmin</span>
-                </h1> */}
         <ul className="space-y-1">
           <li className="pt-4 text-sm font-semibold text-gray-400">ADMIN</li>
           {/* <li>
-                        <button
-                            onClick={() => toggleDropdown('dashboard')}
-                            className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
-                        >
-                            <div className="flex items-center space-x-2">
-                                <AiOutlineForm className="text-lg" />
-                                <span>Dashboard</span>
-                            </div>
-                            <BsChevronDown
-                                className={`transform transition-transform ${openDropdown === 'dashboard' ? "rotate-180" : ""
-                                    } text-gray-400`}
-                            />
-                        </button>
-                        {openDropdown === 'dashboard' && (
-                            <ul className="pl-4 mt-1 space-y-1">
-                                <li>
-                                    <Link href="/admin/dashboard/elements" className="block p-2 hover:bg-gray-800 rounded-md">
-                                        eCommerce
-                                    </Link>
-                                </li>
-                            </ul>
-                        )}
-                    </li> */}
-          <li>
             <Link
               href="/admin/dashboard"
               className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
@@ -63,6 +36,33 @@ export default function AdminSidebar() {
               <RiHome2Line className="text-lg" />
               <span>Dashboard</span>
             </Link>
+          </li> */}
+          <li>
+            <button
+              onClick={() => toggleDropdown("dashboard")}
+              className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
+            >
+              <div className="flex items-center space-x-2">
+                <AiOutlineForm className="text-lg" />
+                <span>Dashboard</span>
+              </div>
+              <BsChevronDown
+                className={`transform transition-transform ${openDropdown === "dashboard" ? "rotate-180" : ""
+                  } text-gray-400`}
+              />
+            </button>
+            {openDropdown === "dashboard" && (
+              <ul className="pl-4 mt-1 space-y-1">
+                <li>
+                  <Link
+                    href="/admin/dashboard/elements"
+                    className="block p-2 hover:bg-gray-800 rounded-md"
+                  >
+                    eCommerce
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
           <li>
             <Link
@@ -101,9 +101,8 @@ export default function AdminSidebar() {
                 <span>Forms</span>
               </div>
               <BsChevronDown
-                className={`transform transition-transform ${
-                  openDropdown === "forms" ? "rotate-180" : ""
-                } text-gray-400`}
+                className={`transform transition-transform ${openDropdown === "forms" ? "rotate-180" : ""
+                  } text-gray-400`}
               />
             </button>
             {openDropdown === "forms" && (
@@ -166,9 +165,8 @@ export default function AdminSidebar() {
                 <span>UI Elements</span>
               </div>
               <BsChevronDown
-                className={`transform transition-transform ${
-                  openDropdown === "ui" ? "rotate-180" : ""
-                } text-gray-400`}
+                className={`transform transition-transform ${openDropdown === "ui" ? "rotate-180" : ""
+                  } text-gray-400`}
               />
             </button>
             {openDropdown === "ui" && (
@@ -202,9 +200,8 @@ export default function AdminSidebar() {
                 <span>Authentication</span>
               </div>
               <BsChevronDown
-                className={`transform transition-transform ${
-                  openDropdown === "auth" ? "rotate-180" : ""
-                } text-gray-400`}
+                className={`transform transition-transform ${openDropdown === "auth" ? "rotate-180" : ""
+                  } text-gray-400`}
               />
             </button>
             {openDropdown === "auth" && (
