@@ -236,7 +236,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
           </div>
           <div className="flex flex-col mt-4 ml-20">
             <label className="font-semibold w-32 text-xl">Description</label>
-            <hr className="my-4 border-gray-600" />
+            <hr className="my-2 border-gray-600" />
             <h3 className="text-gray-500">{description}</h3>
           </div>
         </div>
