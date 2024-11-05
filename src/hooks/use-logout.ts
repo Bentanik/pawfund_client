@@ -6,7 +6,7 @@ export default function useLogout() {
     try {
       mutate();
     } catch (err) {
-      console.log("err: ", err);
+      location.href = "/";
     }
   };
   return {
