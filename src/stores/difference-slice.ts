@@ -4,6 +4,9 @@ export interface InitialState {
   staff: {
     openSidebar: boolean;
   };
+  admin: {
+    openSidebar: boolean;
+  };
   message: {
     openMessageUser: boolean;
   };
@@ -11,6 +14,9 @@ export interface InitialState {
 
 let initialState: InitialState = {
   staff: {
+    openSidebar: false,
+  },
+  admin: {
     openSidebar: false,
   },
   message: {
@@ -28,6 +34,12 @@ const differenceSlice = createSlice({
     closeSidebar: (state) => {
       state.staff.openSidebar = false;
     },
+    openAdminSidebar: (state) => {
+      state.admin.openSidebar = true;
+    },
+    closeAdminSidebar: (state) => {
+      state.admin.openSidebar = false;
+    },
     openMessageUser: (state) => {
       state.message.openMessageUser = true;
     },
@@ -37,7 +49,7 @@ const differenceSlice = createSlice({
   },
 });
 
-export const { openSidebar, closeSidebar, openMessageUser, closeMessageUser } =
+export const { openSidebar, closeSidebar, openAdminSidebar, closeAdminSidebar, openMessageUser, closeMessageUser } =
   differenceSlice.actions;
 
 export default differenceSlice.reducer;
