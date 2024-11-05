@@ -15,18 +15,9 @@ export default function useGetApplicationByAdopter() {
       const res = await getAllApplicationByAdopter(params);
       if (isTResponseData(res)) {
         return res as TResponseData<API.ResponseData>;
-      } else {
-        addToast({
-          type: "error",
-          description: "Failed to fetch applications",
-        });
-        return null;
       }
+      return null;
     } catch (error) {
-      addToast({
-        type: "error",
-        description: "An error occurred while fetching applications",
-      });
       return null;
     } finally {
       setPending(false);
