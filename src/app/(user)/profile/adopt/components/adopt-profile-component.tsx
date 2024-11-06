@@ -164,30 +164,35 @@ export default function AdoptApplication() {
   };
 
   return (
-    <div className="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="basis-[58%] py-5 border-1 border-gray-300 rounded-2xl bg-white shadow-box-shadown">
       {/* Bộ lọc trạng thái */}
-      <div className="flex flex-col gap-y-2 w-full mb-4">
-        <label className="text-base text-[#6f6f6f]">Status</label>
-        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-full border-2 border-gray-500">
-            <SelectValue placeholder="Select status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            {StatusAdoptApplciation?.map((item, index) => {
-              return (
-                <SelectItem key={index} value={item.id.toString()}>
-                  {item.value}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col gap-y-6 px-8">
+        <header className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold">Adopt Applications</h2>
+        </header>
+        <div className="flex flex-col gap-y-2 w-1/4 mb-4">
+          <label className="text-base text-[#6f6f6f]">Status</label>
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-full border-2 border-gray-500">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {StatusAdoptApplciation?.map((item, index) => {
+                return (
+                  <SelectItem key={index} value={item.id.toString()}>
+                    {item.value}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {renderApplications()}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {renderApplications()}
-      </div>
       {/* Phân trang */}
       <Pagination className="mt-5">
         <PaginationContent>
