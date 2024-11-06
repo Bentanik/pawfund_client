@@ -32,18 +32,20 @@ export default function VolunteerForm({
 }: VolunteerFormProps) {
     const [description, setDescription] = useState("");
     const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-
     const handleCheckboxChange = (activityId: string) => {
-        setSelectedActivities((prev) =>
-            prev.includes(activityId)
-                ? prev.filter((id) => id !== activityId)
-                : [...prev, activityId]
+        // Cập nhật selectedActivities: thêm hoặc bỏ activityId khi click vào checkbox
+        setSelectedActivities((prevSelected) =>
+            prevSelected.includes(activityId)
+                ? prevSelected.filter((id) => id !== activityId)
+                : [...prevSelected, activityId]
         );
     };
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         console.log("Submit button clicked");
+        console.log(selectedActivities);
+
         onSubmit({
             description,
             activities: selectedActivities,
@@ -56,9 +58,15 @@ export default function VolunteerForm({
     const renderListOption = () =>
         eventActivities?.map((item, index) => (
             <div key={index} className="flex items-center space-x-2 mt-[10px]">
-                <Checkbox
-                    // checked={selectedActivities.includes(item.activityDTO.id)}
+                {/* <Checkbox
+                    checked={selectedActivities.includes(item.activityDTO.id)}
                     onChange={() => handleCheckboxChange(item.activityDTO.id)}
+                /> */}
+                <input
+                    type="checkbox"
+                    checked={selectedActivities.includes(item.activityDTO.id)} // Kiểm tra xem activityId có được chọn không
+                    onChange={() => handleCheckboxChange(item.activityDTO.id)} // Cập nhật khi checkbox thay đổi
+                    id={`checkbox-${item.activityDTO.id}`}
                 />
                 <Label className="text-[#0000008b]">
                     {item?.activityDTO.name}

@@ -55,12 +55,13 @@ const EventDetail = ({ eventId }: EventDetail) => {
     const { mutate, isPending } = useServiceCreateVolunteerApplication();
 
     const handleVolunteer = async (data: any) => {
-        console.log("1234");
+        console.log(data);
         const volunteerApplicationData = {
             description: data?.description || "", // Ensures a default empty string if `description` is undefined
-            listActivity: data?.listActivity || [], // Ensures a default empty array if `listActivity` is undefined
+            listActivity: data?.activities || [], // Ensures a default empty array if `listActivity` is undefined
             eventId: eventId,
         };
+        console.log("Received Data:", data);
         try {
             mutate(volunteerApplicationData, {
                 onSuccess: async (data) => {
