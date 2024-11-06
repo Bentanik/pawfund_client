@@ -66,7 +66,7 @@ declare namespace API {
         id: string;
         meetingDate: string | null;
         reasonReject: string | null;
-        status?: string;
+        status?: number;
         isFinalized: boolean;
         description: string;
         createdDate: string;

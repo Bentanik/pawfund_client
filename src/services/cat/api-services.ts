@@ -33,6 +33,8 @@ export const getCats = async ({
   if (sterilization !== undefined && sterilization !== "all")
     params.Sterilization = sterilization;
 
+  params.IsDeleted = false;
+
   const response = await request<TResponseData<API.TGetCats>>(
     API_ENDPOINTS.GET_CATS,
     {

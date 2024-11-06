@@ -17,6 +17,8 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { ForgotPasswordEmailBodyType } from "@/utils/schemaValidations/forgotPassword.schema";
 import useToast from "@/hooks/use-toast";
+import { resetProfile } from "@/stores/account-slice";
+import { resetCreatePet } from "@/stores/create-pet-slice";
 
 export const useServiceLogin = () => {
   const dispatch = useAppDispatch();
@@ -80,11 +82,18 @@ export const useServiceLogout = () => {
     onSuccess: (data) => {
       removeStorageItem("accessToken");
       dispatch(resetUser());
+      dispatch(resetProfile());
+      dispatch(resetCreatePet());
+      dispatch(resetProfile());
       window.location.href = "/";
     },
     onError: (error) => {
       removeStorageItem("accessToken");
       dispatch(resetUser());
+      dispatch(resetProfile());
+      dispatch(resetCreatePet());
+      dispatch(resetProfile());
+      window.location.href = "/";
     },
   });
 };

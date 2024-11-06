@@ -6,6 +6,7 @@ import {
 import axios, { AxiosError } from "axios";
 import { refreshToken } from "@/services/auth/api-services";
 import useToast from "@/hooks/use-toast";
+import useLogout from "@/hooks/use-logout";
 
 const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER,
@@ -42,6 +43,14 @@ const errorHandler = async (error: AxiosError) => {
           description: responseMeta.detail,
           duration: 5000,
         });
+        break;
+      case "account_ban_01":
+        addToast({
+          type: "error",
+          description: responseMeta.detail,
+          duration: 5000,
+        });
+        useLogout().handleLogout();
         break;
       default:
         break;
