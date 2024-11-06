@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useAppSelector } from "@/stores/store";
 import { Button } from "@/components/ui/button";
+import useToast from "@/hooks/use-toast";
 
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -17,6 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import VolunteerForm from "./volunteer-form";
 import getCurrentEvent from "../hooks/getCurrentEvent";
 import getEventById from "../hooks/getEventById";
+import { useServiceCreateVolunteerApplication } from "@/services/volunteer/services";
 
 interface EventDetail {
     eventId: string;
@@ -47,6 +49,47 @@ const EventDetail = ({ eventId }: EventDetail) => {
 
     const handleClosePopup = () => {
         setPopupEvent(false);
+    };
+
+    const { addToast } = useToast();
+    const { mutate, isPending } = useServiceCreateVolunteerApplication();
+
+    const handleVolunteer = async (data: any) => {
+        console.log("1234");
+        const volunteerApplicationData = {
+            description: data?.description || "", // Ensures a default empty string if `description` is undefined
+            listActivity: data?.listActivity || [], // Ensures a default empty array if `listActivity` is undefined
+            eventId: eventId,
+        };
+        try {
+            mutate(volunteerApplicationData, {
+                onSuccess: async (data) => {
+                    if (data) {
+                        if (data.value.code.includes("adopt_noti")) {
+                            addToast({
+                                description: data.value.message,
+                                type: "success",
+                                duration: 5000,
+                            });
+                        }
+                    }
+                },
+                onError: (error) => {
+                    if (error.errorCode.includes("adopt_noti")) {
+                        addToast({
+                            description: error.detail,
+                            type: "error",
+                            duration: 5000,
+                        });
+                    }
+                },
+            });
+        } catch (error) {
+            console.error(
+                "Có lỗi xảy ra khi gửi yêu cầu tình nguyện viên:",
+                error
+            );
+        }
     };
 
     const { isPendingEventActivity, getApprovedEventsActivityApi } =
@@ -105,7 +148,6 @@ const EventDetail = ({ eventId }: EventDetail) => {
                     item?.activityDTO.quantity) *
                     100
             );
-
             return (
                 <div key={index}>
                     <AccordionItem value={`item-${index + 1}`}>
@@ -173,7 +215,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                         className="absolute top-20 transform left-[27%] text-center"
                     >
                         <div className=" text-white text-[3rem] w-[70%] min-w-[700px] font-semibold leading-[50px]">
-                            {/* {event?.event.name} */}
+                            {event?.eventDTO.name}
                         </div>
                     </motion.h1>
 
@@ -358,12 +400,16 @@ const EventDetail = ({ eventId }: EventDetail) => {
                             <h1 className="text-[2rem]">
                                 Activities for volunteers
                             </h1>
-                            <Button
-                                className="hover:bg-[#2DD4BF]"
-                                onClick={handleOpenPopup}
-                            >
-                                Be come volunteer
-                            </Button>
+                            {eventActivities.length === 0 ? (
+                                <div></div>
+                            ) : (
+                                <Button
+                                    className="hover:bg-[#2DD4BF]"
+                                    onClick={handleOpenPopup}
+                                >
+                                    Be come volunteer
+                                </Button>
+                            )}
                         </div>
 
                         <div>
@@ -372,7 +418,14 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                 collapsible
                                 className="w-[70%]"
                             >
-                                {renderListEvent()}
+                                {eventActivities.length === 0 ? (
+                                    <div className="mt-5">
+                                        There are no event activities currently
+                                        taking place.
+                                    </div>
+                                ) : (
+                                    renderListEvent()
+                                )}
                             </Accordion>
                         </div>
                     </div>
@@ -383,6 +436,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                 open={popupEvent}
                 onClose={handleClosePopup}
                 eventActivities={eventActivities ?? []}
+                onSubmit={handleVolunteer}
             />
         </div>
     );
