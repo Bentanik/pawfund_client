@@ -20,6 +20,8 @@ import useUpdateAdoptApplication from "@/app/(user)/profile/adopt/hooks/useUpdat
 import useGetApplicationByAdopter from "@/app/(user)/profile/adopt/hooks/useGetApplicationByAdopter";
 import Link from "next/link";
 import { StatusAdoptApplciation } from "@/const/adopt";
+import AdoptionModal from "@/components/adoptionmodal";
+import UpdateAdoptionModal from "@/components/updateadoptionmodal";
 
 export default function AdoptApplication() {
   const { isPending: isFetching, getAllApplicationByAdopterApi } =
@@ -32,6 +34,8 @@ export default function AdoptApplication() {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [editingAppId, setEditingAppId] = useState<string | null>(null);
   const [newDescription, setNewDescription] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // State để kiểm tra modal có mở hay không
+  const [selectedApplication, setSelectedApplication] = useState<any>(null); // Lưu t
 
   const pageSize = 10;
   const isAscCreatedDate = false;
@@ -62,23 +66,33 @@ export default function AdoptApplication() {
     }
   };
 
-  const handleUpdateClick = (appId: string, currentDescription: string) => {
-    setEditingAppId(appId);
-    setNewDescription(currentDescription);
+  const handleUpdateClick = (applicationId: string, description: string) => {
+    setSelectedApplication({
+      id: applicationId,
+      description: description,
+    });
+    setIsModalOpen(true); // Mở modal khi người dùng nhấn Update
   };
 
-  const handleDescriptionChange = async (appId: string) => {
-    // Gọi API để cập nhật mô tả
-    const updateData = { adoptId: appId, description: newDescription }; // Tạo dữ liệu cần cập nhật
-    const result = await updateAdoptApplicationApi(updateData); // Gọi hàm từ hook
+  const handleModalClose = () => {
+    setIsModalOpen(false); // Đóng modal khi người dùng hủy
+  };
+
+  const handleSubmit = async (data: any) => {
+    console.log("Adoption request submitted with description:", data.description);
+    // Gọi API để cập nhật mô tả ứng dụng
+    const result = await updateAdoptApplicationApi({
+      adoptId: selectedApplication.id,
+      description: data.description,
+    });
 
     if (result) {
       // Nếu cập nhật thành công
-      setEditingAppId(null);
-      setNewDescription("");
-      fetchApplications(currentPage); // Tải lại danh sách ứng dụng
+      setIsModalOpen(false); // Đóng modal sau khi submit thành công
+      fetchApplications(currentPage); // Lấy lại dữ liệu sau khi cập nhật thành công
     }
   };
+
 
   const renderApplications = () => {
     if (isFetching || isPending) {
@@ -92,12 +106,17 @@ export default function AdoptApplication() {
     return applications.items.map((app) => (
       <div
         key={app.application.id}
-        className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+        className="flex flex-col justify-between h-full bg-white p-5 rounded-lg shadow-md border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
       >
         <div>
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {app.application.description}
-          </h5>
+          <img
+            src={app.application.cat.imageUrl}
+            alt="Application Image"
+            className="w-full h-48 object-cover rounded-t-lg mb-4"
+          />
+          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+            Description: {app.application.description}
+          </p>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             Sex: {app.application.cat.sex}
           </p>
@@ -114,51 +133,38 @@ export default function AdoptApplication() {
               : "Not Scheduled"}
           </p>
         </div>
-        {editingAppId === app.application.id ? (
-          <div className="flex flex-col">
-            <input
-              type="text"
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              className="border p-2 rounded mb-2"
-              placeholder="Edit description"
-            />
-            <button
-              onClick={() => handleDescriptionChange(app.application.id)}
-              className="w-16 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
-            >
-              Save
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between">
-              {!app.application.meetingDate &&
-                app.application.status === StatusAdoptApplciation[0].id && (
-                  <button
-                    onClick={() =>
-                      handleUpdateClick(
-                        app.application.id,
-                        app.application.description
-                      )
-                    }
-                    className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
-                  >
-                    Update
+        <>
+          <div className="flex justify-between">
+            {!app.application.meetingDate &&
+              app.application.status === StatusAdoptApplciation[0].id && (
+                <button
+                  onClick={() =>
+                    handleUpdateClick(app.application.id, app.application.description)
+                  }
+                  className="w-20 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 mt-auto"
+                >
+                  Update
+                </button>
+              )}
+            {/* Hiển thị nút View Meeting Time nếu status là Approved */}
+            {app.application.status === StatusAdoptApplciation[2].id &&
+              !app.application.meetingDate && (
+                <Link href={`/choosemeetingtime/${app.application.id}`}>
+                  <button className="w-24 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800">
+                    View Time
                   </button>
-                )}
-              {/* Hiển thị nút View Meeting Time nếu status là Approved */}
-              {app.application.status === StatusAdoptApplciation[2].id &&
-                !app.application.meetingDate && (
-                  <Link href={`/choosemeetingtime/${app.application.id}`}>
-                    <button className="w-24 inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-teal-400 rounded-lg hover:bg-teal-300 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800">
-                      View Time
-                    </button>
-                  </Link>
-                )}
-            </div>
-          </>
-        )}
+                </Link>
+              )}
+          </div>
+          {/* Modal hiển thị khi nhấn Update */}
+          {isModalOpen && selectedApplication && (
+            <UpdateAdoptionModal
+              isOpen={isModalOpen}
+              onRequestClose={handleModalClose}
+              onSubmit={handleSubmit}
+            />
+          )}
+        </>
       </div>
     ));
   };

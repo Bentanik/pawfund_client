@@ -60,6 +60,7 @@ declare namespace API {
     size: number;
     color: string;
     description: string;
+    imageUrl: string;
   };
 
   type Application = {
@@ -72,6 +73,7 @@ declare namespace API {
     createdDate: string;
     account: Account;
     cat: Cat;
+    
   };
 
   type Item = {
