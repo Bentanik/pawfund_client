@@ -28,7 +28,6 @@ const ViewProfileCat = ({ catId }: ViewProfileCatProps) => {
 
   const [catData, setCatData] = useState<API.TGetCat | null>(null);
   useEffect(() => {
-    // Mô phỏng việc lấy dữ liệu từ API
     const fetchCatData = async () => {
       const res = await getCatApi({
         Id: catId,
@@ -45,7 +44,7 @@ const ViewProfileCat = ({ catId }: ViewProfileCatProps) => {
         <Backdrop open={isPending} />
       ) : (
         <CatProfile
-          mainImage={catData?.images?.at(0) || ""}
+          mainImage={catData?.images?.at(0)?.imageUrl || ""}
           otherImages={catData?.images || []}
           name={catData?.name || ""}
           gender={catData?.sex || ""}

@@ -1,4 +1,15 @@
 declare namespace REQUEST {
+    type TCreateEvent = {
+        name: string;
+        startDate: Date;
+        endDate: Date;
+        description: string;
+        maxAttendees: number;
+        thumbHeroUrl?: string;
+        imagesUrl?: string;
+        branchId: string;
+    }
+
     type TGetEventById = {
         eventId: string;
     };

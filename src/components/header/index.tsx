@@ -82,6 +82,7 @@ const Header: React.FC = () => {
         >
           News and Events
         </Link>
+
         {userState.user === null ? (
           <Link
             href="/login"
@@ -111,12 +112,16 @@ const Header: React.FC = () => {
               onClickOutside={handleCloseAvatarTooltip}
             >
               <figure className="rounded-full border border-zinc-300 overflow-hidden w-14 h-14 flex items-center justify-center hover:bg-teal-400">
+
                 {userState?.user?.cropAvatarLink !== "" && (
                   <img
                     id="avatarButton"
                     onClick={handleToggleAvatarTooltip}
                     className="w-12 h-12 rounded-full cursor-pointer"
-                    src={userState?.user?.cropAvatarLink}
+                    src={
+                      userState?.user?.cropAvatarLink ||
+                      "images/unknown_avatar.png"
+                    }
                     alt="User dropdown"
                   />
                 )}
