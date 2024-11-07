@@ -46,7 +46,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
   const [isDisabled, setIsDisabled] = useState(false);
   const { mutate, isPending } = useServiceCreateAdoptApplication();
   const { addToast } = useToast();
- 
+
 
   const openModal = (index: number) => {
     setCurrentImageIndex(index);
@@ -101,11 +101,12 @@ const CatProfile: React.FC<CatProfileProps> = ({
   };
 
   const allImages = [mainImage, ...otherImages];
+  const imagesToDisplay = allImages.slice(currentImageIndex, currentImageIndex + 3);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 w-full mx-auto bg-white rounded-lg shadow-md font-open_sans">
       {/* Image gallery */}
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-6">
         <img
           src={mainImage}
           alt={`Main image of ${name}`}
@@ -118,34 +119,32 @@ const CatProfile: React.FC<CatProfileProps> = ({
           opts={{
             align: "start",
           }}
-          className="flex flex-wrap justify-between mt-4"
+          className="w-full max-w-sm"
         >
           <CarouselContent>
-            {otherImages.length > 0 ? (
-              otherImages.map((image, index) => (
-                <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
-                  <div className="p-1">
-                    <Card>
-                      <CardContent className="w-full p-1 transition-transform transform hover:scale-105">
-                        <img
-                          src={image}
-                          alt={`Other image ${index + 1}`}
-                          className="h-48 w-full object-cover rounded-lg cursor-pointer"
-                          onClick={() => openModal(index + 1)}
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))
-            ) : (
-              <p>No additional images</p>
-            )}
+            {allImages.map((image, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1">
+                  <Card>
+                    <CardContent className="flex aspect-square items-center justify-center p-0">
+                      <img
+                        src={image}
+                        alt={`Cat Image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                        onClick={() => openModal(index)}
+                      />
+                    </CardContent>
+                  </Card>
+
+                </div>
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
 
+        {/* Modal để xem ảnh phóng to */}
         <ImageModal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
