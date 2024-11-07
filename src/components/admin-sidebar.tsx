@@ -13,7 +13,7 @@ import {
 import { AiOutlineForm, AiOutlinePieChart } from "react-icons/ai";
 import { RiHome2Line } from "react-icons/ri";
 import { useAppSelector } from "@/stores/store";
-
+import { BsCoin } from "react-icons/bs";
 export default function AdminSidebar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const staffState = useAppSelector((state) => state.differenceSlice.staff);
@@ -42,10 +42,13 @@ export default function AdminSidebar() {
               onClick={() => toggleDropdown("dashboard")}
               className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
             >
-              <div className="flex items-center space-x-2">
-                <AiOutlineForm className="text-lg" />
+              <Link
+                href="/admin/dashboard"
+                className="flex items-center space-x-2 hover:bg-gray-700 rounded-md"
+              >
+                <RiHome2Line className="text-xl" />
                 <span>Dashboard</span>
-              </div>
+              </Link>
               <BsChevronDown
                 className={`transform transition-transform ${openDropdown === "dashboard" ? "rotate-180" : ""
                   } text-gray-400`}
@@ -55,23 +58,15 @@ export default function AdminSidebar() {
               <ul className="pl-4 mt-1 space-y-1">
                 <li>
                   <Link
-                    href="/admin/dashboard/elements"
-                    className="block p-2 hover:bg-gray-800 rounded-md"
+                    href="/admin/user-donate"
+                    className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded-md"
                   >
-                    eCommerce
+                    <BsCoin className="text-lg" />
+                    All users donation
                   </Link>
                 </li>
               </ul>
             )}
-          </li>
-          <li>
-            <Link
-              href="/admin/calendar"
-              className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
-            >
-              <BsCalendar className="text-lg" />
-              <span>Calendar</span>
-            </Link>
           </li>
           <li>
             <Link
@@ -91,7 +86,7 @@ export default function AdminSidebar() {
               <span>Manage User</span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <button
               onClick={() => toggleDropdown("forms")}
               className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
@@ -125,8 +120,8 @@ export default function AdminSidebar() {
                 </li>
               </ul>
             )}
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <Link
               href="/admin/tables"
               className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
@@ -143,9 +138,9 @@ export default function AdminSidebar() {
               <BsGear className="text-lg" />
               <span>Settings</span>
             </Link>
-          </li>
+          </li> */}
 
-          <li className="pt-4 text-sm font-semibold text-gray-400">OTHERS</li>
+          {/* <li className="pt-4 text-sm font-semibold text-gray-400">OTHERS</li>
           <li>
             <Link
               href="/admin/chart"
@@ -224,7 +219,7 @@ export default function AdminSidebar() {
                 </li>
               </ul>
             )}
-          </li>
+          </li> */}
         </ul>
       </div>
     </aside>

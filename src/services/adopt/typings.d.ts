@@ -123,8 +123,6 @@ declare namespace API {
     isFailure: boolean;
     error: Error;
   };
-
-  
 }
 
 declare namespace APIResponse {

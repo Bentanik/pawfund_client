@@ -7,17 +7,16 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface MultipleAreaChartProps {
     incomeData: number[];
-    outcomeData: number[];
     categories: string[];
 }
 
-const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outcomeData, categories }) => {
+const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, categories }) => {
     const [timeframe, setTimeframe] = useState<string>('Total');
     const [chartData, setChartData] = useState<{ options: any; series: any[] }>({ options: {}, series: [] });
 
     useEffect(() => {
         const filteredIncomeData = filterData(incomeData, timeframe);
-        const filteredOutcomeData = filterData(outcomeData, timeframe);
+
         const filteredCategories = filterCategories(categories, timeframe);
 
         const options = {
@@ -93,20 +92,14 @@ const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outco
                     name: 'Income',
                     data: filteredIncomeData,
                 },
-                {
-                    name: 'Outcome',
-                    data: filteredOutcomeData,
-                },
+
             ],
         });
-    }, [incomeData, outcomeData, categories, timeframe]);
+    }, [incomeData, categories, timeframe]);
 
     const filterData = (data: number[], timeframe: string): number[] => {
         switch (timeframe) {
-            case 'Day':
-                return data.slice(-1);
-            case 'Week':
-                return data.slice(-7);
+
             case 'Month':
                 return data.slice(-30);
             default:
@@ -116,10 +109,6 @@ const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outco
 
     const filterCategories = (categories: string[], timeframe: string): string[] => {
         switch (timeframe) {
-            case 'Day':
-                return categories.slice(-1);
-            case 'Week':
-                return categories.slice(-7);
             case 'Month':
                 return categories.slice(-30);
             default:
@@ -130,15 +119,17 @@ const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outco
     return (
         <div>
             <div className="flex justify-end mb-4">
-                <select
+                {/* <select
                     value={timeframe}
                     onChange={(e) => setTimeframe(e.target.value)}
                     className="py-2 px-3 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-gray-300 focus:border-gray-300"
                 >
-                    <option value="Day">Day</option>
-                    <option value="Week">Week</option>
+                    
                     <option value="Month">Month</option>
-                </select>
+                </select> */}
+                <div className="py-2 px-3 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-gray-300 focus:border-gray-300">
+                    <span>Month</span>
+                </div>
             </div>
 
             <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={300} />

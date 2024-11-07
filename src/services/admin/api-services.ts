@@ -36,10 +36,35 @@ export const banUser = async (body: REQUEST.BanUser) => {
 };
 
 export const unbanUser = async (body: REQUEST.UnbanUser) => {
-    const response = await request<TResponse>(API_ENDPOINTS.POST_UNBAN_USER, {
-      method: "POST",
-      data: body,
-    });
-    return response.data;
-  };
-  
+  const response = await request<TResponse>(API_ENDPOINTS.POST_UNBAN_USER, {
+    method: "POST",
+    data: body,
+  });
+  return response.data;
+};
+
+export const getAllListUserDonate = async ({
+  pageIndex,
+  pageSize,
+  totalCount,
+  totalPages,
+  hasNextPage,
+  hasPreviousPage,
+}: API.DataDonate): Promise<TResponseData<API.DataDonate>> => {
+  const response = await request<TResponseData<API.DataDonate>>(
+    API_ENDPOINTS.GET_LIST_USER_DONATE,
+    {
+      method: "GET",
+      params: {
+        pageIndex,
+        pageSize,
+        totalCount,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    }
+  );
+
+  return response.data;
+};
