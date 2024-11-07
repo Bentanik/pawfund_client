@@ -14,7 +14,7 @@ import { useServiceCreateAdoptApplication } from "@/services/adopt/services";
 import useToast from "@/hooks/use-toast";
 interface CatProfileProps {
   mainImage: string;
-  otherImages: string[];
+  otherImages: API.CatImage[];
   name: string;
   gender: string;
   age: string;
@@ -125,7 +125,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
                     <Card>
                       <CardContent className="w-full p-1 transition-transform transform hover:scale-105">
                         <img
-                          src={image}
+                          src={image.imageUrl}
                           alt={`Other image ${index + 1}`}
                           className="h-48 w-full object-cover rounded-lg cursor-pointer"
                           onClick={() => openModal(index + 1)}
@@ -147,7 +147,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
         <ImageModal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          images={allImages}
+          images={allImages?.map((image) => image.toString())}
           currentIndex={currentImageIndex}
         />
       </div>

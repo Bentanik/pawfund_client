@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CreatePetForm from "@/app/staff/create-pet/components/create-pet-form";
+import CreatePetForm from "@/app/staff/pet/create-pet/components/create-pet-form";
 
 export const metadata: Metadata = {
   title: "Create pet",

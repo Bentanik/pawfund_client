@@ -7,6 +7,7 @@ import { LuBookMarked, LuMessageSquarePlus } from "react-icons/lu";
 import { useAppSelector } from "@/stores/store";
 export default function StaffSidebar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const userState = useAppSelector((state) => state.userSlice);
   const staffState = useAppSelector((state) => state.differenceSlice.staff);
 
   const toggleDropdown = (dropdown: string) => {
@@ -62,14 +63,44 @@ export default function StaffSidebar() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/staff/create-pet"
-                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                <button
+                  onClick={() => toggleDropdown("cat")}
+                  className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
                 >
-                  <LuBookMarked className="text-lg" />
-                  <span>Create pet</span>
-                </Link>
+                  <div className="flex items-center space-x-2">
+                    <AiOutlineForm className="text-lg" />
+                    <span>Cat</span>
+                  </div>
+                  <BsChevronDown
+                    className={`transform transition-transform ${
+                      openDropdown === "cat" ? "rotate-180" : ""
+                    } text-gray-400`}
+                  />
+                </button>
+                {openDropdown === "cat" && (
+                  <ul className="pl-4 mt-1 space-y-1">
+                    <li>
+                      <Link
+                        href="/staff/pet/create-pet"
+                        className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                      >
+                        <LuBookMarked className="text-lg" />
+                        <span>Create cat</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/staff/pet/view-pet"
+                        className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                      >
+                        <LuBookMarked className="text-lg" />
+                        <span>View cats</span>
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </li>
+
               <li>
                 <Link
                   href="/staff/create-cash-donate"
@@ -88,15 +119,17 @@ export default function StaffSidebar() {
                   <span>Free Time</span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/staff/message"
-                  className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
-                >
-                  <LuMessageSquarePlus className="text-lg" />
-                  <span>Message</span>
-                </Link>
-              </li>
+              {userState.user?.firstName === "Staff assistant" && (
+                <li>
+                  <Link
+                    href="/staff/message"
+                    className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md"
+                  >
+                    <LuMessageSquarePlus className="text-lg" />
+                    <span>Message</span>
+                  </Link>
+                </li>
+              )}
               <li>
                 <button
                   onClick={() => toggleDropdown("forms")}
@@ -104,7 +137,7 @@ export default function StaffSidebar() {
                 >
                   <div className="flex items-center space-x-2">
                     <AiOutlineForm className="text-lg" />
-                    <span>Forms</span>
+                    <span>Events</span>
                   </div>
                   <BsChevronDown
                     className={`transform transition-transform ${
@@ -116,10 +149,10 @@ export default function StaffSidebar() {
                   <ul className="pl-4 mt-1 space-y-1">
                     <li>
                       <Link
-                        href="/admin/forms/elements"
+                        href="/staff/event/create-event"
                         className="block p-2 hover:bg-gray-800 rounded-md"
                       >
-                        Form Elements
+                        Create event
                       </Link>
                     </li>
                     <li>
@@ -127,7 +160,7 @@ export default function StaffSidebar() {
                         href="/admin/forms/layout"
                         className="block p-2 hover:bg-gray-800 rounded-md"
                       >
-                        Form Layout
+                        View event
                       </Link>
                     </li>
                   </ul>
