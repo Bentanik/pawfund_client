@@ -6,6 +6,9 @@ declare namespace REQUEST {
   type UnbanUser = {
     id: string;
   };
+  type YearParams = {
+    year: number;
+  };
 }
 
 declare namespace API {
@@ -48,9 +51,9 @@ declare namespace API {
     id: string;
     amount: number;
     description: string;
-    paymentMethodId: 1 | 2; // Payment method có thể là 1 hoặc 2
-    createdDate: string | null; // Có thể là null nếu không có ngày tạo
-    account: AccountDonate; // Thông tin tài khoản của người thực hiện giao dịch
+    paymentMethodId: 1 | 2;
+    createdDate: string | null;
+    account: AccountDonate;
   };
 
   type DataDonate = {
@@ -61,5 +64,24 @@ declare namespace API {
     totalPages: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+  };
+
+  type DashboardData = {
+    totalCats: number;
+    totalAdoptApplications: number;
+    totalEvents: number;
+    totalDonations: number;
+    totalVolunteerApplications: number;
+    totalUsers: number;
+    listMonths: string[];
+    listDonationInYear: number[];
+    listFiveUsersDonated: UserDonation[];
+  };
+
+  type UserDonation = {
+    imageUrl: string;
+    email: string;
+    amount: number;
+    percentage: number;
   };
 }

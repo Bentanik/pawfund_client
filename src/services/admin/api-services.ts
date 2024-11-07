@@ -68,3 +68,19 @@ export const getAllListUserDonate = async ({
 
   return response.data;
 };
+
+export const getDashboard = async ({
+  year
+}: REQUEST.YearParams): Promise<TResponseData<API.DashboardData>> => {
+  const response = await request<TResponseData<API.DashboardData>>(
+    API_ENDPOINTS.GET_DASHBOARD,
+    {
+      method: "GET",
+      params: {
+        year,
+      },
+    }
+  );
+
+  return response.data;
+};

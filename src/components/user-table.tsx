@@ -1,9 +1,10 @@
 import React from 'react';
 
 interface User {
-    role: string;
+    email: string;
     amount: number;
     percentage: number;
+    imageUrl: string;
 }
 
 interface UserTableProps {
@@ -32,14 +33,17 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
                     <table className="items-center w-full bg-transparent border-collapse">
                         <thead>
                             <tr>
+                                {/* <th className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase font-semibold text-left border-r">
+                                    
+                                </th> */}
                                 <th className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase font-semibold text-left border-r">
-                                    Role
+                                    Email
                                 </th>
                                 <th className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase font-semibold text-left border-r">
                                     Amount
                                 </th>
                                 <th className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase font-semibold text-left">
-                                    
+
                                 </th>
                             </tr>
                         </thead>
@@ -47,7 +51,11 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
                         <tbody>
                             {users.map((user, index) => (
                                 <tr key={index} className="text-gray-700 dark:text-gray-100">
-                                    <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{user.role}</th>
+                                    {/* <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"><img
+                                        src={user.imageUrl || 'default_avatar.png'}
+                                        className="w-10 h-10 rounded-full mr-2"
+                                    /></th> */}
+                                    <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{user.email}</th>
                                     <td className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{user.amount}</td>
                                     <td className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                         <div className="flex items-center">
