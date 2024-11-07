@@ -68,14 +68,14 @@ const EventDetail = ({ eventId }: EventDetail) => {
             getListApprovedEventsActivity(eventId);
             getEvent(eventId);
         }
-    }, [eventId]); // Added eventId to dependency array
+    }, [eventId]);
 
     useEffect(() => {
         if (popupEvent) {
             getListApprovedEventsActivity(eventId);
             getEvent(eventId);
         }
-    }, [popupEvent, eventId]); // No need for nested condition, use popupEvent directly
+    }, [popupEvent, eventId]);
 
     const formatDateTime = (dateTimeString?: string) => {
         if (!dateTimeString) return { formattedDate: "", formattedTime: "" };

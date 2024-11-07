@@ -11,7 +11,12 @@ declare namespace REQUEST {
         isAscCreatedDate?: boolean;
     };
 
-    type EventStatus = "NotApproved" | "NotStarted" | "Ongoing" | "Completed";
+    type EventStatus =
+        | "NotApproved"
+        | "NotStarted"
+        | "Ongoing"
+        | "Completed"
+        | "Rejected";
 }
 
 declare namespace API {
@@ -22,8 +27,8 @@ declare namespace API {
     type StaffEvent = {
         id: string;
         name?: string;
-        startDate?: Date;
-        endDate?: Date;
+        startDate: Date;
+        endDate: Date;
         reasonReject: string[];
         description?: string;
         status?: string;
