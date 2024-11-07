@@ -1,6 +1,6 @@
-import AdminHeader from '@/components/admin-header'
-import AdminSidebar from '@/components/admin-sidebar'
-import React from 'react'
+import AdminHeader from "@/components/admin-header";
+import AdminSidebar from "@/components/admin-sidebar";
+import React from "react";
 
 export default function AdminLayout({
     children,
@@ -12,10 +12,8 @@ export default function AdminLayout({
             <AdminSidebar />
             <div className="flex flex-col flex-1 px-8 overflow-auto">
                 <AdminHeader />
-                <main className="flex-1 p-4 bg-gray-100">
-                    {children}
-                </main>
+                <main className="flex-1 p-4 bg-gray-100">{children}</main>
             </div>
         </div>
-    )
+    );
 }

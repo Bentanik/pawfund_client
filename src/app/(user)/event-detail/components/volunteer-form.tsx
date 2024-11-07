@@ -28,9 +28,12 @@ export default function VolunteerForm({
         eventActivities?.map((item, index) => (
             <div key={index} className="flex items-center space-x-2 mt-[10px]">
                 <Checkbox />
-                <Label className="text-[#0000008b]">
-                    {item?.activityDTO.name}
-                </Label>
+                {item?.activityDTO.numberOfVolunteer !==
+                    item?.activityDTO.quantity && (
+                    <Label className="text-[#0000008b]">
+                        {item?.activityDTO.name}
+                    </Label>
+                )}
             </div>
         ));
 
