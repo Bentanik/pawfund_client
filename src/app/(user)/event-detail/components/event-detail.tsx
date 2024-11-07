@@ -91,6 +91,8 @@ const EventDetail = ({ eventId }: EventDetail) => {
         return { formattedDate, formattedTime: timePart };
     };
 
+    console.log("1234", event);
+
     const {
         formattedDate: formattedStartDate,
         formattedTime: formattedStartTime,
@@ -173,7 +175,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                         className="absolute top-20 transform left-[27%] text-center"
                     >
                         <div className=" text-white text-[3rem] w-[70%] min-w-[700px] font-semibold leading-[50px]">
-                            {/* {event?.event.name} */}
+                            {event?.eventDTO.name}
                         </div>
                     </motion.h1>
 
@@ -293,7 +295,10 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                                     <path d="M0 32C0 14.3 14.3 0 32 0L480 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l0 384c17.7 0 32 14.3 32 32s-14.3 32-32 32l-176 0 0-48c0-26.5-21.5-48-48-48s-48 21.5-48 48l0 48L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64C14.3 64 0 49.7 0 32zm96 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zM240 96c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zM112 192c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM328 384c13.3 0 24.3-10.9 21-23.8c-10.6-41.5-48.2-72.2-93-72.2s-82.5 30.7-93 72.2c-3.3 12.8 7.8 23.8 21 23.8l144 0z" />
                                                 </svg>
                                                 <div>
-                                                    {event?.branchDTO.name}
+                                                    {
+                                                        event?.eventDTO.branch
+                                                            .name
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="flex mt-4 gap-3 ">
@@ -306,7 +311,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                                 </svg>
                                                 <div>
                                                     {
-                                                        event?.branchDTO
+                                                        event?.eventDTO.branch
                                                             .phoneNumberOfBranch
                                                     }
                                                 </div>
@@ -321,7 +326,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                                 </svg>
                                                 <div>
                                                     {
-                                                        event?.branchDTO
+                                                        event?.eventDTO.branch
                                                             .emailOfBranch
                                                     }
                                                 </div>
@@ -335,7 +340,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                                                     <path d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152l0 270.8c0 9.8-6 18.6-15.1 22.3L416 503l0-302.6zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6l0 251.4L32.9 502.7C17.1 509 0 497.4 0 480.4L0 209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77l0 249.3L192 449.4 192 255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
                                                 </svg>
                                                 <div className="w-[50%]">
-                                                    {`${event?.branchDTO.numberHome}, ${event?.branchDTO.streetName}, ${event?.branchDTO.ward}, ${event?.branchDTO.district}, ${event?.branchDTO.province}`}
+                                                    {`${event?.eventDTO.branch.numberHome}, ${event?.eventDTO.branch.streetName}, ${event?.eventDTO.branch.ward}, ${event?.eventDTO.branch.district}, ${event?.eventDTO.branch.province}`}
                                                 </div>
                                             </div>
                                         </div>

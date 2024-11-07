@@ -39,3 +39,29 @@ export const getAllEvents = async ({
     );
     return response.data;
 };
+
+export const getEventsByStaff = async ({
+    name = "",
+    status,
+    isAscCreatedDate = true,
+    pageIndex = 1,
+    pageSize = 10,
+}: REQUEST.TGetEvents) => {
+    const params: Record<string, any> = {};
+
+    if (pageIndex) params.pageIndex = pageIndex;
+    if (pageSize) params.pageSize = pageSize;
+    if (name !== "all") params.Name = name;
+    if (status) params.Status = status;
+    if (isAscCreatedDate !== undefined)
+        params.IsAscCreatedDate = isAscCreatedDate;
+
+    const response = await request<TResponseData<API.TStaffGetEvents>>(
+        API_ENDPOINTS.GET_ALL_EVENT_BY_STAFF,
+        {
+            method: "GET",
+            params: Object.keys(params).length > 0 ? params : undefined,
+        }
+    );
+    return response.data;
+};
