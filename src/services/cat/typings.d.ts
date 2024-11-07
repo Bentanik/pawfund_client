@@ -10,6 +10,17 @@ declare namespace REQUEST {
     sterilization?: string;
   };
 
+  type TGetStaffCats = {
+    pageIndex: number;
+    pageSize?: number;
+    catName?: string;
+    age?: string;
+    sex?: string;
+    // breed: string;
+    color?: string;
+    sterilization?: string;
+  };
+
   type TCreateCat = {
     catName: string;
     age: string;
@@ -22,15 +33,34 @@ declare namespace REQUEST {
     sterilization: boolean;
   };
 
+  type TUpdateCat = {
+    catId: string;
+    catName: string;
+    age: string;
+    sex: int;
+    weight: number;
+    breed: string;
+    description: string;
+    color: string;
+    oldImages?: API.CatImage[] | null;
+    newImages?: File[] | null;
+    sterilization: boolean;
+  };
+
   type TGetCat = {
     Id: string;
+  };
+
+  type TDeleteCat = {
+    id: string;
   };
 }
 
 declare namespace API {
   type CatImage = {
-    imageUrl: string;
-    publicImageId: string;
+    id?: string;
+    imageUrl?: string;
+    publicImageId?: string;
   };
 
   type CatAdopt = {
@@ -63,7 +93,8 @@ declare namespace API {
     breed: string;
     weight: number;
     color: string;
+    sterilization: boolean;
     description: string;
-    images: string[];
+    images: CatImage[];
   };
 }
