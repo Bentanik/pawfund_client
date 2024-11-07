@@ -9,8 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import UploadImageCat from "@/app/staff/pet/create-pet/components/upload-images-cat";
-import useCreatePetForm from "@/app/staff/pet/create-pet/hooks/useCreatePetForm";
+import UploadImageCat from "@/app/staff/pet/update-pet/components/upload-images-cat";
 import { useEffect, useState } from "react";
 import {
   breedCats,

@@ -5,10 +5,12 @@ import { ImagePlus } from "lucide-react";
 import { ChangeEvent, DragEvent, useEffect, useState } from "react";
 
 interface UploadImageCatProps {
-  fileList: { file: File; previewUrl: string }[];
-  setFileList: React.Dispatch<
-    React.SetStateAction<{ file: File; previewUrl: string }[]>
-  >;
+  fileList: { file: File | null; previewUrl: string; id?: string }[];
+  setFileList: (
+    updater: (
+      prev: { file: File | null; previewUrl: string; id?: string }[]
+    ) => { file: File | null; previewUrl: string; id?: string }[]
+  ) => void;
 }
 
 export default function UploadImageCat({
@@ -17,7 +19,7 @@ export default function UploadImageCat({
 }: UploadImageCatProps) {
   const { addToast } = useToast();
 
-  // Upload image
+  // Upload image cleanup
   useEffect(() => {
     return () => {
       fileList.forEach((item) => URL.revokeObjectURL(item.previewUrl));
@@ -35,27 +37,30 @@ export default function UploadImageCat({
     const newFiles = event.target.files;
     if (!newFiles) return;
 
-    const newFileList = Array.from(newFiles).map((file) => {
-      const fileType = file.type;
-      if (!fileType.startsWith("image/")) {
-        addToast(
-          {
-            type: "error",
-            description: "Please upload an image file",
-            duration: 3000,
-          },
-          true
-        );
-        return null;
-      }
-      return {
-        file,
-        previewUrl: URL.createObjectURL(file),
-      };
-    });
+    const newFileList = Array.from(newFiles)
+      .map((file) => {
+        const fileType = file.type;
+        if (!fileType.startsWith("image/")) {
+          addToast(
+            {
+              type: "error",
+              description: "Please upload an image file",
+              duration: 3000,
+            },
+            true
+          );
+          return null;
+        }
+        return {
+          file,
+          previewUrl: URL.createObjectURL(file),
+        };
+      })
+      .filter(
+        (file): file is { file: File; previewUrl: string } => file !== null
+      ); // Type guard to filter out null
 
-    const validFiles = newFileList.filter((file) => file !== null);
-    setFileList((prev) => [...prev, ...validFiles]);
+    setFileList((prev) => [...prev, ...newFileList]);
   };
 
   const handleDeleteImage = (previewUrl: string) => {
