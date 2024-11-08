@@ -1,5 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import React, { useState } from "react";
+
 import {
     Dialog,
     DialogContent,
@@ -16,6 +20,7 @@ interface VolunteerFormProps {
     open: boolean;
     onClose?: (open: boolean) => void;
     eventActivities: API.ActivityEvent[] | null;
+    onSubmit: any;
 }
 
 export default function VolunteerForm({
@@ -23,51 +28,89 @@ export default function VolunteerForm({
     open,
     onClose,
     eventActivities,
+    onSubmit,
 }: VolunteerFormProps) {
+    const [description, setDescription] = useState("");
+    const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
+    const handleCheckboxChange = (activityId: string) => {
+        // Cập nhật selectedActivities: thêm hoặc bỏ activityId khi click vào checkbox
+        setSelectedActivities((prevSelected) =>
+            prevSelected.includes(activityId)
+                ? prevSelected.filter((id) => id !== activityId)
+                : [...prevSelected, activityId]
+        );
+    };
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        console.log("Submit button clicked");
+        console.log(selectedActivities);
+
+        onSubmit({
+            description,
+            activities: selectedActivities,
+        });
+
+        setDescription("");
+        setSelectedActivities([]);
+    };
+
     const renderListOption = () =>
         eventActivities?.map((item, index) => (
             <div key={index} className="flex items-center space-x-2 mt-[10px]">
-                <Checkbox />
-                {item?.activityDTO.numberOfVolunteer !==
-                    item?.activityDTO.quantity && (
-                    <Label className="text-[#0000008b]">
-                        {item?.activityDTO.name}
-                    </Label>
-                )}
+                {/* <Checkbox
+                    checked={selectedActivities.includes(item.activityDTO.id)}
+                    onChange={() => handleCheckboxChange(item.activityDTO.id)}
+                /> */}
+                <input
+                    type="checkbox"
+                    checked={selectedActivities.includes(item.activityDTO.id)} // Kiểm tra xem activityId có được chọn không
+                    onChange={() => handleCheckboxChange(item.activityDTO.id)} // Cập nhật khi checkbox thay đổi
+                    id={`checkbox-${item.activityDTO.id}`}
+                />
+                <Label className="text-[#0000008b]">
+                    {item?.activityDTO.name}
+                </Label>
             </div>
         ));
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px] bg-white">
-                <DialogHeader>
-                    <DialogTitle>Volunteer Application Form</DialogTitle>
-                    <DialogDescription />
-                </DialogHeader>
+            <form onSubmit={handleSubmit}>
+                <DialogContent className="sm:max-w-[425px] bg-white">
+                    <DialogHeader>
+                        <DialogTitle>Volunteer Application Form</DialogTitle>
+                        <DialogDescription />
+                    </DialogHeader>
 
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                            Description
-                        </Label>
-                        <Input id="username" className="col-span-3" />
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="description" className="text-right">
+                                Description
+                            </Label>
+                            <Input
+                                id="description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="col-span-3"
+                            />
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div className="text-[1rem] text-[#2DD4BF] font-medium mb-[20px]">
-                        Choose your activity you want to join
+                    <div>
+                        <div className="text-[1rem] text-[#2DD4BF] font-medium mb-[20px]">
+                            Choose your activity you want to join
+                        </div>
+                        {renderListOption()}
                     </div>
-                    {renderListOption()}
-                </div>
-                <DialogFooter className="!justify-center mt-[30px]">
                     <Button
                         type="submit"
-                        className="hover:bg-[#2DD4BF] !justify-center"
+                        onClick={handleSubmit} // Gọi trực tiếp handleSubmit
+                        className="bg-blue-700 hover:bg-blue-800"
                     >
-                        Apply Now
+                        Create
                     </Button>
-                </DialogFooter>
-            </DialogContent>
+                </DialogContent>
+            </form>
         </Dialog>
     );
 }
