@@ -5,9 +5,8 @@ declare namespace REQUEST {
         endDate: Date;
         description: string;
         maxAttendees: number;
-        thumbHeroUrl?: string;
-        imagesUrl?: string;
-        branchId: string;
+        thumbHeroUrl?: File;
+        imagesUrl?: File;
     }
 
     type TGetEventById = {

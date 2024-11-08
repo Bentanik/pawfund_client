@@ -1,8 +1,9 @@
-import { useServiceCreateCat } from "@/services/cat/services";
+import { useServiceCreateEvent } from "@/services/event/services";
 import {
-  CreatePetBody,
-  CreatePetBodyType,
-} from "@/utils/schemaValidations/create-pet.schema";
+  CreateEventBodyType,
+  CreateEventBody,
+} from "@/utils/schemaValidations/create-event.schema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -15,25 +16,27 @@ export default function useCreateEventForm() {
     setValue,
     formState: { errors },
     reset,
-  } = useForm<CreatePetBodyType>({
-    resolver: zodResolver(CreatePetBody),
+  } = useForm<CreateEventBodyType>({
+    resolver: zodResolver(CreateEventBody),
     defaultValues: {
-      catName: "",
-      weight: 0,
       description: "",
+      maxAttendance: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      name: "",
     },
   });
 
-  const { mutate, isPending } = useServiceCreateCat();
+  const { mutate, isPending } = useServiceCreateEvent();
 
-  const onSubmit = (data: REQUEST.TCreateCat, clearImages: () => void) => {
+  const onSubmit = (data: REQUEST.TCreateEvent, clearImages: () => void) => {
     try {
-    //   mutate(data, {
-    //     onSuccess: () => {
-    //       reset();
-    //       clearImages();
-    //     },
-    //   });
+        mutate(data, {
+          onSuccess: () => {
+            reset();
+            clearImages();
+          },
+        });
     } catch (err) {
       console.log(err);
     }

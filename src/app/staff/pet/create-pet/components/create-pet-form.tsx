@@ -23,8 +23,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { CreatePetBodyType } from "@/utils/schemaValidations/create-pet.schema";
 import { Backdrop } from "@/components/backdrop";
+import useToast from "@/hooks/use-toast";
 
 export default function CreatePetForm() {
+  const { addToast } = useToast();
+
   // Use create pet form
   const { register, handleSubmit, watch, onSubmit, errors, isPending } =
     useCreatePetForm();
@@ -41,6 +44,18 @@ export default function CreatePetForm() {
 
   const handleFormSubmit = (data: CreatePetBodyType) => {
     try {
+      if (fileList.length === 0) {
+        addToast(
+          {
+            type: "error",
+            description: "Please upload an image file",
+            duration: 3000,
+          },
+          true
+        );
+        return;
+      }
+
       const form: REQUEST.TCreateCat = {
         catName: data.catName,
         age: age,

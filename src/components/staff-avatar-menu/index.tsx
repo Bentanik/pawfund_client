@@ -15,25 +15,15 @@ interface StaffAvatarMenuProps {
 export default function StaffAvatarMenu({
   onCloseTooltip,
 }: StaffAvatarMenuProps) {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const userState = useAppSelector((state) => state.userSlice);
   const { handleLogout, isPending } = useLogout();
 
-  const handleOpenTabMessage = () => {
-    dispatch(openMessageUser());
-  };
-
   const handleNavigate = (index: number) => {
     switch (index) {
       case 1: {
-        router.push("/staff/create-pet");
+        router.push("/staff/dashboard");
         onCloseTooltip();
-        break;
-      }
-      case 3: {
-        onCloseTooltip();
-        handleOpenTabMessage();
         break;
       }
       default:
