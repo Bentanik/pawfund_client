@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ViewBranchs from "@/app/admin/view_branchs/components/view_branchs";
+import ViewBranchs from "@/app/admin/view-branchs/components/view_branchs";
 
 export const metadata: Metadata = {
     title: "View branchs",

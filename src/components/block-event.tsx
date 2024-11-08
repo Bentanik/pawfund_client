@@ -38,7 +38,7 @@ const BlockEvent: React.FC<BlockEventProps> = ({ events }) => {
                 return (
                     <div key={item.id}>
                         <Link
-                            href="/event-detail"
+                            href={`/event-detail/${item?.id}`}
                             className="block mt-[30px] relative group"
                         >
                             <div className="relative w-full max-w-sm">
