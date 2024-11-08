@@ -1,5 +1,6 @@
 import CarouselStaffCat from "@/components/CarouselStaffCat";
 import { Input } from "@/components/ui/input";
+import useToast from "@/hooks/use-toast";
 import { ImagePlus } from "lucide-react";
 import { ChangeEvent, DragEvent, useEffect, useState } from "react";
 
@@ -14,8 +15,9 @@ export default function UploadImageCat({
   fileList,
   setFileList,
 }: UploadImageCatProps) {
-  // Upload image
+  const { addToast } = useToast();
 
+  // Upload image
   useEffect(() => {
     return () => {
       fileList.forEach((item) => URL.revokeObjectURL(item.previewUrl));
@@ -36,7 +38,14 @@ export default function UploadImageCat({
     const newFileList = Array.from(newFiles).map((file) => {
       const fileType = file.type;
       if (!fileType.startsWith("image/")) {
-        alert("Please upload only image files.");
+        addToast(
+          {
+            type: "error",
+            description: "Please upload an image file",
+            duration: 3000,
+          },
+          true
+        );
         return null;
       }
       return {
@@ -81,7 +90,7 @@ export default function UploadImageCat({
       </div>
       <div>
         <CarouselStaffCat
-          otherImages={fileList.map((item) => item.previewUrl)}
+          otherImages={fileList?.map((item) => item.previewUrl)}
           handleDeleteImage={handleDeleteImage}
         />
       </div>
