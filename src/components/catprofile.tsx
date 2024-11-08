@@ -12,6 +12,9 @@ import ImageModal from "./image-cat-modal";
 import AdoptionModal from "./adoptionmodal";
 import { useServiceCreateAdoptApplication } from "@/services/adopt/services";
 import useToast from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+import { IoColorFill } from "react-icons/io5";
+
 interface CatProfileProps {
   mainImage: string;
   otherImages: API.CatImage[];
@@ -43,6 +46,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
   const [isDisabled, setIsDisabled] = useState(false);
   const { mutate, isPending } = useServiceCreateAdoptApplication();
   const { addToast } = useToast();
+
 
   const openModal = (index: number) => {
     setCurrentImageIndex(index);
@@ -97,17 +101,17 @@ const CatProfile: React.FC<CatProfileProps> = ({
   };
 
   const allImages = [mainImage, ...otherImages];
+  const imagesToDisplay = allImages.slice(currentImageIndex, currentImageIndex + 3);
 
   return (
-    <div className="grid grid-cols-12 gap-6 p-6 w-full mx-auto bg-white rounded-lg shadow-md">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 w-full mx-auto bg-white rounded-lg shadow-md font-open_sans">
       {/* Image gallery */}
-      <div className="col-span-12 md:col-span-6 mb-6 ml-20">
+      <div className="flex flex-col items-center space-y-6">
         <img
           src={mainImage}
           alt={`Main image of ${name}`}
-          className={`w-full h-96 rounded-lg object-cover cursor-pointer ${
-            isDisabled ? "" : "transition-transform transform hover:scale-105"
-          }`}
+          className={`w-full h-96 rounded-lg object-cover cursor-pointer ${isDisabled ? "" : "transition-transform transform hover:scale-105"
+            }`}
           onClick={() => openModal(0)}
         />
 
@@ -115,35 +119,31 @@ const CatProfile: React.FC<CatProfileProps> = ({
           opts={{
             align: "start",
           }}
-          className="flex flex-wrap justify-between mt-4"
+          className="w-full max-w-sm"
         >
           <CarouselContent>
-            {otherImages.length > 0 ? (
-              otherImages.map((image, index) => (
-                <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
-                  <div className="p-1">
-                    <Card>
-                      <CardContent className="w-full p-1 transition-transform transform hover:scale-105">
-                        <img
-                          src={image.imageUrl}
-                          alt={`Other image ${index + 1}`}
-                          className="h-48 w-full object-cover rounded-lg cursor-pointer"
-                          onClick={() => openModal(index + 1)}
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))
-            ) : (
-              <p>No additional images</p>
-            )}
+            {otherImages.map((image, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1">
+                  <Card>
+                    <CardContent className="flex aspect-square items-center justify-center p-0">
+                      <img
+                        src={image.imageUrl}
+                        alt={`Cat Image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                        onClick={() => openModal(index)}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
 
-        {/* Modal component */}
+        {/* Modal để xem ảnh phóng to */}
         <ImageModal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
@@ -153,100 +153,136 @@ const CatProfile: React.FC<CatProfileProps> = ({
       </div>
 
       {/* Cat information */}
-      <div className="col-span-12 md:col-span-6 mr-20">
-        <h2 className="text-4xl font-bold mb-4 text-center">Cat Profile</h2>
+      <div className="space-y-6 rounded-lg shadow-sm p-8">
+        <motion.h2
+          className="text-2xl font-semibold text-gray-700 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {name}
+        </motion.h2>
         <div className="space-y-4">
-          <div className="flex items-center justify-center gap-40">
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Gender:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={gender}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fas fa-paw"></i>
+          <div className="flex items-center justify-between gap-4">
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Gender</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {gender}
+                </span>
+                <i className="fas fa-paw text-teal-400"></i>
               </div>
-            </div>
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Age:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={age}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fa-regular fa-calendar-days"></i>
+            </motion.div>
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Age</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {age}
+                </span>
+                <i className="fa-regular fa-calendar-days text-teal-400"></i>
               </div>
-            </div>
+            </motion.div>
           </div>
-          <div className="flex items-center justify-center gap-40">
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Status:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={"Adopted"}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fa-solid fa-circle-info"></i>
+
+          <div className="flex items-center justify-between gap-4">
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Status</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {"Adopted"}
+                </span>
+                <i className="fa-solid fa-circle-info text-teal-400"></i>
               </div>
-            </div>
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Breed:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={breed}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fa-solid fa-cat"></i>
+            </motion.div>
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Breed</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {breed}
+                </span>
+                <i className="fa-solid fa-cat text-teal-400"></i>
               </div>
-            </div>
+            </motion.div>
           </div>
-          <div className="flex items-center justify-center gap-40">
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Size:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={weight}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fa-solid fa-weight-scale"></i>
+
+          <div className="flex items-center justify-between gap-4">
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Size</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {weight}
+                </span>
+                <i className="fa-solid fa-weight-scale text-teal-400"></i>
               </div>
-            </div>
-            <div className="flex flex-col">
-              <label className="font-semibold w-32 text-xl">Color:</label>
-              <div className="flex items-center border rounded-lg p-2 w-40">
-                <input
-                  type="text"
-                  value={color}
-                  className="border-none w-full focus:outline-none text-gray-500"
-                  readOnly
-                />
-                <i className="fa-solid fa-droplet"></i>
+            </motion.div>
+            <motion.div
+              className="flex flex-col w-1/2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <label className="text-gray-600 font-semibold">Color</label>
+              <div className="flex items-center border rounded-sm p-2">
+                <span className="border-none w-full text-gray-500">
+                  {color}
+                </span>
+                <i className="fa-solid fa-droplet text-teal-400"></i>
               </div>
-            </div>
+            </motion.div>
           </div>
-          <div className="flex flex-col mt-4 ml-20">
-            <label className="font-semibold w-32 text-xl">Description</label>
-            <hr className="my-2 border-gray-600" />
-            <h3 className="text-gray-500">{description}</h3>
+
+          <motion.div
+            className="mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <label className="text-gray-600 font-semibold">Description</label>
+            <div className="mt-4 text-gray-500 text-justify">
+              {description}
+            </div>
+          </motion.div>
+
+          <div className="flex justify-center mt-6">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="w-full md:w-3/4 lg:w-1/2 bg-teal-400 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-teal-500 focus:outline-none"
+              onClick={openAdoptionModal}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              Apply for Adoption
+            </motion.button>
           </div>
         </div>
-        <button
-          className="mt-6 bg-teal-400 text-white px-6 py-3 rounded-lg hover:bg-teal-300 transition-transform transform hover:scale-105 ml-20"
-          onClick={openAdoptionModal}
-        >
-          Adopt
-        </button>
       </div>
+
       <AdoptionModal
         isOpen={adoptionModalIsOpen}
         onRequestClose={closeAdoptionModal}

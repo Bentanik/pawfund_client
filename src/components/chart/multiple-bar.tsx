@@ -6,23 +6,19 @@ import React, { useEffect, useState } from "react";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 // Định nghĩa kiểu cho props
-interface ChartData {
-  income: number[];
-  outcome: number[];
-}
 
-interface MultipleBarChartProps {
-  data: ChartData;
+interface MultipleAreaChartProps {
+  incomeData: number[];
+  categories: string[];
 }
-
-const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
+const MultipleBarChart: React.FC<MultipleAreaChartProps> = ({ incomeData, categories }) => {
   const [chartOptions, setChartOptions] = useState<any>(null);
   const [timeframe, setTimeframe] = useState<string>("Total");
 
   useEffect(() => {
     // Lọc dữ liệu dựa trên `timeframe`
-    const filteredIncome = filterData(data.income, timeframe);
-    const filteredOutcome = filterData(data.outcome, timeframe);
+    const filteredIncome = filterData(incomeData, timeframe);
+   
     const filteredCategories = filterCategories(timeframe);
 
     // Cấu hình cho biểu đồ
@@ -42,10 +38,7 @@ const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
           name: 'Income',
           data: filteredIncome,
         },
-        {
-          name: 'Outcome',
-          data: filteredOutcome,
-        },
+        
       ],
       plotOptions: {
         bar: {
@@ -104,7 +97,7 @@ const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
 
     // Cập nhật state với options
     setChartOptions(options);
-  }, [data, timeframe]);
+  }, [incomeData, timeframe]);
 
   // Hàm để lọc dữ liệu dựa trên `timeframe`
   const filterData = (data: number[], timeframe: string): number[] => {

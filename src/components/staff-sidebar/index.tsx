@@ -166,7 +166,7 @@ export default function StaffSidebar() {
                                         </li>
                                         <li>
                                             <Link
-                                                href="/admin/forms/layout"
+                                                href="/staff/view-event"
                                                 className="block p-2 hover:bg-gray-800 rounded-md"
                                             >
                                                 View event
