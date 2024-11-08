@@ -17,7 +17,7 @@ import { IoColorFill } from "react-icons/io5";
 
 interface CatProfileProps {
   mainImage: string;
-  otherImages: string[];
+  otherImages: API.CatImage[];
   name: string;
   gender: string;
   age: string;
@@ -122,20 +122,19 @@ const CatProfile: React.FC<CatProfileProps> = ({
           className="w-full max-w-sm"
         >
           <CarouselContent>
-            {allImages.map((image, index) => (
+            {otherImages.map((image, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-1">
                   <Card>
                     <CardContent className="flex aspect-square items-center justify-center p-0">
                       <img
-                        src={image}
+                        src={image.imageUrl}
                         alt={`Cat Image ${index + 1}`}
                         className="w-full h-full object-cover rounded-lg"
                         onClick={() => openModal(index)}
                       />
                     </CardContent>
                   </Card>
-
                 </div>
               </CarouselItem>
             ))}
@@ -148,7 +147,7 @@ const CatProfile: React.FC<CatProfileProps> = ({
         <ImageModal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          images={allImages}
+          images={allImages?.map((image) => image.toString())}
           currentIndex={currentImageIndex}
         />
       </div>

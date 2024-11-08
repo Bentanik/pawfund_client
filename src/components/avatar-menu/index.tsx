@@ -1,14 +1,13 @@
 import useLogout from "@/hooks/use-logout";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { FaMoon, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuLogOut } from "react-icons/lu";
-import { TbMessageReportFilled } from "react-icons/tb";
 import { Backdrop } from "@/components/backdrop";
-import Link from "next/link";
 import { openMessageUser } from "@/stores/difference-slice";
 import { useRouter } from "next/navigation";
+import { Roles } from "@/const/authentication";
 
 interface AvatarMenuProps {
   onCloseTooltip: () => void;
@@ -36,6 +35,10 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
         handleOpenTabMessage();
         break;
       }
+      case 4: {
+        router.push("/staff/dashboard");
+        onCloseTooltip();
+      }
       default:
         break;
     }
@@ -52,38 +55,66 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
           {userState.user?.firstName} {userState.user?.lastName}
         </div>
       </div>
-      <ul className="py-2 text-sm text-gray-700" aria-labelledby="avatarButton">
-        <li>
-          <div
-            onClick={() => handleNavigate(1)}
-            className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
-          >
-            <div className="flex items-center">
-              <IoSettingsSharp
-                className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                size={30}
-              />
-              <span className="text-black">Setting</span>
+      {userState.user?.roleId === Roles[2]?.id && (
+        <ul
+          className="py-2 text-sm text-gray-700"
+          aria-labelledby="avatarButton"
+        >
+          <li>
+            <div
+              onClick={() => handleNavigate(1)}
+              className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
+            >
+              <div className="flex items-center">
+                <IoSettingsSharp
+                  className="p-1 bg-gray-300 text-black rounded-full mr-2"
+                  size={30}
+                />
+                <span className="text-black">Setting</span>
+              </div>
+              <FiChevronRight className="text-gray-500" size={24} />
             </div>
-            <FiChevronRight className="text-gray-500" size={24} />
-          </div>
-        </li>
-        <li>
-          <div
-            className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200 cursor-pointer"
-            onClick={() => handleNavigate(3)}
-          >
-            <div className="flex items-center">
-              <FaQuestionCircle
-                className="p-1 bg-gray-300 text-black rounded-full mr-2"
-                size={30}
-              />
-              <span className="text-black">Support</span>
+          </li>
+          <li>
+            <div
+              className="flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200 cursor-pointer"
+              onClick={() => handleNavigate(3)}
+            >
+              <div className="flex items-center">
+                <FaQuestionCircle
+                  className="p-1 bg-gray-300 text-black rounded-full mr-2"
+                  size={30}
+                />
+                <span className="text-black">Support</span>
+              </div>
+              <FiChevronRight className="text-gray-500" size={24} />
             </div>
-            <FiChevronRight className="text-gray-500" size={24} />
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      )}
+      {userState.user?.roleId === Roles[1].id && (
+        <ul
+          className="py-2 text-sm text-gray-700"
+          aria-labelledby="avatarButton"
+        >
+          <li>
+            <div
+              onClick={() => handleNavigate(4)}
+              className="cursor-pointer flex items-center justify-between px-4 py-2 bg-white rounded-lg hover:bg-gray-200"
+            >
+              <div className="flex items-center">
+                <IoSettingsSharp
+                  className="p-1 bg-gray-300 text-black rounded-full mr-2"
+                  size={30}
+                />
+                <span className="text-black">Staff dashboard</span>
+              </div>
+              <FiChevronRight className="text-gray-500" size={24} />
+            </div>
+          </li>
+        </ul>
+      )}
+
       <div className="py-1">
         <div
           onClick={handleLogout}

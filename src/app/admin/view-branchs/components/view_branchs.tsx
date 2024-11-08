@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PaginatedComponent from "@/components/paginated";
-import useGetDataBranches from "@/app/admin/view_branchs/hooks/getBranches";
+import useGetDataBranches from "@/app/admin/view-branchs/hooks/getBranches";
 import { Input } from "@/components/ui/input";
 
 export default function PaymentTable() {
@@ -88,7 +88,8 @@ export default function PaymentTable() {
 
     return (
         <div className="w-full p-4 ">
-            <div className="flex mb-5 gap-10">
+            <h1 className="text-2xl font-semibold">View Branches</h1>
+            <div className="flex my-5 gap-10">
                 <div className="flex gap-7 items-center w-[30%]">
                     <label className="text-base text-[#6f6f6f]">Name</label>
                     <Input

@@ -1,4 +1,15 @@
 declare namespace REQUEST {
+    type TCreateEvent = {
+        name: string;
+        startDate: Date;
+        endDate: Date;
+        description: string;
+        maxAttendees: number;
+        thumbHeroUrl?: string;
+        imagesUrl?: string;
+        branchId: string;
+    }
+
     type TGetEventById = {
         eventId: string;
     };
@@ -11,13 +22,30 @@ declare namespace REQUEST {
         isAscCreatedDate?: boolean;
     };
 
-    type EventStatus = "NotApproved" | "NotStarted" | "Ongoing" | "Completed";
+    type EventStatus =
+        | "NotApproved"
+        | "NotStarted"
+        | "Ongoing"
+        | "Completed"
+        | "Rejected";
 }
 
 declare namespace API {
     type TGetEvent = {
         eventDTO: EventDTO;
-        branchDTO: Branch;
+    };
+
+    type StaffEvent = {
+        id: string;
+        name?: string;
+        startDate: Date;
+        endDate: Date;
+        reasonReject: string[];
+        description?: string;
+        status?: string;
+        maxAttendees: number;
+        imagesUrl?: string;
+        branch: StaffBranch;
     };
 
     type EventDTO = {
@@ -28,8 +56,9 @@ declare namespace API {
         description: string;
         status: string;
         maxAttendees: number;
-        thumbHeroUrl?: string; // Thêm ? để thể hiện rằng trường này có thể null
-        imagesUrl?: string; // Thêm ? tương tự
+        imagesUrl?: string;
+        thumbHeroUrl?: string;
+        branch: Branch;
     };
 
     type Events = {
@@ -40,8 +69,22 @@ declare namespace API {
         description: string;
         status: string;
         maxAttendees: number;
-        imagesUrl?: string; // Add this line for the ImagesUrl field
+        imagesUrl?: string;
+        thumbHeroUrl?: string;
         branchDto: Branch;
+    };
+
+    type StaffBranch = {
+        id: string;
+        name: string;
+        phoneNumberOfBranch: string;
+        emailOfBranch: string;
+        numberHome: string;
+        streetName: string;
+        ward: string;
+        district: string;
+        province: string;
+        description: string;
     };
 
     type Branch = {
@@ -55,10 +98,21 @@ declare namespace API {
         district: string;
         province: string;
         description: string;
+        postalCode: string;
     };
 
     type TGetEvents = {
         items: Events[];
+        pageIndex: number;
+        pageSize: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+    };
+
+    type TStaffGetEvents = {
+        items: StaffEvent[];
         pageIndex: number;
         pageSize: number;
         totalCount: number;

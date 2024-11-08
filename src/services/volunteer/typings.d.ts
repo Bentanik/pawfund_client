@@ -6,4 +6,14 @@ declare namespace REQUEST {
     };
 }
 
-declare namespace API {}
+declare namespace API {
+    type TGetVolunteerApplication = {
+        items: StaffActivities[];
+        pageIndex: number;
+        pageSize: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+    };
+}

@@ -4,6 +4,7 @@ import {
     getAllApplicationByAdopter,
 } from "@/services/adopt/api-services";
 import { getQueryClient } from "@/lib/query";
+import { createEventActivity } from "./api-services";
 
 export const useServiceCreateAdoptApplication = () => {
     return useMutation<TResponse, TMeta, REQUEST.CreateAdoptApplicationBody>({
@@ -25,3 +26,11 @@ export const useServiceGetApplicationAdopt = async (
         }
     );
 };
+
+export const useServiceCreateEventActivity = () => {
+    return useMutation<TResponse, TMeta, REQUEST.EventActivity>({
+      mutationFn: createEventActivity,
+      onSuccess: (data) => {
+      },
+    });
+  };
