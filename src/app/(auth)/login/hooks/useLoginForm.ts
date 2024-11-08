@@ -41,7 +41,7 @@ export function useLoginForm() {
               case 1:
                 return router.push("/admin/dashboard");
               case 2:
-                return router.push("/staff/dashboard");
+                return router.push("/staff/application");
               case 3:
                 return router.push("/");
               default:

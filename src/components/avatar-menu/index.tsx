@@ -41,7 +41,7 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
         break;
       }
       case 4: {
-        router.push("/staff/dashboard");
+        router.push("/staff/application");
         onCloseTooltip();
       }
       default:

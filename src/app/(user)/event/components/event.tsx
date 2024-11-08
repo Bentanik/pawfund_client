@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 
 const Event = () => {
-    const [name, setName] = useState<string>("all");
+    const [name, setName] = useState<string>("");
     const [status, setStatus] = useState<REQUEST.EventStatus | undefined>();
     const [isAscCreatedDate, setIsAscCreatedDate] = useState<boolean>(true);
     const [data, setData] = useState<API.Events[]>([]);

@@ -27,7 +27,7 @@ export default function StaffSidebar() {
                             STAFF
                         </h3>
                         <ul className="space-y-1">
-                            <li>
+                            {/* <li>
                                 <button
                                     onClick={() => toggleDropdown("dashboard")}
                                     className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded-md"
@@ -56,7 +56,7 @@ export default function StaffSidebar() {
                                         </li>
                                     </ul>
                                 )}
-                            </li>
+                            </li> */}
                             <li>
                                 <Link
                                     href="/staff/application"

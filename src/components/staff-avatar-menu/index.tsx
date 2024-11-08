@@ -22,7 +22,7 @@ export default function StaffAvatarMenu({
   const handleNavigate = (index: number) => {
     switch (index) {
       case 1: {
-        router.push("/staff/dashboard");
+        router.push("/staff/application");
         onCloseTooltip();
         break;
       }
