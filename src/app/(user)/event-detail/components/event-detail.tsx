@@ -17,6 +17,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import VolunteerForm from "./volunteer-form";
 import getCurrentEvent from "../hooks/getCurrentEvent";
 import getEventById from "../hooks/getEventById";
+import useToast from "@/hooks/use-toast";
+import { useServiceCreateVolunteerApplication } from "@/services/volunteer/services";
 
 interface EventDetail {
     eventId: string;
@@ -38,6 +40,9 @@ const EventDetail = ({ eventId }: EventDetail) => {
     const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.2 });
     const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.2 });
     const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.2 });
+
+    const { mutate, isPending } = useServiceCreateVolunteerApplication();
+    const { addToast } = useToast();
 
     const userState = useAppSelector((state) => state.userSlice);
 
@@ -91,7 +96,43 @@ const EventDetail = ({ eventId }: EventDetail) => {
         return { formattedDate, formattedTime: timePart };
     };
 
-    console.log("1234", event);
+    const handleVolunteer = async (data: any) => {
+        console.log(data);
+        const volunteerApplicationData: REQUEST.createVolunteerApplication = {
+            description: data?.description || "", // Ensures a default empty string if `description` is undefined
+            listActivity: data?.activities || [], // Ensures a default empty array if `listActivity` is undefined
+            eventId: eventId,
+        };
+        try {
+            mutate(volunteerApplicationData, {
+                onSuccess: async (data) => {
+                    if (data) {
+                        if (data.value.code.includes("adopt_noti")) {
+                            addToast({
+                                description: data.value.message,
+                                type: "success",
+                                duration: 5000,
+                            });
+                        }
+                    }
+                },
+                onError: (error) => {
+                    if (error.errorCode.includes("adopt_noti")) {
+                        addToast({
+                            description: error.detail,
+                            type: "error",
+                            duration: 5000,
+                        });
+                    }
+                },
+            });
+        } catch (error) {
+            console.error(
+                "Có lỗi xảy ra khi gửi yêu cầu tình nguyện viên:",
+                error
+            );
+        }
+    };
 
     const {
         formattedDate: formattedStartDate,
@@ -388,6 +429,7 @@ const EventDetail = ({ eventId }: EventDetail) => {
                 open={popupEvent}
                 onClose={handleClosePopup}
                 eventActivities={eventActivities ?? []}
+                onSubmit={handleVolunteer}
             />
         </div>
     );

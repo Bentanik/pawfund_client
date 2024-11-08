@@ -6,6 +6,7 @@ import {
 import API_ENDPOINTS from "@/services/volunteer/api-path";
 
 import { getQueryClient } from "@/lib/query";
+import { createVolunteerApplication } from "./api-services";
 
 export const useServiceCreateAdoptApplication = () => {
     return useMutation<TResponse, TMeta, REQUEST.CreateAdoptApplicationBody>({
@@ -26,4 +27,13 @@ export const useServiceGetApplicationAdopt = async (
             queryFn: () => getAllApplicationByAdopter(params),
         }
     );
+};
+
+export const useServiceCreateVolunteerApplication = () => {
+    return useMutation<TResponse, TMeta, REQUEST.createVolunteerApplication>({
+        mutationFn: createVolunteerApplication,
+        onSuccess: (data) => {
+            console.log("Yêu cầu đăng kí tình nguyện viên đã được gửi:", data);
+        },
+    });
 };
