@@ -21,14 +21,10 @@ export default function useGetDataEvent() {
                 return null;
             }
         } catch (error) {
-            addToast({
-                type: "error",
-                description: "An error occurred while fetching applications",
-            });
             return null;
         } finally {
             setPending(false);
         }
     };
-    return { getEventsApi };
+    return { getEventsApi, isPending };
 }

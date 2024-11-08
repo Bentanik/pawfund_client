@@ -7,43 +7,29 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface MultipleAreaChartProps {
     incomeData: number[];
-    outcomeData: number[];
     categories: string[];
 }
 
-const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outcomeData, categories }) => {
+const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, categories }) => {
     const [timeframe, setTimeframe] = useState<string>('Total');
     const [chartData, setChartData] = useState<{ options: any; series: any[] }>({ options: {}, series: [] });
 
     useEffect(() => {
+        // Lọc dữ liệu và categories theo timeframe
         const filteredIncomeData = filterData(incomeData, timeframe);
-        const filteredOutcomeData = filterData(outcomeData, timeframe);
         const filteredCategories = filterCategories(categories, timeframe);
 
         const options = {
             chart: {
                 height: 300,
                 type: 'area',
-                toolbar: {
-                    show: false,
-                },
-                zoom: {
-                    enabled: false,
-                },
+                toolbar: { show: false },
+                zoom: { enabled: false },
             },
-            legend: {
-                show: false,
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2,
-            },
-            grid: {
-                strokeDashArray: 2,
-            },
+            legend: { show: false },
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth', width: 2 },
+            grid: { strokeDashArray: 2 },
             fill: {
                 type: 'gradient',
                 gradient: {
@@ -77,70 +63,50 @@ const MultipleAreaChart: React.FC<MultipleAreaChartProps> = ({ incomeData, outco
                 },
             },
             tooltip: {
-                x: {
-                    format: 'MMMM yyyy',
-                },
+                x: { format: 'MMMM yyyy' },
                 y: {
                     formatter: (value: number) => `$${value >= 1000 ? `${value / 1000}k` : value}`,
                 },
             },
         };
 
+        
         setChartData({
             options,
             series: [
                 {
                     name: 'Income',
-                    data: filteredIncomeData,
-                },
-                {
-                    name: 'Outcome',
-                    data: filteredOutcomeData,
+                    data: filteredIncomeData, 
                 },
             ],
         });
-    }, [incomeData, outcomeData, categories, timeframe]);
+    }, [incomeData, categories, timeframe]);
 
     const filterData = (data: number[], timeframe: string): number[] => {
         switch (timeframe) {
-            case 'Day':
-                return data.slice(-1);
-            case 'Week':
-                return data.slice(-7);
             case 'Month':
-                return data.slice(-30);
+                return data.slice(-12); 
             default:
-                return data;
+                return data; 
         }
     };
 
     const filterCategories = (categories: string[], timeframe: string): string[] => {
         switch (timeframe) {
-            case 'Day':
-                return categories.slice(-1);
-            case 'Week':
-                return categories.slice(-7);
             case 'Month':
-                return categories.slice(-30);
+                return categories.slice(-12); // Lấy 12 tháng gần nhất
             default:
-                return categories;
+                return categories; // Trả về toàn bộ categories nếu không phải "Month"
         }
     };
 
     return (
         <div>
             <div className="flex justify-end mb-4">
-                <select
-                    value={timeframe}
-                    onChange={(e) => setTimeframe(e.target.value)}
-                    className="py-2 px-3 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-gray-300 focus:border-gray-300"
-                >
-                    <option value="Day">Day</option>
-                    <option value="Week">Week</option>
-                    <option value="Month">Month</option>
-                </select>
+                <div className="py-2 px-3 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-gray-300 focus:border-gray-300">
+                    <span>Year</span>
+                </div>
             </div>
-
             <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={300} />
         </div>
     );

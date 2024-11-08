@@ -81,7 +81,7 @@ export const getMeetingTimeByStaff = async () => {
 };
 
 export const applyAdoptApplication = async ({
-    detailId,
+    Id,
 }: REQUEST.ApplyAdoptApplication): Promise<
     TResponseData<APIResponse.ApiResponse>
 > => {
@@ -90,7 +90,7 @@ export const applyAdoptApplication = async ({
         {
             method: "PUT",
             params: {
-                detailId,
+                Id,
             },
         }
     );
@@ -154,7 +154,7 @@ export const updateChooseMeetingTime = async (
 };
 
 export const completeAdoption = async ({
-    detailId,
+    Id,
 }: REQUEST.ApplyAdoptApplication): Promise<
     TResponseData<APIResponse.ApiResponse>
 > => {
@@ -163,7 +163,7 @@ export const completeAdoption = async ({
         {
             method: "PUT",
             params: {
-                detailId,
+                Id,
             },
         }
     );

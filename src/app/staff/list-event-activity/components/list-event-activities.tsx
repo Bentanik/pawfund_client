@@ -14,6 +14,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import CreateEvent from "@/components/create-activity-form";
 
 interface ListEventActivity {
     eventId: string;
@@ -25,6 +27,7 @@ export default function ListEventActivities({ eventId }: ListEventActivity) {
     const [isAscCreatedDate, setIsAscCreatedDate] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPage, setTotalPage] = useState<number>(1);
+    const [showForm, setShowForm] = useState(false);
     const [eventActivities, setEventActivities] = useState<
         API.StaffActivities[]
     >([]);
@@ -73,9 +76,14 @@ export default function ListEventActivities({ eventId }: ListEventActivity) {
         } else handleGetData(currentPage);
     }, [name, status, isAscCreatedDate]);
 
+    const toggleForm = () => {
+        setShowForm((prev) => !prev); 
+    };
+
     return (
         <div className="w-full p-4 ">
             <h1 className="text-2xl font-semibold">View event activities</h1>
+
             <div className="flex my-5 gap-10 justify-between">
                 <div className="flex gap-7 items-center w-[30%]">
                     <label className="text-base text-[#6f6f6f]">Name</label>
@@ -86,7 +94,16 @@ export default function ListEventActivities({ eventId }: ListEventActivity) {
                         onChange={handleChangeName}
                     />
                 </div>
+                <div className="my-5">
+                    <Button className="bg-teal-400 text-white hover:bg-teal-500" onClick={toggleForm}>
+                        Add Event Activity
+                    </Button>
+                </div>
             </div>
+            {showForm && (
+                <CreateEvent eventId={eventId} />
+            )}
+
             {/* Header */}
             <div className="grid grid-cols-4 bg-[#4B5563] text-white font-semibold rounded-t-lg">
                 <div className="p-4">Name</div>

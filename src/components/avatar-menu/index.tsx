@@ -30,6 +30,11 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
         onCloseTooltip();
         break;
       }
+      case 2: {
+        router.push("/admin/dashboard");
+        onCloseTooltip();
+        break;
+      }
       case 3: {
         onCloseTooltip();
         handleOpenTabMessage();
@@ -48,7 +53,17 @@ export default function AvatarMenu({ onCloseTooltip }: AvatarMenuProps) {
     <div className="z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-box w-72 overflow-hidden">
       <div
         className="px-4 py-3 text-lg text-gray-900 hover:bg-gray-200 select-none cursor-pointer"
-        onClick={() => handleNavigate(1)}
+        onClick={() => {
+          if(userState?.user?.roleId === Roles[2].id) {
+            handleNavigate(1);
+          }
+          if(userState?.user?.roleId === Roles[1].id) {
+            handleNavigate(4);
+          }
+          if(userState?.user?.roleId === Roles[0].id) {
+            handleNavigate(2);
+          }
+        }}
       >
         <div className="font-bold">Hello</div>
         <div className="text-xs text-gray-500 truncate">

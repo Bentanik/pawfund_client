@@ -15,6 +15,17 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import useGetMeetingTimeByAdopter from "@/app/(user)/choosemeetingtime/hooks/useGetMeetingTimeByAdopter";
 import { useEffect, useRef, useState } from "react";
 import useUpdateChooseMeetingTime from "@/app/(user)/choosemeetingtime/hooks/usePutChooseMeetingTime";
@@ -44,6 +55,7 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
     const router = useRouter();
     const [meetingTimes, setMeetingTimes] = useState<string[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const hasFetchedRef = useRef(false);
 
     useEffect(() => {
@@ -72,9 +84,15 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
         fetchMeetingTimes();
     }, [AdoptId, getMeetingTimeByAdopterApi]);
 
+    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        if (selectedIndex !== null) {
+            setIsModalOpen(true);  
+        } else {
+            console.log("No meeting time selected");
+        }
+    };
 
-
-    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const handleConfirmSubmit = async () => {
         if (selectedIndex !== null) {
             const selectedMeetingTime = meetingTimes[selectedIndex];
             const payload = {
@@ -86,9 +104,8 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
             if (result) {
                 router.push("/profile/adopt");
             }
-        } else {
-            console.log("No meeting time selected");
         }
+        setIsModalOpen(false); 
     };
 
 
@@ -171,6 +188,20 @@ export const ChooseMeetingTime: React.FC<ChooseMeetingTimeProps> = ({ AdoptId })
                     </div>
                 </form>
             </Form>
+            <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <AlertDialogContent className="bg-white">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to submit your selected meeting time?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setIsModalOpen(false)}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleConfirmSubmit}>Confirm</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 

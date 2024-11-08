@@ -73,7 +73,7 @@ export default function AdminHeader() {
           </button>
         </div>
         <div className="flex items-center space-x-4 relative">
-          <div className="relative" ref={notificationRef}>
+          {/* <div className="relative" ref={notificationRef}>
             <div
               onClick={() => setNotificationOpen(!notificationOpen)}
               className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 bg-slate-200 cursor-pointer"
@@ -111,7 +111,7 @@ export default function AdminHeader() {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="relative" ref={dropdownRef}>
             <img

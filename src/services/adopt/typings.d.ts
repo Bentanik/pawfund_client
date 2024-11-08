@@ -60,6 +60,7 @@ declare namespace API {
         size: number;
         color: string;
         description: string;
+        imageUrl: string;
     };
 
     type Application = {
