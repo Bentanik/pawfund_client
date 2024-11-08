@@ -7,7 +7,7 @@ declare namespace REQUEST {
         maxAttendees: number;
         thumbHeroUrl?: File;
         imagesUrl?: File;
-    }
+    };
 
     type TGetEventById = {
         eventId: string;

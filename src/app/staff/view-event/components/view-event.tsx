@@ -141,7 +141,7 @@ export default function ListEvents() {
                         </Link>
                     ))
                 ) : (
-                    <div className="p-4 text-center">Không có kết quả nào.</div>
+                    <div className="p-4 text-center">No result.</div>
                 )}
             </div>
 
