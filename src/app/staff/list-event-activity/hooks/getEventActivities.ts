@@ -23,10 +23,6 @@ export default function useGetDataStaffEventActivity() {
                 return null;
             }
         } catch (error) {
-            addToast({
-                type: "error",
-                description: "An error occurred while fetching applications",
-            });
             return null;
         } finally {
             setPending(false);

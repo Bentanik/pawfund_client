@@ -101,7 +101,7 @@ export default function ListEventActivities({ eventId }: ListEventActivity) {
                 {eventActivities.length > 0 ? (
                     eventActivities.map((item, index) => (
                         <Link
-                            href={`/list-event-activity/${item.id}`}
+                            href={`/staff/list-volunteer-application/${item.id}`}
                             key={index}
                         >
                             <div className="grid grid-cols-4 hover:bg-gray-50 transition-colors cursor-pointer">

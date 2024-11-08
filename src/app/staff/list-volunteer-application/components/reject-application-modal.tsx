@@ -6,29 +6,29 @@ import { IoCloseSharp } from "react-icons/io5";
 interface RejectModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
-    onSubmit: (data: { adoptId: string; reasonReject: string }) => void;
-    adoptId: string;
+    onSubmit: (data: { detailId: string; reason: string }) => void;
+    detailId: string;
 }
 
 const RejectModal: React.FC<RejectModalProps> = ({
     isOpen,
     onRequestClose,
     onSubmit,
-    adoptId,
+    detailId,
 }) => {
-    const [reasonReject, setReasonReject] = useState("");
+    const [reason, setReason] = useState("");
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
         // Gọi hàm onSubmit với adoptId và lý do từ chối
         onSubmit({
-            adoptId,
-            reasonReject,
+            detailId,
+            reason,
         });
 
         // Reset lại lý do sau khi gửi
-        setReasonReject("");
+        setReason("");
 
         // Đóng modal
         onRequestClose();
@@ -56,8 +56,8 @@ const RejectModal: React.FC<RejectModalProps> = ({
                     <textarea
                         id="reasonReject"
                         rows={4}
-                        value={reasonReject}
-                        onChange={(e) => setReasonReject(e.target.value)}
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         placeholder="Nhập lý do từ chối ở đây"
                         required

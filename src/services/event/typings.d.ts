@@ -8,7 +8,7 @@ declare namespace REQUEST {
         thumbHeroUrl?: string;
         imagesUrl?: string;
         branchId: string;
-    }
+    };
 
     type TGetEventById = {
         eventId: string;
